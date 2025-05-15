@@ -6,6 +6,7 @@ import { useToast } from "vue-toast-notification";
 import authService from "../../services/authService";
 import InputField from "../../components/InputField.vue";
 
+
 const $toast = useToast();
 const router = useRouter();
 
@@ -62,37 +63,56 @@ const onSubmitLogin = async () => {
 </script>
 
 <template>
-    <div class="w-1/3 h-screen px-16 py-20 flex flex-col gap-y-8">
+  <div class="h-screen bg-gray-100 flex items-center justify-center font-sans">
+    <!-- Container with shadow and rounded corner -->
+    <div class="flex w-full max-w-4xl h-[500px] rounded-lg shadow-lg overflow-hidden bg-white">
+      
+      <!-- Sign in section -->
+      <div class="w-1/2 bg-white flex flex-col justify-center items-center px-12">
+        <h1 class="text-3xl font-bold mb-4 text-blue-600 dark:text-sky-400">Sign in</h1>
+
+        <form class="w-full max-w-sm flex flex-col gap-y-4" @submit.prevent="onSubmitLogin">
+
+        <!-- Label Email -->
         <div>
-            <h1>Selamat Datang di Website Akreditasi</h1>
-            <p>Silahkan login untuk melanjutkan</p>
+            <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+            <InputField
+            id="email"
+            label=""
+            type="email"
+            placeholder="Email"
+            v-model="formLogin.email"
+            />
         </div>
 
-        <form class="flex flex-col gap-y-4" @submit.prevent="onSubmitLogin">
+        <!-- Label Password -->
+        <div>
+            <label for="password" class="block text-sm font-medium text-gray-700 mb-1">Password</label>
             <InputField
-                id="email"
-                label="Email"
-                type="email"
-                placeholder="Masukkan email"
-                v-model="formLogin.email"
+            id="password"
+            label=""
+            type="password"
+            placeholder="Password"
+            v-model="formLogin.password"
             />
+        </div>
 
-            <InputField
-                id="password"
-                label="Password"
-                type="password"
-                placeholder="Masukkan password"
-                v-model="formLogin.password"
-            />
-
-            <button
-                type="submit"
-                class="bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition-colors"
-                :disabled="!isFormValid || formLogin.loading"
-            >
-                <span v-if="formLogin.loading">Loading...</span>
-                <span v-else>Login</span>
-            </button>
+          <button
+            type="submit"
+            class="bg-blue-500 text-white py-2 rounded-full hover:bg-emerald-600 transition-colors font-semibold"
+            :disabled="!isFormValid || formLogin.loading"
+          >
+            <span v-if="formLogin.loading">Loading...</span>
+            <span v-else>Sign In</span>
+          </button>
         </form>
+      </div>
+
+      <!-- Welcome section -->
+      <div class="w-1/2 bg-gradient-to-r from-blue-400 to-blue-600 text-white flex flex-col justify-center items-center px-12">
+        <h2 class="text-3xl font-bold mb-2 text-center">Halo, Teman!</h2>
+        <p class="text-xl mb-6 text-center">Selamat Datang Website Akreditas</p>
+      </div>
     </div>
+  </div>
 </template>
