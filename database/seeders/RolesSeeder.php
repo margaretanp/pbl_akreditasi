@@ -18,25 +18,21 @@ class RolesSeeder extends Seeder
                 'name' => 'Administrator',
             ],
             [
-                'code' => 'DSN',
-                'name' => 'Dosen',
+                'code' => 'VAL1',
+                'name' => 'Validator 1',
             ],
             [
-                'code' => 'KJM',
-                'name' => 'Kantor Jaminan Mutu',
+                'code' => 'VAL2',
+                'name' => 'Validator 2',
             ],
             [
-                'code' => 'KPS',
-                'name' => 'Ketua Program Studi',
+                'code' => 'EXT',
+                'name' => 'External',
             ],
             [
-                'code' => 'KJR',
-                'name' => 'Ketua Jurusan',
+                'code' => 'ANG',
+                'name' => 'Anggota',
             ],
-            [
-                'code' => 'DKR',
-                'name' => 'Direktur'
-            ]
         ]);
     }
 }
