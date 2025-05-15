@@ -4,6 +4,7 @@ import { createApp } from "vue";
 import App from "./App.vue";
 import router from "./router";
 import ToastPlugin from "vue-toast-notification";
+import "./services/axios";
 
 const app = createApp(App);
 

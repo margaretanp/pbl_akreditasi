@@ -25,7 +25,7 @@ const onSubmitLogin = async () => {
 
     try {
         const { data } = await axios.post(
-            "/api/login",
+            "/login",
             {
                 email: formLogin.email,
                 password: formLogin.password,
@@ -38,18 +38,13 @@ const onSubmitLogin = async () => {
         );
 
         if (data.status === "success") {
-            // Extract token information and pass it to authService
             const tokenData = {
                 access_token: data.access_token,
-                jwt_key: data.jwt_key,
-                expires_at: data.expires_at
+                expires_at: data.expires_at,
             };
-            
+
             authService.setTokens(tokenData);
-            
-            // Save user data if needed
-            localStorage.setItem('user', JSON.stringify(data.user));
-            
+
             $toast.success("Login successful!");
             router.push("/dashboard");
         } else {
@@ -57,7 +52,9 @@ const onSubmitLogin = async () => {
         }
     } catch (error) {
         console.error("Login error:", error);
-        $toast.error(error.response?.data?.message || "Username or password is incorrect");
+        $toast.error(
+            error.response?.data?.message || "Username or password is incorrect"
+        );
     } finally {
         formLogin.loading = false;
     }
@@ -88,8 +85,8 @@ const onSubmitLogin = async () => {
                 v-model="formLogin.password"
             />
 
-            <button 
-                type="submit" 
+            <button
+                type="submit"
                 class="bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition-colors"
                 :disabled="!isFormValid || formLogin.loading"
             >

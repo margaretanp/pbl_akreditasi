@@ -15,7 +15,7 @@ const fetchUserData = async () => {
     usersData.loading = true;
 
     try {
-        const { data} = await axios.get('api/users');
+        const { data} = await axios.get('/users');
         if (data.status === 'success') {
             usersData.data = data.data;
         } else {
@@ -47,7 +47,7 @@ onMounted(fetchUserData);
             <tr v-for="user in usersData.data" :key="user.id">
                 <td>{{ user.name }}</td>
                 <td>{{ user.email }}</td>
-                <td>{{ user.role }}</td>
+                <td>{{ user.role.name }}</td>
             </tr>
         </tbody>
     </table>
