@@ -16,3 +16,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('/{any}', function () {
+    return view('welcome');  // This returns your index blade file
+})->where('any', '^(?!api).*$');  // This will match all routes except /api
