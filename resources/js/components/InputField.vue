@@ -1,4 +1,6 @@
 <script setup>
+import ErrorMessages from './ErrorMessages.vue';
+
 const props = defineProps({
     id: {
         type: String,
@@ -40,6 +42,14 @@ const props = defineProps({
         type: Boolean,
         default: false,
     },
+    isError: {
+        type: Boolean,
+        default: false,
+    },
+    errors: {
+        type: Array,
+        default: () => [],
+    },
 });
 
 defineEmits(["update:modelValue", "blur"]);
@@ -47,11 +57,16 @@ defineEmits(["update:modelValue", "blur"]);
 
 <template>
     <div>
-        <label :for="props.id">{{ props.label }}</label>
+        <label :for="props.id" class="font-medium text-gray-800">{{ props.label }}</label>
         <input
-            :type="props.type"
+            :class="`mt-2 w-full px-3 py-2 border border-gray-500 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-offset-2 rounded-md ${
+                isError
+                    ? 'focus-visible:ring-red-500'
+                    : 'focus-visible:ring-blue-500'
+            }`"
             :id="props.id"
             :name="props.id"
+            :type="props.type"
             :min="
                 props.type === 'number' || props.type === 'date'
                     ? props.min
@@ -65,11 +80,10 @@ defineEmits(["update:modelValue", "blur"]);
             :value="modelValue"
             :placeholder="props.placeholder"
             :disabled="props.disabled"
-            :class="`mt-2 w-full px-3 py-2 border border-gray-500 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-offset-2 rounded-md ${
-                isError
-                    ? 'focus-visible:ring-red-500'
-                    : 'focus-visible:ring-blue-500'
-            }`"
+            @input="$emit('update:modelValue', $event.target.value)"
+            @blur="$emit('blur', $event.target.value)"
         />
+
+        <ErrorMessages v-if="isError" :errors="props.errors" />
     </div>
 </template>

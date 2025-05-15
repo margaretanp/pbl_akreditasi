@@ -1,66 +1,101 @@
 <script setup>
-import { reactive } from "vue"; // ✅ import reactive
 import axios from "axios";
-import { useRouter } from "vue-router"; // if you're using vue-router
-import InputField from "../../components/InputField.vue"; // import your InputField component
+import { computed, reactive } from "vue";
+import { useRouter } from "vue-router";
+import { useToast } from "vue-toast-notification";
+import authService from "../../services/authService";
+import InputField from "../../components/InputField.vue";
 
+const $toast = useToast();
 const router = useRouter();
 
-const form = reactive({
-  email: "",
-  password: "",
-  loading: false
+const formLogin = reactive({
+    email: "",
+    password: "",
+    loading: false,
 });
 
-const onSubmit = async () => {
-//   if (form.email.trim() !== "" || form.password.trim() !== "" || form.loading) return;
+const isFormValid = computed(() => {
+    return formLogin.email.trim() !== "" && formLogin.password.trim() !== "";
+});
 
-  form.loading = true;
+const onSubmitLogin = async () => {
+    if (!isFormValid.value || formLogin.loading) return;
+    formLogin.loading = true;
 
-  try {
-    const response = await axios.post("/api/login", {
-      email: form.email,
-      password: form.password
-    });
+    try {
+        const { data } = await axios.post(
+            "/api/login",
+            {
+                email: formLogin.email,
+                password: formLogin.password,
+            },
+            {
+                headers: {
+                    Accept: "application/json",
+                },
+            }
+        );
 
-    const token = response.data.token;
-
-    localStorage.setItem("auth_token", token);
-    axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-
-    router.push("/home");
-  } catch (error) {
-    console.error("Login failed:", error.response?.data || error.message);
-  } finally {
-    form.loading = false;
-  }
+        if (data.status === "success") {
+            // Extract token information and pass it to authService
+            const tokenData = {
+                access_token: data.access_token,
+                jwt_key: data.jwt_key,
+                expires_at: data.expires_at
+            };
+            
+            authService.setTokens(tokenData);
+            
+            // Save user data if needed
+            localStorage.setItem('user', JSON.stringify(data.user));
+            
+            $toast.success("Login successful!");
+            router.push("/dashboard");
+        } else {
+            throw new Error(data.message || "Login failed");
+        }
+    } catch (error) {
+        console.error("Login error:", error);
+        $toast.error(error.response?.data?.message || "Username or password is incorrect");
+    } finally {
+        formLogin.loading = false;
+    }
 };
 </script>
 
-
 <template>
-    <div class="max-h-screen w-full flex">
-        <div class="w-full p-20 flex flex-col items-center gap-y-8">
-            <form class="flex flex-col gap-y-4" @submit.prevent="onSubmit">
-                <InputField
-                    label="Email"
-                    type="email"
-                    id="email"
-                    name="email"
-                    placeholder="Masukkan Email"
-                    v-model="form.email"
-                />
-                <InputField
-                    label="Password"
-                    type="password"
-                    id="password"
-                    name="password"
-                    placeholder="Masukkan Password"
-                    v-model="form.password"
-                />
-                <button type="submit" class="bg-blue-500 p-4">Login</button>
-            </form>
+    <div class="w-1/3 h-screen px-16 py-20 flex flex-col gap-y-8">
+        <div>
+            <h1>Selamat Datang di Website Akreditasi</h1>
+            <p>Silahkan login untuk melanjutkan</p>
         </div>
-        <!-- <img :src="bgLogin" alt="bg-login" class="" /> -->
+
+        <form class="flex flex-col gap-y-4" @submit.prevent="onSubmitLogin">
+            <InputField
+                id="email"
+                label="Email"
+                type="email"
+                placeholder="Masukkan email"
+                v-model="formLogin.email"
+            />
+
+            <InputField
+                id="password"
+                label="Password"
+                type="password"
+                placeholder="Masukkan password"
+                v-model="formLogin.password"
+            />
+
+            <button 
+                type="submit" 
+                class="bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition-colors"
+                :disabled="!isFormValid || formLogin.loading"
+            >
+                <span v-if="formLogin.loading">Loading...</span>
+                <span v-else>Login</span>
+            </button>
+        </form>
     </div>
 </template>

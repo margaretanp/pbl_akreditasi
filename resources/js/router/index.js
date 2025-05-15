@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router";
+import authService from "../services/authService";
 
 const routes = [
     {
@@ -7,16 +8,27 @@ const routes = [
         component: () => import("../pages/Home.vue"),
         meta: {
             title: "Home",
+            requiresAuth: false,
         },
     },
     {
-        path: '/login',
-        name: 'login',
+        path: "/login",
+        name: "login",
         component: () => import("../pages/auth/Login.vue"),
         meta: {
             title: "Login",
+            requiresAuth: false,
+        },
+    },
+    {
+        path: "/dashboard",
+        name: "dashboard",
+        component: () => import("../pages/dashboard/Dashboard.vue"),
+        meta: {
+            title: "Dashboard",
+            requiresAuth: true,
         }
-    }
+    },
 ];
 
 const router = createRouter({
@@ -25,14 +37,14 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
-    const token = localStorage.getItem("token");
+    const isAuthenticated = authService.isAuthenticated();
 
-    if (to.meta.requreAuth && !token) {
-        document.title = `Akred | ${to.meta.title}`;
-        next("/login");
-    } else {
-        next();
+    if (to.meta.requiresAuth && isAuthenticated) {
+        return next("/dashboard");
     }
+
+    document.title = `Akreditasi | ${to.meta.title}`;
+    next();
 });
 
 export default router;
