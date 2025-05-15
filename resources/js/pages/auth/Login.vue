@@ -1,11 +1,10 @@
 <script setup>
 import axios from "axios";
-import { computed, reactive } from "vue";
+import { computed, reactive, ref } from "vue";
 import { useRouter } from "vue-router";
 import { useToast } from "vue-toast-notification";
 import authService from "../../services/authService";
 import InputField from "../../components/InputField.vue";
-
 
 const $toast = useToast();
 const router = useRouter();
@@ -16,9 +15,15 @@ const formLogin = reactive({
     loading: false,
 });
 
+const showPassword = ref(false); // <-- Tambahan ini
+
 const isFormValid = computed(() => {
     return formLogin.email.trim() !== "" && formLogin.password.trim() !== "";
 });
+
+const togglePassword = () => {
+    showPassword.value = !showPassword.value;
+};
 
 const onSubmitLogin = async () => {
     if (!isFormValid.value || formLogin.loading) return;
@@ -64,7 +69,6 @@ const onSubmitLogin = async () => {
 
 <template>
   <div class="h-screen bg-gray-100 flex items-center justify-center font-sans">
-    <!-- Container with shadow and rounded corner -->
     <div class="flex w-full max-w-4xl h-[500px] rounded-lg shadow-lg overflow-hidden bg-white">
       
       <!-- Sign in section -->
@@ -73,30 +77,38 @@ const onSubmitLogin = async () => {
 
         <form class="w-full max-w-sm flex flex-col gap-y-4" @submit.prevent="onSubmitLogin">
 
-        <!-- Label Email -->
-        <div>
+          <!-- Email -->
+          <div>
             <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email</label>
             <InputField
-            id="email"
-            label=""
-            type="email"
-            placeholder="Email"
-            v-model="formLogin.email"
+              id="email"
+              label=""
+              type="email"
+              placeholder="Email"
+              v-model="formLogin.email"
             />
-        </div>
+          </div>
 
-        <!-- Label Password -->
-        <div>
+          <!-- Password -->
+          <div class="relative">
             <label for="password" class="block text-sm font-medium text-gray-700 mb-1">Password</label>
             <InputField
-            id="password"
-            label=""
-            type="password"
-            placeholder="Password"
-            v-model="formLogin.password"
+              id="password"
+              label=""
+              :type="showPassword ? 'text' : 'password'"
+              placeholder="Password"
+              v-model="formLogin.password"
             />
-        </div>
+            <button
+              type="button"
+              class="absolute right-3 top-[42px] text-sm text-gray-500"
+              @click="togglePassword"
+            >
+              {{ showPassword ? '🙄' : '😖' }}
+            </button>
+          </div>
 
+          <!-- Submit Button -->
           <button
             type="submit"
             class="bg-blue-500 text-white py-2 rounded-full hover:bg-emerald-600 transition-colors font-semibold"
@@ -108,10 +120,10 @@ const onSubmitLogin = async () => {
         </form>
       </div>
 
-      <!-- Welcome section -->
+      <!-- Welcome -->
       <div class="w-1/2 bg-gradient-to-r from-blue-400 to-blue-600 text-white flex flex-col justify-center items-center px-12">
         <h2 class="text-3xl font-bold mb-2 text-center">Halo, Teman!</h2>
-        <p class="text-xl mb-6 text-center">Selamat Datang Website Akreditas</p>
+        <p class="text-xl mb-6 text-center">Selamat Datang di Website Akreditas</p>
       </div>
     </div>
   </div>
