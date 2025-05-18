@@ -4,10 +4,10 @@ import authService from "../services/authService";
 const routes = [
     {
         path: "/",
-        name: "home",
-        component: () => import("../pages/Home.vue"),
+        name: "welcome",
+        component: () => import("../pages/Welcome.vue"),
         meta: {
-            title: "Home",
+            title: "Welcome",
             requiresAuth: false,
         },
     },
@@ -27,13 +27,41 @@ const routes = [
         meta: {
             title: "Dashboard",
             requiresAuth: true,
-        }
+        },
+        children: [
+            {
+                path: "",
+                redirect: "/home"
+            },
+            {
+                path: "/home",
+                name: "Home",
+                component: () => import("../pages/dashboard/Home/Home.vue"),
+                meta: {
+                    title: "Home",
+                },
+            },
+            {
+                path: "/data-master",
+                children: [
+                    {
+                        path: "/users",
+                        name: "users",
+                        component: () =>
+                            import(
+                                "../pages/dashboard/data-master/users/Users.vue"
+                            ),
+                    },
+                ],
+            },
+        ],
     },
 ];
 
 const router = createRouter({
     history: createWebHistory(),
     routes,
+    linkActiveClass: "font-semibold text-blue-500",
 });
 
 router.beforeEach((to, from, next) => {

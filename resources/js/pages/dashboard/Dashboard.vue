@@ -2,6 +2,7 @@
 import axios from 'axios';
 import { onMounted, reactive } from 'vue';
 import { useToast } from 'vue-toast-notification';
+import SidebarMenu from '../../components/SidebarMenu.vue';
 
 const $toast = useToast();
 
@@ -33,22 +34,11 @@ onMounted(fetchUserData);
 </script>
 
 <template>
-    <div>This is dashboard page</div>
-    
-    <table class="w-full">
-        <thead>
-            <tr>
-                <th>Nama</th>
-                <th>Email</th>
-                <th>Role</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr v-for="user in usersData.data" :key="user.id">
-                <td>{{ user.name }}</td>
-                <td>{{ user.email }}</td>
-                <td>{{ user.role.name }}</td>
-            </tr>
-        </tbody>
-    </table>
+    <div class="h-screen bg-gray-50 flex">
+        <SidebarMenu />
+        
+        <main class="p-8">
+            <router-view />
+        </main>
+    </div>
 </template>
