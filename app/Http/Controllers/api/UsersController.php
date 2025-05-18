@@ -27,7 +27,7 @@ class UsersController extends Controller
 
     public function show($id)
     {
-        $user = UsersModel::find($id);
+        $user = UsersModel::with("role")->find($id);
 
         return response()->json(
             [
