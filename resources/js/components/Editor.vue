@@ -1,7 +1,7 @@
 <template>
   <textarea
     v-model="content"
-    class="w-full h-40 p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 resize-y"
+    class="w-full h-40 p-3 border border-[#021526] rounded-md focus:outline-none focus:ring-2 focus:ring-[#03346E] resize-y"
     placeholder="Tulis di sini..."
   ></textarea>
 </template>

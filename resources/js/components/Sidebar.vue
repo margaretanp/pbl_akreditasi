@@ -3,7 +3,7 @@
         <!-- Sidebar -->
         <div
             :class="[
-                'bg-gray-900 text-white h-screen transition-all duration-300 ease-in-out',
+                'bg-[#021526] text-white h-screen transition-all duration-300 ease-in-out',
                 expanded ? 'w-64' : 'w-16',
                 'flex flex-col',
             ]"
@@ -80,7 +80,7 @@
                         <router-link
                             to="/dashboard"
                             :class="[
-                                'hover:bg-gray-800 rounded-lg text-gray-300',
+                                'hover:bg-gray-800 rounded-lg text-white',
                                 expanded
                                     ? 'flex items-center px-4 py-2'
                                     : 'p-2 flex justify-center',
@@ -110,7 +110,7 @@
                         <div
                             @click="toggleKriteriaDropdown"
                             :class="[
-                                'flex items-center cursor-pointer hover:bg-gray-800 rounded-lg text-gray-300',
+                                'flex items-center cursor-pointer hover:bg-gray-800 rounded-lg text-white',
                                 expanded
                                     ? 'px-4 py-2 justify-between'
                                     : 'p-2 justify-center',
@@ -180,7 +180,7 @@
                         <router-link
                             to="/validasi"
                             :class="[
-                                'hover:bg-gray-800 rounded-lg text-gray-300',
+                                'hover:bg-gray-800 rounded-lg text-white',
                                 expanded
                                     ? 'flex items-center px-4 py-2'
                                     : 'p-2 flex justify-center',

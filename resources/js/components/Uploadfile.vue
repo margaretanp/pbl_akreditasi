@@ -16,7 +16,7 @@
     <!-- Button untuk memilih file -->
     <button
       type="button"
-      class="mb-1 py-1 px-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition text-sm"
+      class="mb-1 py-1 px-2 bg-[#021526] text-white rounded hover:bg-[#03346E] transition text-sm"
       @click="triggerInput"
     >
       Pilih File
@@ -24,10 +24,10 @@
 
     <!-- Area klik dengan ikon, fleksibel agar tinggi tersisa -->
     <div
-      class="border-dashed border-2 border-gray-300 flex-1 flex items-center justify-center cursor-pointer hover:bg-gray-100 transition rounded-lg"
+      class="border-dashed border-2 border-[#021526] flex-1 flex items-center justify-center cursor-pointer hover:bg-[#03346E] transition rounded-lg"
       @click="triggerInput"
     >
-      <span class="text-gray-400 text-3xl select-none">+</span>
+      <span class="text-[#021526] text-3xl select-none">+</span>
     </div>
   </div>
 </template>

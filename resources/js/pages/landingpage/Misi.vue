@@ -1,7 +1,7 @@
 <template>
     <div>
         <Navbar />
-
+        
         <div
             class="p-8 max-w-3xl mx-auto flex flex-col items-center justify-center"
         >

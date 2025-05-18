@@ -66,9 +66,6 @@ const onGetStarted = () => {
             </button>
         </div>
     </div>
-
-    <!-- Footer -->
-    <Footer class="absoulute fixed bottom-0" />
 </template>
 
 <style scoped>

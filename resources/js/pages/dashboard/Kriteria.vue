@@ -8,19 +8,19 @@
         <!-- Main Content -->
         <div class="flex-1 p-6 overflow-auto space-y-6">
             <!-- Penetapan -->
-            <fieldset class="border border-gray-300 p-4 rounded-md bg-white">
+            <fieldset class="border border-[#021526] p-4 rounded-md bg-white">
                 <legend
                     class="text-md text-white font-semibold px-2 rounded"
-                    style="background-color: #12086f"
+                    style="background-color: #021526"
                 >
                     Penetapan
                 </legend>
                 <div class="flex gap-4">
-                    <div class="flex-1">
+                    <div class="flex-1 text-black">
                         <Editor v-model="contents.penetapan" />
                     </div>
                     <div class="w-1/4">
-                        <h2 class="text-md font-semibold mb-2">
+                        <h2 class="text-md font-semibold mb-2 text-[#021526]">
                             Pendukung Penetapan (Upload File)
                         </h2>
                         <UploadFile
@@ -31,19 +31,19 @@
             </fieldset>
 
             <!-- Perencanaan -->
-            <fieldset class="border border-gray-300 p-4 rounded-md bg-white">
+            <fieldset class="border border-[#021526] p-4 rounded-md bg-white">
                 <legend
                     class="text-md text-white font-semibold px-2 rounded"
-                    style="background-color: #12086f"
+                    style="background-color: #021526"
                 >
                     Perencanaan
                 </legend>
                 <div class="flex gap-4">
-                    <div class="flex-1">
+                    <div class="flex-1 text-black">
                         <Editor v-model="contents.perencanaan" />
                     </div>
                     <div class="w-1/4">
-                        <h2 class="text-md font-semibold mb-2">
+                        <h2 class="text-md font-semibold mb-2 text-[#021526]">
                             Pendukung Perencanaan (Upload File)
                         </h2>
                         <UploadFile
@@ -54,19 +54,19 @@
             </fieldset>
 
             <!-- Pelaksanaan -->
-            <fieldset class="border border-gray-300 p-4 rounded-md bg-white">
+            <fieldset class="border border-[#021526] p-4 rounded-md bg-white">
                 <legend
                     class="text-md text-white font-semibold px-2 rounded"
-                    style="background-color: #12086f"
+                    style="background-color: #021526"
                 >
                     Pelaksanaan
                 </legend>
                 <div class="flex gap-4">
-                    <div class="flex-1">
+                    <div class="flex-1 text-black">
                         <Editor v-model="contents.pelaksanaan" />
                     </div>
                     <div class="w-1/4">
-                        <h2 class="text-md font-semibold mb-2">
+                        <h2 class="text-md font-semibold mb-2 text-[#021526]">
                             Pendukung Pelaksanaan (Upload File)
                         </h2>
                         <UploadFile
@@ -77,19 +77,19 @@
             </fieldset>
 
             <!-- Evaluasi -->
-            <fieldset class="border border-gray-300 p-4 rounded-md bg-white">
+            <fieldset class="border border-[#021526] p-4 rounded-md bg-white">
                 <legend
                     class="text-md text-white font-semibold px-2 rounded"
-                    style="background-color: #12086f"
+                    style="background-color: #021526"
                 >
                     Evaluasi
                 </legend>
                 <div class="flex gap-4">
-                    <div class="flex-1">
+                    <div class="flex-1 text-black">
                         <Editor v-model="contents.evaluasi" />
                     </div>
                     <div class="w-1/4">
-                        <h2 class="text-md font-semibold mb-2">
+                        <h2 class="text-md font-semibold mb-2 text-[#021526]">
                             Pendukung Evaluasi (Upload File)
                         </h2>
                         <UploadFile
@@ -100,19 +100,19 @@
             </fieldset>
 
             <!-- Peningkatan -->
-            <fieldset class="border border-gray-300 p-4 rounded-md bg-white">
+            <fieldset class="border border-[#021526] p-4 rounded-md bg-white">
                 <legend
                     class="text-md text-white font-semibold px-2 rounded"
-                    style="background-color: #12086f"
+                    style="background-color: #021526"
                 >
                     Peningkatan
                 </legend>
                 <div class="flex gap-4">
-                    <div class="flex-1">
+                    <div class="flex-1 text-black">
                         <Editor v-model="contents.peningkatan" />
                     </div>
                     <div class="w-1/4">
-                        <h2 class="text-md font-semibold mb-2">
+                        <h2 class="text-md font-semibold mb-2 text-[#021526]">
                             Pendukung Peningkatan (Upload File)
                         </h2>
                         <UploadFile
