@@ -1,6 +1,6 @@
 <script setup>
 import { useRouter } from "vue-router";
-import TopNavbar from "../components/TopNavbar.vue";
+import { NButton } from "naive-ui";
 import Footer from "../components/Footer.vue";
 
 import bgLogin from "../assets/bg-login.jpg"
@@ -25,16 +25,19 @@ const onGetStarted = () => {
     
     <div class="w-full h-screen max-h-screen flex flex-col justify-center items-center bg-black/50">
 
-        <img :src="bgLogin" alt="" class="absolute isolated -z-10 w-full h-full object-cover">
+        <img :src="bgLogin" alt="" class="absolute isolated -z-10 w-full h-full object-cover object-center">
     <!-- Main Content -->
     <div class="text-center z-10">
       <h1 class="text-5xl font-bold mb-4 text-white">AKREDITASI</h1>
       <p class="text-xl mb-8 text-white-200 max-w-xl">
         Akreditasi bukan hanya penilaian formal, tetapi cerminan kualitas institusi. Polinema terus berkomitmen meningkatkan mutu pendidikan, layanan, dan tata kelola untuk meraih predikat akreditasi terbaik demi masa depan generasi unggul.
       </p>
-      <button
+      <n-button
+      type="info"
+       size="large"
+       round
         @click="onGetStarted"
-        class="bg-white text-blue-700 text-lg font-bold py-3 px-8 rounded-full hover:bg-blue-100 transition duration-300">GET STARTED</button>
+        class="bg-white text-blue-700 text-lg font-bold py-3 px-8 rounded-full hover:bg-blue-100 transition duration-300">GET STARTED</n-button>
 
       
       <!-- Social Media Icons -->
