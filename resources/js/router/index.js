@@ -27,8 +27,49 @@ const routes = [
         meta: {
             title: "Dashboard",
             requiresAuth: true,
-        }
+        },
     },
+    {
+        path: "/profil",
+        name: "profil",
+        component: () => import("../pages/landingpage/Profil.vue"),
+        meta: {
+            title: "Profil",
+        },
+    },
+    {
+        path: "/visi",
+        name: "visi",
+        component: () => import("../pages/landingpage/Visi.vue"),
+        meta: {
+            title: "Visi",
+        },
+    },
+    {
+        path: "/misi",
+        name: "misi",
+        component: () => import("../pages/landingpage/Misi.vue"),
+        meta: {
+            title: "Misi",
+        },
+    },
+    {
+        path: "/tujuan",
+        name: "tujuan",
+        component: () => import("../pages/landingpage/Tujuan.vue"),
+        meta: {
+            title: "Tujuan",
+        },
+    },
+    {
+    path: "/kriteria",
+    name: "kriteria",
+    component: () => import("../pages/dashboard/Kriteria.vue"),
+    meta: {
+        title: "Kriteria",
+    },
+},
+
 ];
 
 const router = createRouter({
