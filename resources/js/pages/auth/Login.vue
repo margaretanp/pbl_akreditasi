@@ -73,7 +73,7 @@ const onSubmitLogin = async () => {
       
       <!-- Sign in section -->
       <div class="w-1/2 bg-white flex flex-col justify-center items-center px-12">
-        <h1 class="text-3xl font-bold mb-4 text-blue-600 dark:text-sky-400">Sign in</h1>
+        <h1 class="text-3xl font-bold mb-4 text-[#021526]">Sign in</h1>
 
         <form class="w-full max-w-sm flex flex-col gap-y-4" @submit.prevent="onSubmitLogin">
 
@@ -111,7 +111,7 @@ const onSubmitLogin = async () => {
           <!-- Submit Button -->
           <button
             type="submit"
-            class="bg-blue-500 text-white py-2 rounded-full hover:bg-emerald-600 transition-colors font-semibold"
+            class="bg-[#021526] text-white py-2 rounded-full hover:bg-[#03346E] transition-colors font-semibold"
             :disabled="!isFormValid || formLogin.loading"
           >
             <span v-if="formLogin.loading">Loading...</span>

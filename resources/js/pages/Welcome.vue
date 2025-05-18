@@ -3,7 +3,7 @@ import { useRouter } from "vue-router";
 import TopNavbar from "../components/TopNavbar.vue";
 import Footer from "../components/Footer.vue";
 import Navbar from "@/components/Navbar.vue";
-import bgLogin from "../assets/bgLogin.png";
+import bgLogin from "../assets/bglogin3.jpg";
 
 const $router = useRouter();
 
@@ -30,25 +30,26 @@ const onGetStarted = () => {
         <img
             :src="bgLogin"
             alt=""
-            class="absolute inset-0 -z-10 w-full h-full object-cover"
+            class="absolute inset-0 -z-10 w-full h-screen object-cover"
         />
         <!-- Main Content -->
         <div class="text-center z-10 flex flex-col items-center px-4">
             <h1
-                class="text-5xl font-bold mb-4 font-sans md:font-serif"
-                style="color: #12086f"
+                class="text-5xl font-bold mb-1"
+                style="color: #021526"
             >
                 SISTEM AKREDITASI
             </h1>
             <h1
-                class="text-5xl font-bold mb-4 font-sans md:font-serif"
-                style="color: #12086f"
+                class="text-5xl font-bold mb-4"
+                style="color: #021526"
             >
                 JURUSAN TEKNOLOGI INFORMASI
             </h1>
 
             <p
-                class="text-xl mb-8 text-gray-700 max-w-xl text-center font-sans md:font-serif"
+                class="text-xl mb-8 max-w-xl text-center font-helvetica md:font-serif"
+                style="color: #021526"
             >
                 Akreditasi bukan hanya penilaian formal, tetapi cerminan
                 kualitas institusi. Polinema terus berkomitmen meningkatkan mutu
@@ -59,30 +60,16 @@ const onGetStarted = () => {
             <!-- Button -->
             <button
                 @click="onGetStarted"
-                class="bg-white text-[#4361ee] text-lg font-bold py-3 px-8 rounded-full hover:bg-blue-100 transition duration-300"
+                class="bg-[#021526] text-white text-lg font-bold py-3 px-8 rounded-full hover:bg-[#03346E] transition duration-300"
             >
                 GET STARTED
             </button>
-
-            <!-- Social Media Icons -->
-            <div class="flex justify-center mt-8 gap-4">
-                <a class="text-gray-400 hover:text-white transition-colors">
-                    <!-- Twitter SVG -->
-                </a>
-                <a class="text-gray-400 hover:text-white transition-colors">
-                    <!-- YouTube SVG -->
-                </a>
-                <a class="text-gray-400 hover:text-white transition-colors">
-                    <!-- Facebook SVG -->
-                </a>
-            </div>
         </div>
     </div>
 
     <!-- Footer -->
-    <Footer />
+    <Footer class="absoulute fixed bottom-0" />
 </template>
 
 <style scoped>
-/* Add CSS for background decorative elements that can be added later */
 </style>
