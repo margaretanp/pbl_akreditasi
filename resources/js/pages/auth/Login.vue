@@ -6,6 +6,7 @@ import { useToast } from "vue-toast-notification";
 import authService from "../../services/authService";
 import InputField from "../../components/InputField.vue";
 
+
 const $toast = useToast();
 const router = useRouter();
 
@@ -14,8 +15,6 @@ const formLogin = reactive({
     password: "",
     loading: false,
 });
-
-const showPassword = ref(false); // <-- Tambahan ini
 
 const isFormValid = computed(() => {
     return formLogin.email.trim() !== "" && formLogin.password.trim() !== "";
@@ -52,7 +51,7 @@ const onSubmitLogin = async () => {
             authService.setTokens(tokenData);
 
             $toast.success("Login successful!");
-            router.push("/dashboard");
+            router.push("/Kriteria");
         } else {
             throw new Error(data.message || "Login failed");
         }
@@ -68,12 +67,13 @@ const onSubmitLogin = async () => {
 </script>
 
 <template>
+  <!-- Welcome section -->
   <div class="h-screen bg-gray-100 flex items-center justify-center font-sans">
     <div class="flex w-full max-w-4xl h-[500px] rounded-lg shadow-lg overflow-hidden bg-white">
       
       <!-- Sign in section -->
       <div class="w-1/2 bg-white flex flex-col justify-center items-center px-12">
-        <h1 class="text-3xl font-bold mb-4 text-blue-600 dark:text-sky-400">Sign in</h1>
+        <h1 class="text-3xl font-bold mb-4 text-[#021526]">Sign in</h1>
 
         <form class="w-full max-w-sm flex flex-col gap-y-4" @submit.prevent="onSubmitLogin">
 
@@ -86,6 +86,7 @@ const onSubmitLogin = async () => {
               type="email"
               placeholder="Email"
               v-model="formLogin.email"
+              class="text-black"
             />
           </div>
 
@@ -98,20 +99,14 @@ const onSubmitLogin = async () => {
               :type="showPassword ? 'text' : 'password'"
               placeholder="Password"
               v-model="formLogin.password"
+              class="text-black"
             />
-            <button
-              type="button"
-              class="absolute right-3 top-[42px] text-sm text-gray-500"
-              @click="togglePassword"
-            >
-              {{ showPassword ? '🙄' : '😖' }}
-            </button>
           </div>
 
           <!-- Submit Button -->
           <button
             type="submit"
-            class="bg-blue-500 text-white py-2 rounded-full hover:bg-emerald-600 transition-colors font-semibold"
+            class="bg-[#021526] text-white py-2 rounded-full hover:bg-[#03346E] transition-colors font-semibold"
             :disabled="!isFormValid || formLogin.loading"
           >
             <span v-if="formLogin.loading">Loading...</span>
@@ -120,8 +115,8 @@ const onSubmitLogin = async () => {
         </form>
       </div>
 
-      <!-- Welcome -->
-      <div class="w-1/2 bg-gradient-to-r from-blue-400 to-blue-600 text-white flex flex-col justify-center items-center px-12">
+      <!-- Welcome section -->
+      <div class="w-1/2 bg-gradient-to-r from-[#03346E] to-[#021526] text-white flex flex-col justify-center items-center px-12">
         <h2 class="text-3xl font-bold mb-2 text-center">Halo, Teman!</h2>
         <p class="text-xl mb-6 text-center">Selamat Datang di Website Akreditas</p>
       </div>
