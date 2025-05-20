@@ -32,7 +32,7 @@ const onGetStarted = () => {
     </video>
 
     <!-- Overlay untuk gelapkan video (opsional) -->
-    <div class="absolute inset-0 bg-white/20 -z-10"></div>
+    <div class="absolute inset-0 bg-white/60 -z-10"></div>
 
     <!-- Main Content -->
     <div class="text-center max-w-3xl">
