@@ -19,7 +19,7 @@
       class="mb-1 py-1 px-2 bg-[#021526] text-white rounded hover:bg-[#03346E] transition text-sm"
       @click="triggerInput"
     >
-      Pilih File
+      Choose File
     </button>
 
     <!-- Area klik dengan ikon, fleksibel agar tinggi tersisa -->

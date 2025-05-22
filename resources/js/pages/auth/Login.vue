@@ -51,7 +51,7 @@ const onSubmitLogin = async () => {
             authService.setTokens(tokenData);
 
             $toast.success("Login successful!");
-            router.push("/Kriteria");
+            router.push("/dashboard");
         } else {
             throw new Error(data.message || "Login failed");
         }

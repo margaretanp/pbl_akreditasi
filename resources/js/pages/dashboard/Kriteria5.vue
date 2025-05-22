@@ -7,6 +7,7 @@
 
         <!-- Main Content -->
         <div class="flex-1 p-6 overflow-auto space-y-6">
+            <h2 class="text-base md:text-5xl font-bold text-[#021526] font-poopins ">Kriteria 5: Penelitian dan Pengabdian Kepada Masyarakat</h2>
             <!-- Penetapan -->
             <fieldset class="border border-[#021526] p-4 rounded-md bg-white">
                 <legend
