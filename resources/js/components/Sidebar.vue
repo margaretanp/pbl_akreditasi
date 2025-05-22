@@ -158,51 +158,81 @@
                             class="mt-2"
                             :class="expanded ? 'ml-8 space-y-1' : 'space-y-1'"
                         >
-                            <router-link
-                                v-for="i in 9"
-                                :key="i"
-                                :to="`/kriteria/${i}`"
-                                class="block text-sm text-gray-300 hover:bg-gray-800 rounded-lg"
-                                :class="
-                                    expanded
-                                        ? 'px-4 py-2'
-                                        : 'px-2 py-1 text-center'
-                                "
-                                active-class="bg-gray-800 text-white"
-                            >
-                                {{ expanded ? `Kriteria ${i}` : i }}
-                            </router-link>
+                            <li>
+                                <router-link to="/kriteria1"
+                                    >Kriteria 1</router-link
+                                >
+                            </li>
+                            <li>
+                                <router-link to="/kriteria2"
+                                    >Kriteria 2</router-link
+                                >
+                            </li>
+                            <li>
+                                <router-link to="/kriteria3"
+                                    >Kriteria 3</router-link
+                                >
+                            </li>
+                            <li>
+                                <router-link to="/kriteria4"
+                                    >Kriteria 4</router-link
+                                >
+                            </li>
+                            <li>
+                                <router-link to="/kriteria5"
+                                    >Kriteria 5</router-link
+                                >
+                            </li>
+                            <li>
+                                <router-link to="/kriteria6"
+                                    >Kriteria 6</router-link
+                                >
+                            </li>
+                            <li>
+                                <router-link to="/kriteria7"
+                                    >Kriteria 7</router-link
+                                >
+                            </li>
+                            <li>
+                                <router-link to="/kriteria8"
+                                    >Kriteria 8</router-link
+                                >
+                            </li>
+                            <li>
+                                <router-link to="/kriteria9"
+                                    >Kriteria 9</router-link
+                                >
+                            </li>
                         </div>
                     </li>
 
-                    <!-- Validasi -->
-                    <li>
-                        <router-link
-                            to="/validasi"
-                            :class="[
-                                'hover:bg-gray-800 rounded-lg text-white',
-                                expanded
-                                    ? 'flex items-center px-4 py-2'
-                                    : 'p-2 flex justify-center',
-                            ]"
+                    <!-- Validasi - Only shown for validator roles -->
+
+                    <router-link
+                        to="/validasi"
+                        :class="[
+                            'hover:bg-gray-800 rounded-lg text-white',
+                            expanded
+                                ? 'flex items-center px-4 py-2'
+                                : 'p-2 flex justify-center',
+                        ]"
+                    >
+                        <svg
+                            class="w-5 h-5"
+                            :class="expanded ? 'mr-3' : ''"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
                         >
-                            <svg
-                                class="w-5 h-5"
-                                :class="expanded ? 'mr-3' : ''"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
-                            >
-                                <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    stroke-width="2"
-                                    d="M5 13l4 4L19 7"
-                                />
-                            </svg>
-                            <span v-if="expanded">Validasi</span>
-                        </router-link>
-                    </li>
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M5 13l4 4L19 7"
+                            />
+                        </svg>
+                        <span v-if="expanded">Validasi</span>
+                    </router-link>
                 </ul>
             </nav>
         </div>
@@ -219,7 +249,7 @@ export default {
     data() {
         return {
             expanded: true,
-            showKriteria: false,
+            showKriteria: false,        
         };
     },
     methods: {

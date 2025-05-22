@@ -31,7 +31,7 @@ const routes = [
         children: [
             {
                 path: "",
-                redirect: "/home"
+                redirect: "/home",
             },
             {
                 path: "/home",
@@ -89,14 +89,77 @@ const routes = [
         },
     },
     {
-    path: "/kriteria",
-    name: "kriteria",
-    component: () => import("../pages/dashboard/Kriteria.vue"),
-    meta: {
-        title: "Kriteria",
+        path: "/kriteria1",
+        name: "kriteria1",
+        component: () => import("../pages/dashboard/Kriteria1.vue"),
+        meta: {
+            title: "Kriteria 1",
+        },
     },
-},
-
+    {
+        path: "/kriteria2",
+        name: "kriteria2",
+        component: () => import("../pages/dashboard/Kriteria2.vue"),
+        meta: {
+            title: "Kriteria 2",
+        },
+    },
+    {
+        path: "/kriteria3",
+        name: "kriteria3",
+        component: () => import("../pages/dashboard/Kriteria3.vue"),
+        meta: {
+            title: "Kriteria 3",
+        },
+    },
+    {
+        path: "/kriteria4",
+        name: "kriteria4",
+        component: () => import("../pages/dashboard/Kriteria4.vue"),
+        meta: {
+            title: "Kriteria 4",
+        },
+    },
+    {
+        path: "/kriteria5",
+        name: "kriteria5",
+        component: () => import("../pages/dashboard/Kriteria5.vue"),
+        meta: {
+            title: "Kriteria 5",
+        },
+    },
+    {
+        path: "/kriteria6",
+        name: "kriteria6",
+        component: () => import("../pages/dashboard/Kriteria6.vue"),
+        meta: {
+            title: "Kriteria 6",
+        },
+    },
+    {
+        path: "/kriteria7",
+        name: "kriteria7",
+        component: () => import("../pages/dashboard/Kriteria7.vue"),
+        meta: {
+            title: "Kriteria 7",
+        },
+    },
+    {
+        path: "/kriteria8",
+        name: "kriteria8",
+        component: () => import("../pages/dashboard/Kriteria8.vue"),
+        meta: {
+            title: "Kriteria 8",
+        },
+    },
+    {
+        path: "/kriteria9",
+        name: "kriteria9",
+        component: () => import("../pages/dashboard/Kriteria9.vue"),
+        meta: {
+            title: "Kriteria 9",
+        },
+    },
 ];
 
 const router = createRouter({

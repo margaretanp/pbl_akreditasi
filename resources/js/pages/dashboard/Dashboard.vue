@@ -2,7 +2,7 @@
 import axios from 'axios';
 import { onMounted, reactive } from 'vue';
 import { useToast } from 'vue-toast-notification';
-import SidebarMenu from '../../components/SidebarMenu.vue';
+import Sidebar from '../../components/Sidebar.vue';
 
 const $toast = useToast();
 
@@ -35,7 +35,7 @@ onMounted(fetchUserData);
 
 <template>
     <div class="h-screen bg-gray-50 flex">
-        <SidebarMenu />
+         <Sidebar />
         
         <main class="p-8">
             <router-view />
