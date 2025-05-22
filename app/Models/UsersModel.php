@@ -3,11 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Laravel\Sanctum\HasApiTokens;
 
 class UsersModel extends Model
 {
-    use HasApiTokens;
+    use HasApiTokens, SoftDeletes;
 
     protected $table = 'users';
     protected $primaryKey = 'id';

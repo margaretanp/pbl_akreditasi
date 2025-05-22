@@ -6,18 +6,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class RolesModel extends Model
+class KriteriaModel extends Model
 {
     use HasFactory, SoftDeletes;
-
-    protected $table = 'roles';
+    protected $table = 'kriteria';
     protected $primaryKey = 'id';
-    protected $fillable = ['code', 'name', 'description'];
-
+    protected $fillable = ['name'];
     protected $hidden = ['deleted_at', 'created_at', 'updated_at'];
-
-    public function users()
-    {
-        return $this->hasMany(UsersModel::class, 'role_id', 'id');
-    }
+    
 }

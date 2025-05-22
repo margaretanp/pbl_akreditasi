@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\api\AuthController;
+use App\Http\Controllers\api\KriteriaController;
 use App\Http\Controllers\api\RolesController;
 use App\Http\Controllers\api\UsersController;
 use Illuminate\Support\Facades\Route;
@@ -23,4 +24,5 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     
     Route::apiResource('roles', RolesController::class);
     Route::apiResource('users', UsersController::class);
+    Route::apiResource('kriteria', KriteriaController::class);
 });
