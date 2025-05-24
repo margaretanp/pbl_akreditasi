@@ -112,7 +112,7 @@ class KriteriaController extends Controller
         return response()->json(
             [
                 'status' => 'success',
-                'meessage' => 'Role deleted successfully'
+                'meessage' => 'Kriteria deleted successfully'
             ],
             200
         );
