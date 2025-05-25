@@ -48,12 +48,18 @@ const routes = [
                         path: "/users",
                         name: "users",
                         component: () =>
-                            import(
-                                "../pages/dashboard/data-master/users/Users.vue"
-                            ),
+                            import("../pages/dashboard/data-master/users/Users.vue"),
                     },
                 ],
             },
+            {
+                path: "validasi",
+                name: "validasi",
+                component: () => import("../pages/dashboard//Home/Validasi.vue"),
+                meta: {
+                    title: "Validasi",
+                },
+            }
         ],
     },
     {
