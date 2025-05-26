@@ -55,11 +55,20 @@ const routes = [
             {
                 path: "/validasi",
                 name: "validasi",
-                component: () => import("../pages/dashboard//Home/Validasi.vue"),
+                component: () => import("../pages/dashboard/Home/Validasi.vue"),
                 meta: {
                     title: "Validasi",
                 },
-            }
+            },
+            {
+                path: "/dashboard-validasi",
+                name: "dashboard-validasi",
+                component: () => import("../pages/dashboard/Home/DashboardValidasi.vue"),
+                meta: {
+                    title: "Dashboard Validasi",
+                },
+            },
+
         ],
     },
     {
