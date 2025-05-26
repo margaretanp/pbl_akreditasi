@@ -10,26 +10,43 @@ const StatusEnum = Object.freeze({
 });
 
 const search = ref("");
+const selectedStatus = ref("semua");
+
 const data = ref([
-  { id: 1, nama: "Kriteria 1", status: StatusEnum.SUBMITTED, komentar: "" },
-  { id: 2, nama: "Kriteria 2", status: StatusEnum.SUBMITTED, komentar: "" },
-  { id: 3, nama: "Kriteria 3", status: StatusEnum.DRAFT, komentar: "" },
-  { id: 4, nama: "Kriteria 4", status: StatusEnum.SUBMITTED, komentar: "" },
-  { id: 5, nama: "Kriteria 5", status: StatusEnum.DRAFT, komentar: "" },
-  { id: 6, nama: "Kriteria 6", status: StatusEnum.REVISION, komentar: "Harap perbaiki bagian C." },
-  { id: 7, nama: "Kriteria 7", status: StatusEnum.SUBMITTED, komentar: "" },
-  { id: 8, nama: "Kriteria 8", status: StatusEnum.DRAFT, komentar: "" },
-  { id: 9, nama: "Kriteria 9", status: StatusEnum.SUBMITTED, komentar: "" },
+  { id: 1, nama: "Kriteria 1 - Visi, Misi, dan Tujuan", status: StatusEnum.SUBMITTED, komentar: "", tanggal: "2024-01-15" },
+  { id: 2, nama: "Kriteria 2 - Tata Pamong dan Kerjasama", status: StatusEnum.SUBMITTED, komentar: "", tanggal: "2024-01-14" },
+  { id: 3, nama: "Kriteria 3 - Mahasiswa", status: StatusEnum.DRAFT, komentar: "", tanggal: "2024-01-13" },
+  { id: 4, nama: "Kriteria 4 - Sumber Daya Manusia", status: StatusEnum.SUBMITTED, komentar: "", tanggal: "2024-01-12" },
+  { id: 5, nama: "Kriteria 5 - Keuangan", status: StatusEnum.DRAFT, komentar: "", tanggal: "2024-01-11" },
+  { id: 6, nama: "Kriteria 6 - Sarana dan Prasarana", status: StatusEnum.REVISION, komentar: "Harap perbaiki bagian C dan tambahkan dokumentasi yang lebih lengkap untuk fasilitas laboratorium.", tanggal: "2024-01-10" },
+  { id: 7, nama: "Kriteria 7 - Penelitian", status: StatusEnum.SUBMITTED, komentar: "", tanggal: "2024-01-09" },
+  { id: 8, nama: "Kriteria 8 - Pengabdian Masyarakat", status: StatusEnum.DRAFT, komentar: "", tanggal: "2024-01-08" },
+  { id: 9, nama: "Kriteria 9 - Luaran dan Capaian", status: StatusEnum.SUBMITTED, komentar: "", tanggal: "2024-01-07" },
 ]);
 
-const filteredData = computed(() =>
-  data.value.filter(
+const filteredData = computed(() => {
+  let filtered = data.value.filter(
     (item) =>
       item.nama.toLowerCase().includes(search.value.toLowerCase()) ||
       item.status.toLowerCase().includes(search.value.toLowerCase()) ||
       (item.komentar && item.komentar.toLowerCase().includes(search.value.toLowerCase()))
-  )
-);
+  );
+  
+  if (selectedStatus.value !== "semua") {
+    filtered = filtered.filter(item => item.status === selectedStatus.value);
+  }
+  
+  return filtered;
+});
+
+const statusCounts = computed(() => {
+  return {
+    total: data.value.length,
+    submitted: data.value.filter(item => item.status === StatusEnum.SUBMITTED).length,
+    draft: data.value.filter(item => item.status === StatusEnum.DRAFT).length,
+    revision: data.value.filter(item => item.status === StatusEnum.REVISION).length
+  };
+});
 
 const isDeleteModalOpen = ref(false);
 const deleteTarget = ref(null);
@@ -37,14 +54,14 @@ const deleteTarget = ref(null);
 function openDeleteModal(item) {
   deleteTarget.value = item;
   isDeleteModalOpen.value = true;
+  document.body.style.overflow = 'hidden';
 }
 
 function confirmDelete() {
   if (!deleteTarget.value) return;
   setTimeout(() => {
     data.value = data.value.filter((d) => d.id !== deleteTarget.value.id);
-    isDeleteModalOpen.value = false;
-    deleteTarget.value = null;
+    closeModals();
   }, 500);
 }
 
@@ -53,6 +70,7 @@ function closeModals() {
   deleteTarget.value = null;
   isKomentarModalOpen.value = false;
   komentarContent.value = "";
+  document.body.style.overflow = 'auto';
 }
 
 function onEdit(item) {
@@ -66,117 +84,249 @@ const komentarContent = ref("");
 function openKomentarModal(komentar) {
   komentarContent.value = komentar;
   isKomentarModalOpen.value = true;
+  document.body.style.overflow = 'hidden';
+}
+
+function getStatusIcon(status) {
+  switch (status) {
+    case StatusEnum.SUBMITTED: return '✓';
+    case StatusEnum.DRAFT: return '📝';
+    case StatusEnum.REVISION: return '🔄';
+    default: return '•';
+  }
+}
+
+function getStatusColor(status) {
+  switch (status) {
+    case StatusEnum.SUBMITTED: return 'bg-green-100 text-green-800 border-green-200';
+    case StatusEnum.DRAFT: return 'bg-gray-100 text-gray-800 border-gray-200';
+    case StatusEnum.REVISION: return 'bg-yellow-100 text-yellow-800 border-yellow-200';
+    default: return 'bg-gray-100 text-gray-800 border-gray-200';
+  }
 }
 </script>
 
 <template>
-  <div class="flex flex-col h-screen w-screen bg-base-100 overflow-auto">
-    <div class="px-4 pt-2 pb-1 border-b border-base-content/10">
-      <h1 class="text-3xl font-bold">AKREDITASI</h1>
-    </div>
-
-    <div class="p-6">
-      <input
-        v-model="search"
-        type="text"
-        placeholder="Cari kriteria, status, atau komentar..."
-        class="input input-bordered w-full text-base"
-      />
-    </div>
-
-    <div class="flex-1 overflow-auto px-4 pb-10">
-      <div class="overflow-x-auto">
-        <table class="table table-zebra min-w-[700px] w-full text-sm">
-          <thead class="bg-base-200 sticky top-0 z-10">
-            <tr>
-              <th class="w-[60px] px-2 py-2 text-left">ID</th>
-              <th class="w-[200px] px-2 py-2 text-left">Nama</th>
-              <th class="w-[120px] px-2 py-2 text-left">Status</th>
-              <th class="w-[180px] px-2 py-2 text-left">Komentar</th>
-              <th class="w-[150px] px-2 py-2 text-left">Aksi</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="item in filteredData" :key="item.id">
-              <td class="px-2 py-2">{{ item.id }}</td>
-              <td class="px-2 py-2 truncate">{{ item.nama }}</td>
-              <td class="px-2 py-2">
-                <span
-                  :class="{
-                    'text-green-600 font-semibold': item.status === StatusEnum.SUBMITTED,
-                    'text-gray-500 italic': item.status === StatusEnum.DRAFT,
-                    'text-yellow-600 font-semibold': item.status === StatusEnum.REVISION,
-                  }"
-                >
-                  {{ item.status }}
-                </span>
-              </td>
-              <td class="px-2 py-2">
-                <template v-if="item.status === StatusEnum.REVISION && item.komentar">
-                  <button class="btn btn-sm btn-outline btn-info" @click="openKomentarModal(item.komentar)">
-                    Lihat Komentar
-                  </button>
-                </template>
-                <template v-else>
-                  <span class="text-gray-400">-</span>
-                </template>
-              </td>
-              <td class="px-2 py-2">
-                <div class="flex flex-wrap gap-2">
-                  <button
-                    class="btn btn-sm btn-primary"
-                    :disabled="item.status === StatusEnum.SUBMITTED"
-                    @click="onEdit(item)"
-                  >
-                    Edit
-                  </button>
-                  <button class="btn btn-sm btn-error" @click="openDeleteModal(item)">
-                    Hapus
-                  </button>
-                </div>
-              </td>
-            </tr>
-            <tr v-if="filteredData.length === 0">
-              <td colspan="5" class="text-center text-gray-500 py-4">
-                Data tidak ditemukan.
-              </td>
-            </tr>
-          </tbody>
-        </table>
+  <div class="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
+    <!-- Header Section -->
+    <div class="bg-white shadow-lg border-b-4 border-indigo-500">
+      <div class="px-8 py-6">
+        <div class="flex items-center justify-between">
+          <div>
+            <h1 class="text-4xl font-bold text-gray-800 mb-2">
+              <span class="bg-gradient-to-r from-indigo-600 to-blue-600 bg-clip-text text-transparent">
+                DASHBOARD AKREDITASI
+              </span>
+            </h1>
+            <p class="text-gray-600 text-lg">Kelola dan pantau progress kriteria akreditasi Anda</p>
+          </div>
+          <div class="flex gap-4">
+            <div class="text-center p-4 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-xl shadow-lg">
+              <div class="text-2xl font-bold">{{ statusCounts.total }}</div>
+              <div class="text-sm opacity-90">Total Kriteria</div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
+    <div class="px-8 py-6">
 
-    <!-- Modal Hapus -->
-    <div
-      v-if="isDeleteModalOpen"
-      class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
-    >
-      <div class="bg-white rounded-lg p-6 max-w-sm w-full">
-        <h2 class="text-xl font-semibold mb-4 text-center text-red-600">Konfirmasi Hapus</h2>
-        <p class="mb-6 text-center">
-          Apakah kamu yakin ingin menghapus <strong>{{ deleteTarget?.nama }}</strong>?
-        </p>
-        <div class="flex justify-center gap-6">
-          <button class="btn btn-ghost" @click="closeModals">Batal</button>
-          <button class="btn btn-error" @click="confirmDelete">Hapus</button>
+      <!-- Filters and Search -->
+      <div class="bg-white rounded-xl shadow-lg p-6 mb-6">
+        <div class="flex flex-col md:flex-row gap-4">
+          <div class="flex-1">
+            <div class="relative">
+              <input
+                v-model="search"
+                type="text"
+                placeholder="🔍 Cari kriteria, status, atau komentar..."
+                class="w-full pl-12 pr-4 py-3 text-black border border-gray-300 rounded-xl focus:ring-4 focus:ring-blue-100 focus:border-blue-500 transition-all duration-300"
+              />
+              <svg class="absolute left-4 top-4 w-5 h-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"></path>
+              </svg>
+            </div>
+          </div>
+          <div class="w-full md:w-64">
+            <select 
+              v-model="selectedStatus"
+              class="w-full px-4 py-3 text-black border border-gray-300 rounded-xl focus:ring-4 focus:ring-blue-100 focus:border-blue-500 transition-all duration-300"
+            >
+              <option value="semua">📋 Semua Status</option>
+              <option value="Submitted">✅ Submitted</option>
+              <option value="Draft">📝 Draft</option>
+              <option value="Revision">🔄 Revision</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Table -->
+      <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+        <div class="overflow-x-auto">
+          <table class="w-full">
+            <thead class="bg-gradient-to-r from-gray-50 to-gray-100 border-b-2 border-gray-200">
+              <tr>
+                <th class="text-left p-6 font-semibold text-gray-700 text-lg">ID</th>
+                <th class="text-left p-6 font-semibold text-gray-700 text-lg">Nama Kriteria</th>
+                <th class="text-left p-6 font-semibold text-gray-700 text-lg">Tanggal</th>
+                <th class="text-left p-6 font-semibold text-gray-700 text-lg">Status</th>
+                <th class="text-left p-6 font-semibold text-gray-700 text-lg">Komentar</th>
+                <th class="text-center p-6 font-semibold text-gray-700 text-lg">Aksi</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                v-for="(item, index) in filteredData"
+                :key="item.id"
+                class="border-b border-gray-100 hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50 transition-all duration-300"
+                :style="{ animationDelay: index * 50 + 'ms' }"
+              >
+                <td class="p-6">
+                  <div class="w-8 h-8 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-full flex items-center justify-center text-white font-bold">
+                    {{ item.id }}
+                  </div>
+                </td>
+                <td class="p-6">
+                  <p class="font-semibold text-gray-800 text-lg">{{ item.nama }}</p>
+                </td>
+                <td class="p-6">
+                  <p class="text-gray-600 text-lg">{{ item.tanggal }}</p>
+                </td>
+                <td class="p-6">
+                  <span 
+                    :class="getStatusColor(item.status)"
+                    class="px-4 py-2 rounded-full text-sm font-semibold inline-flex items-center gap-2 border"
+                  >
+                    <span class="text-lg">{{ getStatusIcon(item.status) }}</span>
+                    {{ item.status }}
+                  </span>
+                </td>
+                <td class="p-6">
+                  <template v-if="item.status === StatusEnum.REVISION && item.komentar">
+                    <button 
+                      @click="openKomentarModal(item.komentar)"
+                      class="bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white px-4 py-2 rounded-xl font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300"
+                    >
+                      💬 Lihat Komentar
+                    </button>
+                  </template>
+                  <template v-else>
+                    <span class="text-gray-400 text-lg">-</span>
+                  </template>
+                </td>
+                <td class="p-6">
+                  <div class="flex gap-3 justify-center">
+                    <button
+                      @click="onEdit(item)"
+                      :disabled="item.status === StatusEnum.SUBMITTED"
+                      :class="item.status === StatusEnum.SUBMITTED 
+                        ? 'bg-gray-300 text-gray-500 cursor-not-allowed' 
+                        : 'bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white shadow-lg hover:shadow-xl transform hover:-translate-y-1'"
+                      class="px-4 py-2 rounded-xl font-semibold transition-all duration-300"
+                    >
+                      ✏️ Edit
+                    </button>
+                    <button 
+                      @click="openDeleteModal(item)"
+                      class="bg-gradient-to-r from-red-500 to-pink-600 hover:from-red-600 hover:to-pink-700 text-white px-4 py-2 rounded-xl font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300"
+                    >
+                      🗑️ Hapus
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div v-if="filteredData.length === 0" class="text-center py-16">
+            <div class="text-6xl mb-4">🔍</div>
+            <p class="text-xl text-gray-500 mb-2">Tidak ada data yang ditemukan</p>
+            <p class="text-gray-400">Coba ubah kata kunci pencarian atau filter status</p>
+          </div>
         </div>
       </div>
     </div>
 
-    <!-- Modal Komentar -->
-    <div
-      v-if="isKomentarModalOpen"
-      class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
-    >
-      <div class="bg-white rounded-lg p-6 max-w-lg w-full">
-        <h2 class="text-xl font-semibold mb-4 text-center text-info">Komentar</h2>
-        <p class="mb-6 text-center text-gray-700 whitespace-pre-line">
-          {{ komentarContent }}
-        </p>
-        <div class="flex justify-center">
-          <button class="btn btn-primary" @click="closeModals">Tutup</button>
+    <!-- Enhanced Delete Modal -->
+    <div v-if="isDeleteModalOpen" class="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+      <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md transform transition-all duration-300 scale-100">
+        <div class="bg-gradient-to-r from-red-500 to-pink-600 text-white p-6 rounded-t-2xl">
+          <div class="flex items-center justify-center mb-4">
+            <div class="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center">
+              <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" clip-rule="evenodd"></path>
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8 7a1 1 0 012 0v4a1 1 0 11-2 0V7zm5 1a1 1 0 10-2 0v4a1 1 0 102 0V8z" clip-rule="evenodd"></path>
+              </svg>
+            </div>
+          </div>
+          <h2 class="text-2xl font-bold text-center">Konfirmasi Hapus</h2>
+        </div>
+        
+        <div class="p-6">
+          <p class="text-center text-gray-700 mb-6 text-lg">
+            Apakah Anda yakin ingin menghapus
+            <strong class="text-red-600">{{ deleteTarget?.nama }}</strong>?
+          </p>
+          <div class="flex gap-4">
+            <button 
+              @click="closeModals"
+              class="flex-1 px-6 py-3 bg-gray-300 hover:bg-gray-400 text-gray-700 rounded-xl font-semibold transition-all duration-300 transform hover:-translate-y-1"
+            >
+              Batal
+            </button>
+            <button 
+              @click="confirmDelete"
+              class="flex-1 px-6 py-3 bg-gradient-to-r from-red-500 to-pink-600 hover:from-red-600 hover:to-pink-700 text-white rounded-xl font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300"
+            >
+              Hapus
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Enhanced Comment Modal -->
+    <div v-if="isKomentarModalOpen" class="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+      <div class="bg-white rounded-2xl shadow-2xl w-full max-w-2xl transform transition-all duration-300 scale-100">
+        <div class="bg-gradient-to-r from-blue-500 to-indigo-600 text-white p-6 rounded-t-2xl">
+          <div class="flex items-center justify-center mb-4">
+            <div class="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center">
+              <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17l1.338-3.123C2.493 12.767 2 11.434 2 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM7 9H5v2h2V9zm8 0h-2v2h2V9zM9 9h2v2H9V9z" clip-rule="evenodd"></path>
+              </svg>
+            </div>
+          </div>
+          <h2 class="text-2xl font-bold text-center">Komentar Revisi</h2>
+        </div>
+        
+        <div class="p-8">
+          <div class="bg-yellow-50 border border-yellow-200 rounded-xl p-6 mb-6">
+            <p class="text-gray-800 text-lg leading-relaxed whitespace-pre-line">
+              {{ komentarContent }}
+            </p>
+          </div>
+          <div class="flex justify-center">
+            <button 
+              @click="closeModals"
+              class="px-8 py-3 bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white rounded-xl font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300"
+            >
+              Tutup
+            </button>
+          </div>
         </div>
       </div>
     </div>
   </div>
 </template>
+
+<style scoped>
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+tbody tr {
+  animation: fadeIn 0.5s ease-out forwards;
+}
+</style>
