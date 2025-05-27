@@ -1,65 +1,104 @@
 <template>
-  <div class="navbar">
-    <div class="flex-1">
-      <router-link
-        to="/"
-        class="btn btn-ghost font-sans md:font-helvetica text-3xl font-bold text-transparent bg-clip-text hover:scale-110 hover:text-gray-300 transition duration-200 hover:bg-transparent focus:outline-none"
-        style="background-image: linear-gradient(to right, #ffff);"
+  <nav class="navbar">
+    <div class="flex-1"></div>
+
+    <div class="flex items-center space-x-4">
+      <router-link to="/profil" class="nav-link">{{ $t('menu.profil') }}</router-link>
+      <router-link to="/visi" class="nav-link">{{ $t('menu.visi') }}</router-link>
+      <router-link to="/misi" class="nav-link">{{ $t('menu.misi') }}</router-link>
+      <router-link to="/tujuan" class="nav-link">{{ $t('menu.tujuan') }}</router-link>
+
+      <select 
+        v-model="currentLocale"
+        @change="changeLanguage"
+        class="lang-switch"
       >
-        AKREDITASI
-      </router-link>
+        <option value="id">ID</option>
+        <option value="en">EN</option>
+      </select>
     </div>
-    <div class="text-white">
-      <ul class="menu menu-horizontal px-1 font-helvetica text-lg space-x-4">
-<router-link to="/profil">{{ $t('menu.profil') }}</router-link>
-<router-link to="/visi">{{ $t('menu.visi') }}</router-link>
-<router-link to="/misi">{{ $t('menu.misi') }}</router-link>
-<router-link to="/tujuan">{{ $t('menu.tujuan') }}</router-link>
-
-      </ul>
-      <div class="ml-4">
-  <select @change="changeLanguage($event)" class="bg-transparent text-white border border-white rounded px-2 py-1 focus:outline-none hover:scale-105 transition duration-200"
-  >
-    <option value="id">Indonesia</option>
-    <option value="en">English</option>
-  </select>
-</div>
-
-    </div>
-  </div>
+  </nav>
 </template>
 
 <script setup>
 import { useI18n } from 'vue-i18n'
+import { ref, watch } from 'vue'
 
 const { locale } = useI18n()
+const currentLocale = ref(locale.value)
 
-function changeLanguage(event) {
-  locale.value = event.target.value
+function changeLanguage() {
+  locale.value = currentLocale.value
+  localStorage.setItem('userLanguage', currentLocale.value)
+}
+
+watch(locale, (newVal) => {
+  currentLocale.value = newVal
+})
+
+const savedLanguage = localStorage.getItem('userLanguage')
+if (savedLanguage) {
+  locale.value = savedLanguage
+  currentLocale.value = savedLanguage
 }
 </script>
 
 <style scoped>
 .navbar {
-  position: fixed;
-  top: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 100%;
-  max-width: 1200px;
   background-color: #021526;
-  color: white;
   padding: 1rem 2rem;
-  border-radius: 16px;
-  z-index: 999;
-  
-}
-
-.container {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  color: white;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  z-index: 50;
+  width: 100%;
 }
 
 
+
+.brand {
+  font-size: 1.75rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  background: linear-gradient(to right, white, white);
+  color: transparent;
+  -webkit-background-clip: text;
+  background-clip: text;
+  transition: transform 0.2s;
+}
+
+.brand:hover {
+  transform: scale(1.05);
+}
+
+.nav-link {
+  color: white;
+  text-decoration: none;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.nav-link:hover,
+.nav-link.router-link-exact-active {
+  color: #a0c4ff;
+  font-weight: bold;
+  transform: scale(1.05);
+}
+
+.lang-switch {
+  background-color: white;
+  color: #021526;
+  font-weight: bold;
+  border: none;
+  border-radius: 6px;
+  padding: 0.25rem 0.5rem;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.lang-switch:hover {
+  transform: scale(1.05);
+}
 </style>

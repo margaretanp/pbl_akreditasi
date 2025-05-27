@@ -4,7 +4,7 @@
         <div
             :class="[
                 'bg-[#021526] text-white h-screen transition-all duration-300 ease-in-out',
-                expanded ? 'w-64' : 'w-16',
+                expanded ? 'w-60' : 'w-60',
                 'flex flex-col',
             ]"
         >
