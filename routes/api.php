@@ -6,6 +6,7 @@ use App\Http\Controllers\api\KriteriaController;
 use App\Http\Controllers\api\RolesController;
 use App\Http\Controllers\api\UsersController;
 use App\Http\Controllers\api\KomentarController;
+use App\Http\Controllers\api\ValidasiController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -28,5 +29,6 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::apiResource('users', UsersController::class);
     Route::apiResource('kriteria', KriteriaController::class);
     Route::apiResource('jenis-kriteria', JenisKriteriaController::class);
-    Route::apiResource('komentar', KomentarController::class);    
+    Route::apiResource('komentar', KomentarController::class);
+    
 });
