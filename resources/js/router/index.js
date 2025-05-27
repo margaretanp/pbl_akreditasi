@@ -4,7 +4,7 @@ import authService from "../services/authService";
 const routes = [
     {
         path: "/",
-        name: "welcome",
+        name: "Welcome",
         component: () => import("../pages/Welcome.vue"),
         meta: {
             title: "Welcome",
