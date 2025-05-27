@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
@@ -30,7 +31,9 @@ class AuthController extends Controller
             'status' => 'success',
             'message' => 'Login successful',
             'access_token' => $token,
-            'user' => $user
+            'user' => [
+                'role' => $user->role_id, // misalnya role 1 = admin, 2 = validator, dll
+            ]
         ]);
     }
 

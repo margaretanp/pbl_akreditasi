@@ -39,7 +39,6 @@ onMounted(fetchUserData);
 
     <main class="p-8 flex-1 overflow-y-auto">
       <h1 class="text-2xl font-semibold text-gray-700 mb-4">Dashboard / Dashboard</h1>
-
       <router-view />
     </main>
   </div>
