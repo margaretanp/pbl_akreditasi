@@ -1,5 +1,5 @@
 <template>
-  <div class="navbar">
+  <div class="navbar bg-blue-600">
     <div class="flex-1">
       <router-link
         to="/"
@@ -16,11 +16,41 @@
         <li><router-link to="/misi" class="transition duration-200 hover:scale-110 hover:text-gray-300 hover:bg-transparent focus:outline-none">MISI</router-link></li>
         <li><router-link to="/tujuan" class="transition duration-200 hover:scale-110 hover:text-gray-300 hover:bg-transparent focus:outline-none">TUJUAN</router-link></li>
       </ul>
+
+      <select 
+        v-model="currentLocale"
+        @change="changeLanguage"
+        class="lang-switch"
+      >
+        <option value="id">ID</option>
+        <option value="en">EN</option>
+      </select>
     </div>
   </div>
 </template>
 
+
 <script setup>
+import { useI18n } from 'vue-i18n'
+import { ref, watch } from 'vue'
+
+const { locale } = useI18n()
+const currentLocale = ref(locale.value)
+
+function changeLanguage() {
+  locale.value = currentLocale.value
+  localStorage.setItem('userLanguage', currentLocale.value)
+}
+
+watch(locale, (newVal) => {
+  currentLocale.value = newVal
+})
+
+const savedLanguage = localStorage.getItem('userLanguage')
+if (savedLanguage) {
+  locale.value = savedLanguage
+  currentLocale.value = savedLanguage
+}
 </script>
 
 <style scoped>
@@ -36,7 +66,6 @@
   padding: 1rem 2rem;
   border-radius: 16px;
   z-index: 999;
-  
 }
 
 .container {

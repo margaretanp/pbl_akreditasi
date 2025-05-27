@@ -18,7 +18,58 @@ const routes = [
         meta: {
             title: "Welcome",
             requiresAuth: false,
+        }
+    },
+    {
+        path: "/dashboard",
+        name: "dashboard",
+        component: () => import("../pages/dashboard/Dashboard.vue"),
+        meta: {
+            title: "Dashboard",
+            requiresAuth: true,
         },
+        children: [
+            {
+                path: "",
+                redirect: "/home",
+            },
+            {
+                path: "/home",
+                name: "Home",
+                component: () => import("../pages/dashboard/Home/Home.vue"),
+                meta: {
+                    title: "Home",
+                },
+            },
+            {
+                path: "/data-master",
+                children: [
+                    {
+                        path: "/users",
+                        name: "users",
+                        component: () =>
+                            import("../pages/dashboard/data-master/users/Users.vue"),
+                    },
+                ],
+            },
+            {
+                path: "/validasi",
+                name: "validasi",
+                component: () => import("../pages/dashboard/Home/Validasi.vue"),
+                meta: {
+                    title: "Validasi",
+                },
+            },
+            {
+                path: "/kriteria",
+                children: [
+                    {
+                        path: "/:id"
+                    }
+                ]
+            }
+
+        ],
     },
     {
         path: "/profil",
@@ -53,41 +104,9 @@ const routes = [
         },
     },
     {
-        path: "/dashboard",
-        name: "dashboard",
-        component: () => import("../pages/dashboard/Dashboard.vue"),
-        meta: {
-            title: "Dashboard",
-            requiresAuth: true,
-        },
-        children: [
-            {
-                path: "home",
-                name: "home",
-                component: () => import("../pages/dashboard/Home/Home.vue"),
-                meta: {
-                    title: "Home",
-                },
-            },
-            {
-                path: "/data-master",
-                children: [
-                    {
-                        path: "/users",
-                        name: "users",
-                        component: () =>
-                            import(
-                                "../pages/dashboard/data-master/users/Users.vue"
-                            ),
-                    },
-                ],
-            },
-        ],
-    },
-    {
         path: "/kriteria1",
         name: "kriteria1",
-        component: () => import("../pages/dashboard/Kriteria1.vue"),
+        component: () => import("../pages/kriteria/Kriteria1.vue"),
         meta: {
             title: "Kriteria 1",
         },
@@ -95,7 +114,7 @@ const routes = [
     {
         path: "/kriteria2",
         name: "kriteria2",
-        component: () => import("../pages/dashboard/Kriteria2.vue"),
+        component: () => import("../pages/kriteria/Kriteria2.vue"),
         meta: {
             title: "Kriteria 2",
         },
@@ -103,7 +122,7 @@ const routes = [
     {
         path: "/kriteria3",
         name: "kriteria3",
-        component: () => import("../pages/dashboard/Kriteria3.vue"),
+        component: () => import("../pages/kriteria/Kriteria3.vue"),
         meta: {
             title: "Kriteria 3",
         },
@@ -111,7 +130,7 @@ const routes = [
     {
         path: "/kriteria4",
         name: "kriteria4",
-        component: () => import("../pages/dashboard/Kriteria4.vue"),
+        component: () => import("../pages/kriteria/Kriteria4.vue"),
         meta: {
             title: "Kriteria 4",
         },
@@ -119,7 +138,7 @@ const routes = [
     {
         path: "/kriteria5",
         name: "kriteria5",
-        component: () => import("../pages/dashboard/Kriteria5.vue"),
+        component: () => import("../pages/kriteria/Kriteria5.vue"),
         meta: {
             title: "Kriteria 5",
         },
@@ -127,7 +146,7 @@ const routes = [
     {
         path: "/kriteria6",
         name: "kriteria6",
-        component: () => import("../pages/dashboard/Kriteria6.vue"),
+        component: () => import("../pages/kriteria/Kriteria6.vue"),
         meta: {
             title: "Kriteria 6",
         },
@@ -135,7 +154,7 @@ const routes = [
     {
         path: "/kriteria7",
         name: "kriteria7",
-        component: () => import("../pages/dashboard/Kriteria7.vue"),
+        component: () => import("../pages/kriteria/Kriteria7.vue"),
         meta: {
             title: "Kriteria 7",
         },
@@ -143,7 +162,7 @@ const routes = [
     {
         path: "/kriteria8",
         name: "kriteria8",
-        component: () => import("../pages/dashboard/Kriteria8.vue"),
+        component: () => import("../pages/kriteria/Kriteria8.vue"),
         meta: {
             title: "Kriteria 8",
         },
@@ -151,7 +170,7 @@ const routes = [
     {
         path: "/kriteria9",
         name: "kriteria9",
-        component: () => import("../pages/dashboard/Kriteria9.vue"),
+        component: () => import("../pages/kriteria/Kriteria9.vue"),
         meta: {
             title: "Kriteria 9",
         },

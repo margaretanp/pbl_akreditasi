@@ -185,4 +185,9 @@ return [
         // 'Example' => App\Facades\Example::class,
     ])->toArray(),
 
+
+    'locale'          => 'id',    // bahasa default
+'fallback_locale' => 'en',
+
+
 ];
