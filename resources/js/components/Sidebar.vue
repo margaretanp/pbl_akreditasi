@@ -1,5 +1,5 @@
 <template>
-    <div class="flex">
+    <div class="fixed left-0 flex h-full">
         <!-- Sidebar -->
         <div
             :class="[
