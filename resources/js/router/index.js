@@ -12,6 +12,15 @@ const routes = [
         },
     },
     {
+        path: "/",
+        name: "welcome",
+        component: () => import("../pages/Welcome.vue"),
+        meta: {
+            title: "Welcome",
+            requiresAuth: false,
+        }
+    },
+    {
         path: "/dashboard",
         name: "dashboard",
         component: () => import("../pages/dashboard/Dashboard.vue"),
@@ -52,13 +61,13 @@ const routes = [
                 },
             },
             {
-                path: "/dashboard-validasi",
-                name: "dashboard-validasi",
-                component: () => import("../pages/dashboard/Home/DashboardValidasi.vue"),
-                meta: {
-                    title: "Dashboard Validasi",
-                },
-            },
+                path: "/kriteria",
+                children: [
+                    {
+                        path: "/:id"
+                    }
+                ]
+            }
 
         ],
     },

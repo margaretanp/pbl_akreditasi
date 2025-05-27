@@ -35,8 +35,8 @@ const authService = {
     },
 
     getLoggedInUser() {
-        const user = localStorage.getItem("user");
-        return user ? JSON.parse(user) : null;
+        const user = this.getAccessToken();
+        return user ? user : null;
     },
 };
 

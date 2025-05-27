@@ -1,5 +1,6 @@
 <template>
-
+<navbar/>
+<br><br>
   <div class="w-full min-h-screen flex-col items-center bg-white">
 
     <div class="p-8 max-w-3xl mx-auto items-center justify-center pt-24">

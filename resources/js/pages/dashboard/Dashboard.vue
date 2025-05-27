@@ -36,24 +36,13 @@ onMounted(fetchUserData);
 </script>
 
 <template>
-  <div class="flex min-h-screen">
-    <!-- Sidebar fixed -->
-    <Sidebar />
-
-    <!-- Konten utama -->
-    <div class="flex-1 flex flex-col">
-      <!-- Navbar di bagian atas -->
-      <Navbar />
+  <div class="h-screen bg-gray-50 flex">
+    <Sidebar  class="z-0"/>
 
       <!-- Konten utama halaman -->
       <main class="bg-gray-50 flex-1 overflow-y-auto">
-        <h1 class="text-2xl font-semibold text-gray-700 mb-4">
-          Dashboard / Dashboard
-        </h1>
-
         <!-- Tempat konten utama -->
         <router-view />
       </main>
     </div>
-  </div>
 </template>
