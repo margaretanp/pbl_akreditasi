@@ -15,6 +15,8 @@ const formLogin = reactive({
     loading: false,
 });
 
+const showPassword = ref(false)
+
 const isFormValid = computed(() => {
     return formLogin.email.trim() !== "" && formLogin.password.trim() !== "";
 });
@@ -63,7 +65,7 @@ const onSubmitLogin = async () => {
             }
 
             $toast.success("Login successful!");
-            // router.push("/dashboard");
+            router.push({name: "dashboard"});
         } else {
             throw new Error(data.message || "Login failed");
         }
