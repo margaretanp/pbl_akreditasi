@@ -122,26 +122,11 @@
                     </div>
                 </div>
             </fieldset>
-            <div class="flex justify-end space-x-2">
-                <button
-                    class="bg-gray-300 text-gray-700 px-4 py-2 rounded hover:bg-gray-400"
-                    @click="handleCancel"
-                >
-                    Reset
-                </button>
-                <button
-                    class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
-                    @click="handleSaveDraft"
-                >
-                    Save
-                </button>
-                <button
-                    class="bg-[#021526] text-white px-4 py-2 rounded hover:bg-[#03346E]"
-                    @click="handleSubmit"
-                >
-                    Submit
-                </button>
-            </div>
+            <ButtonsPanel1
+                :formData="contents"
+                :originalData="originalContents"
+                @update:formData="(value) => Object.assign(contents, value)"
+            />
         </div>
     </div>
 </template>
@@ -150,7 +135,7 @@
 import Editor from "../../components/Editor.vue";
 import UploadFile from "../../components/UploadFile.vue";
 import Sidebar from "../../components/Sidebar.vue";
-import Button from "../../components/Button.vue";
+import ButtonsPanel1 from "@/components/ButtonsPanel1.vue";
 import { reactive } from "vue";
 
 const contents = reactive({

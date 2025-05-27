@@ -208,31 +208,20 @@
 
                     <!-- Validasi - Only shown for validator roles -->
 
+                    <li>
                     <router-link
-                        to="/validasi"
+                        to="/Validasi"
                         :class="[
                             'hover:bg-gray-800 rounded-lg text-white',
-                            expanded
-                                ? 'flex items-center px-4 py-2'
-                                : 'p-2 flex justify-center',
+                            expanded ? 'flex items-center px-4 py-2' : 'p-2 flex justify-center',
                         ]"
                     >
-                        <svg
-                            class="w-5 h-5"
-                            :class="expanded ? 'mr-3' : ''"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                        >
-                            <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                stroke-width="2"
-                                d="M5 13l4 4L19 7"
-                            />
+                        <svg class="w-5 h-5" :class="expanded ? 'mr-3' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
                         </svg>
                         <span v-if="expanded">Validasi</span>
                     </router-link>
+                    </li>
                 </ul>
             </nav>
         </div>

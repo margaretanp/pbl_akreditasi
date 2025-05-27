@@ -1,3 +1,36 @@
+<script setup>
+import Editor from "@/components/Editor.vue";
+import UploadFile from "../../components/UploadFile.vue";
+import Sidebar from "../../components/Sidebar.vue";
+import ButtonsPanel1 from "@/components/ButtonsPanel1.vue";
+import { reactive } from "vue";
+
+const contents = reactive({
+    penetapan: "",
+    perencanaan: "",
+    pelaksanaan: "",
+    evaluasi: "",
+    peningkatan: "",
+});
+
+const originalContents = JSON.parse(JSON.stringify(contents));
+
+const files = reactive({
+    penetapan: null,
+    perencanaan: null,
+    pelaksanaan: null,
+    evaluasi: null,
+    peningkatan: null,
+});
+
+function handleFileUpload(section) {
+    return (file) => {
+        files[section] = file;
+        console.log(`File uploaded for ${section}:`, file);
+    };
+}
+</script>
+
 <template>
     <div class="flex min-h-screen bg-gray-100">
         <!-- Sidebar -->
@@ -7,7 +40,11 @@
 
         <!-- Main Content -->
         <div class="flex-1 p-6 overflow-auto space-y-6">
-            <h2 class="text-base md:text-5xl font-bold text-[#021526] font-poopins ">Kriteria 2: Tata Guna Sumber Daya</h2>
+            <h2
+                class="text-base md:text-5xl font-bold text-[#021526] font-poopins"
+            >
+                Kriteria 1: Visi, Misi, Tujuan, dan Sasaran
+            </h2>
             <!-- Penetapan -->
             <fieldset class="border border-[#021526] p-4 rounded-md bg-white">
                 <legend
@@ -122,57 +159,11 @@
                     </div>
                 </div>
             </fieldset>
-            <div class="flex justify-end space-x-2">
-                <button
-                    class="bg-gray-300 text-gray-700 px-4 py-2 rounded hover:bg-gray-400"
-                    @click="handleCancel"
-                >
-                    Reset
-                </button>
-                <button
-                    class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
-                    @click="handleSaveDraft"
-                >
-                    Save
-                </button>
-                <button
-                    class="bg-[#021526] text-white px-4 py-2 rounded hover:bg-[#03346E]"
-                    @click="handleSubmit"
-                >
-                    Submit
-                </button>
-            </div>
+            <<ButtonsPanel1
+                :formData="contents"
+                :originalData="originalContents"
+                @update:formData="(value) => Object.assign(contents, value)"
+            />
         </div>
     </div>
 </template>
-
-<script setup>
-import Editor from "../../components/Editor.vue";
-import UploadFile from "../../components/UploadFile.vue";
-import Sidebar from "../../components/Sidebar.vue";
-import Button from "../../components/Button.vue";
-import { reactive } from "vue";
-
-const contents = reactive({
-    penetapan: "",
-    perencanaan: "",
-    pelaksanaan: "",
-    evaluasi: "",
-    peningkatan: "",
-});
-
-const files = reactive({
-    penetapan: null,
-    perencanaan: null,
-    pelaksanaan: null,
-    evaluasi: null,
-    peningkatan: null,
-});
-
-function handleFileUpload(section) {
-    return (file) => {
-        files[section] = file;
-        console.log(`File uploaded for ${section}:`, file);
-    };
-}
-</script>
