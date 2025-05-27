@@ -12,13 +12,55 @@ const routes = [
         },
     },
     {
-        path: "/",
-        name: "welcome",
-        component: () => import("../pages/Welcome.vue"),
+        path: "/dashboard",
+        name: "dashboard",
+        component: () => import("../pages/dashboard/Dashboard.vue"),
         meta: {
-            title: "Welcome",
-            requiresAuth: false,
+            title: "Dashboard",
+            requiresAuth: true,
         },
+        children: [
+            {
+                path: "",
+                redirect: "/home",
+            },
+            {
+                path: "/home",
+                name: "Home",
+                component: () => import("../pages/dashboard/Home/Home.vue"),
+                meta: {
+                    title: "Home",
+                },
+            },
+            {
+                path: "/data-master",
+                children: [
+                    {
+                        path: "/users",
+                        name: "users",
+                        component: () =>
+                            import("../pages/dashboard/data-master/users/Users.vue"),
+                    },
+                ],
+            },
+            {
+                path: "/validasi",
+                name: "validasi",
+                component: () => import("../pages/dashboard/Home/Validasi.vue"),
+                meta: {
+                    title: "Validasi",
+                },
+            },
+            {
+                path: "/dashboard-validasi",
+                name: "dashboard-validasi",
+                component: () => import("../pages/dashboard/Home/DashboardValidasi.vue"),
+                meta: {
+                    title: "Dashboard Validasi",
+                },
+            },
+
+        ],
     },
     {
         path: "/profil",
@@ -51,38 +93,6 @@ const routes = [
         meta: {
             title: "Tujuan",
         },
-    },
-    {
-        path: "/dashboard",
-        name: "dashboard",
-        component: () => import("../pages/dashboard/Dashboard.vue"),
-        meta: {
-            title: "Dashboard",
-            requiresAuth: true,
-        },
-        children: [
-            {
-                path: "home",
-                name: "home",
-                component: () => import("../pages/dashboard/Home/Home.vue"),
-                meta: {
-                    title: "Home",
-                },
-            },
-            {
-                path: "/data-master",
-                children: [
-                    {
-                        path: "/users",
-                        name: "users",
-                        component: () =>
-                            import(
-                                "../pages/dashboard/data-master/users/Users.vue"
-                            ),
-                    },
-                ],
-            },
-        ],
     },
     {
         path: "/kriteria1",
