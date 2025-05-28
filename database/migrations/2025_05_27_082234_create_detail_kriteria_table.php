@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreignId('jenis_kriteria_id')->constrained('jenis_kriteria');
             $table->enum('status_validasi', ['pending', 'accepted', 'rejected'])->default('pending');
             $table->enum('status_pengerjaan', ['save', 'submitted', 'revised'])->default('save');
-            $table->text('file_url')->nullable();
+            $table->text('file_url')->default(null);
             $table->softDeletes();
             $table->timestamps();
         });

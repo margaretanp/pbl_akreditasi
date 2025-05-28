@@ -21,13 +21,34 @@ class updatedetailKriteriaRequest extends FormRequest
      */
     public function rules(): array
     {
+        $hasFile = $this->hasFile('file_url');
+
         return [
-            'kriteria_id' => 'required|integer|exists:kriteria, id',
-            'jenis_kriteria_id' => 'required|integer|exists:jenis_kriteria,id',
-            'status_validasi' => 'required|in:pending, accepted, rejected',
-            'status_pengerjaan' => 'required|in:save, submitted, revised',
-            'file' => 'file|mimes:pdf,doc,docx,png,jpg,jpeg|max:2048',
+            'kriteria_id' => [
+                'nullable',
+                $hasFile ? 'string' : 'integer',
+                'exists:kriteria,id'
+            ],
+            'jenis_kriteria_id' => [
+                'nullable',
+                $hasFile ? 'string' : 'integer',
+                'exists:jenis_kriteria,id'
+            ],
+            'status_validasi' => 'nullable|in:pending,accepted,rejected',
+            'status_pengerjaan' => 'nullable|in:save,submitted,revised',
+            'file_url' => 'nullable|file|mimes:pdf,doc,docx,png,jpg,jpeg|max:2048',
         ];
+    }
+
+    protected function prepareForValidation()
+    {
+        // Convert string IDs to integers 
+        if ($this->hasFile('file_url')) {
+            $this->merge([
+                'kriteria_id' => $this->kriteria_id ? (int) $this->kriteria_id : null,
+                'jenis_kriteria_id' => $this->jenis_kriteria_id ? (int) $this->jenis_kriteria_id : null,
+            ]);
+        }
     }
 
     public function messages()
@@ -37,8 +58,6 @@ class updatedetailKriteriaRequest extends FormRequest
             'jenis_kriteria_id.exists' => 'Jenis Kriteria ID must exist in the jenis_kriteria table',
             'status_validasi.in' => 'Status Validasi must be one of: pending, accepted, rejected',
             'status_pengerjaan.in' => 'Status Pengerjaan must be one of: save, submitted, revised',
-            'file_url.url' => 'File URL must be a valid URL',
-            'file_url.max' => 'File URL must not exceed 255 characters',
         ];
     }
 }
