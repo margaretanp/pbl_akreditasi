@@ -22,11 +22,11 @@ class UpdateValidasiRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'id_validator'     => 'sometimes|integer|exists:users,id',
             'id_user'          => 'sometimes|integer|exists:users,id',
-            'validated_date'   => 'sometimes|date',
+            'id_detail_kriteria' => 'sometimes|integer|exists:detail_kriteria,id',
+            'validated_at'   => 'sometimes|date',
             'komentar'         => 'nullable|string|max:1000',
-            'status'           => 'sometimes|in:approved,rejected,pending',
+            'status'           => 'sometimes|in:pending,valid,invalid',
         ];
     }
 
@@ -36,11 +36,11 @@ class UpdateValidasiRequest extends FormRequest
     public function messages()
     {
         return [
-            'id_validator.integer'    => 'Validator ID must be an integer',
-            'id_validator.exists'     => 'Validator ID must exist in users table',
-
             'id_user.integer'         => 'User ID must be an integer',
             'id_user.exists'          => 'User ID must exist in users table',
+
+            'id_detail_kriteria.integer' => 'Detail Kriteria ID must be an integer',
+            'id_detail_kriteria.exists' => 'Detail Kriteria ID must exist in detail_kriteria table',
 
             'validated_date.date'     => 'Validation date must be a valid date',
 

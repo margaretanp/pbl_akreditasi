@@ -7,20 +7,23 @@ use Illuminate\Database\Eloquent\Model;
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Validasi extends Model
 {
     protected $table = 'validasi';
-    protected $primaryKey = 'id_validator';
-    public $incrementing = false;
-    protected $keyType = 'int';
-
-    protected $fillable = ['id_validator', 'id_user', 'validated_date', 'komentar', 'status'];
-    protected $hidden = ['create_at', 'update_at', 'd   eleted_at'];
+    protected $primaryKey = 'id';
+    protected $fillable = ['id_user', 'id_detail_kriteria', 'validated_date', 'komentar', 'status'];
+    protected $hidden = ['created_at', 'updated_at', 'deleted_at'];
 
 
     public function user()
     {
         return $this->belongsTo(UsersModel::class, 'id_user', 'id');
+    }
+
+    public function detailKriteria(): BelongsTo
+    {   
+        return $this->belongsTo(DetailKriteriaModel::class, 'id_detail_kriteria', 'id');
     }
 }

@@ -12,15 +12,18 @@ return new class extends Migration
     public function up(): void
     {
     Schema::create('validasi', function (Blueprint $table) {
-        $table->unsignedBigInteger('id_validator')->primary();
+        $table->id();
         $table->unsignedBigInteger('id_user');
+        $table->unsignedBigInteger('id_detail_kriteria');
         $table->timestamp('validated_at')->nullable();
         $table->text('komentar')->nullable();
         $table->enum('status', ['pending', 'valid', 'invalid'])->default('pending');
+        $table->softDeletes();
         $table->timestamps();
 
         // Foreign key
         $table->foreign('id_user')->references('id')->on('users')->onDelete('cascade');
+        $table->foreign('id_detail_kriteria')->references('id')->on('detail_kriteria')->onDelete('cascade');
         });
     }
 

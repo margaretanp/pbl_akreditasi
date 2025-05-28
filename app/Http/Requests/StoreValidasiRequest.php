@@ -22,11 +22,11 @@ class StoreValidasiRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'id_validator'     => 'required|integer|exists:users,id',
             'id_user'          => 'required|integer|exists:users,id',
-            'validated_date'   => 'required|date',
+            'id_detail_kriteria' => 'required|integer|exists:detail_kriteria,id',
+            'validated_at'   => 'nullable|date',
             'komentar'         => 'nullable|string|max:1000',
-            'status'           => 'required|in:approved,rejected,pending',
+            'status'           => 'required|in:pending,valid,invalid',
         ];
     }
 
@@ -36,13 +36,13 @@ class StoreValidasiRequest extends FormRequest
     public function messages()
     {
         return [
-            'id_validator.required'   => 'Validator ID is required',
-            'id_validator.integer'    => 'Validator ID must be an integer',
-            'id_validator.exists'     => 'Validator ID must exist in users table',
-
             'id_user.required'        => 'User ID is required',
             'id_user.integer'         => 'User ID must be an integer',
             'id_user.exists'          => 'User ID must exist in users table',
+
+            'id_detail_kriteria.required' => 'Detail Kriteia ID is required',
+            'id_detail_kriteria.integer' => 'Detail Kriteria ID must be an integer',
+            'id_detail_kriteria.exists' => 'Detail Kriteria ID must exist in detail_kriteria table',
 
             'validated_date.required' => 'Validation date is required',
             'validated_date.date'     => 'Validation date must be a valid date',

@@ -11,7 +11,7 @@ class ValidasiController extends Controller
 {
     public function index()
     {
-        $validasi = Validasi::with(['validator', 'user'])->get();
+        $validasi = Validasi::with(['user', 'detailKriteria'])->get();
 
         return response()->json([
             'status' => 'success',
@@ -22,7 +22,7 @@ class ValidasiController extends Controller
 
     public function show($id)
     {
-        $validasi = Validasi::with(['validator', 'user'])->find($id);
+        $validasi = Validasi::with(['user', 'detailKriteria'])->find($id);
 
         if (!$validasi) {
             return response()->json([
