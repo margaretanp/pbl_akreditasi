@@ -27,7 +27,7 @@ class storedetailKriteriaRequest extends FormRequest
             'jenis_kriteria_id' => 'required|integer|exists:jenis_kriteria,id',
             'status_validasi' => 'required|in:pending,accepted,rejected',
             'status_pengerjaan' => 'required|in:save,submitted,revised',
-            'file' => 'required|file|mimes:pdf,doc,docx,png,jpg,jpeg|max:2048',
+            'file_url' => 'nullable|file|mimes:pdf,doc,docx,png,jpg,jpeg|max:2048',
         ];
     }
 
@@ -45,8 +45,6 @@ class storedetailKriteriaRequest extends FormRequest
             'status_validasi.in' => 'Status Validasi must be one of: pending, accepted, rejected',
             'status_pengerjaan.required' => 'Status Pengerjaan is required',
             'status_pengerjaan.in' => 'Status Pengerjaan must be one of: save, submitted, revised',
-            'file_url.required' => 'File URL is required',
-            'file_url.string' => 'File URL must be a string'
         ];
     }
 }
