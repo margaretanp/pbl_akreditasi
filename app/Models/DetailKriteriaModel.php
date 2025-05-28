@@ -23,4 +23,8 @@ class DetailKriteriaModel extends Model
     {
         return $this->belongsTo(JenisKriteriaModel::class, 'jenis_kriteria_id', 'id');
     }
+    public function validasi()
+    {
+        return $this->hasMany(Validasi::class, 'id_detail_kriteria', 'id');
+    }
 }

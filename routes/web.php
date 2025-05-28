@@ -38,9 +38,9 @@ Route::get('/{any}', function () {
     return view('welcome');  // This returns your index blade file
 })->where('any', '^(?!api).*$');  // This will match all routes except /api
 
-Route::middleware(['web', 'auth'])->group(function () {
-    Route::get('/dashboard', [App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
-});
+// Route::middleware(['web', 'auth'])->group(function () {
+//     Route::get('/dashboard', [App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
+// });
 
 // Route::post('/locale', function (Request $request) {
 //     $request->validate([
