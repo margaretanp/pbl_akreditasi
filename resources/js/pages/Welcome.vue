@@ -1,25 +1,22 @@
 <script setup>
 import { useRouter } from "vue-router";
-import { NButton } from "naive-ui";
-import Footer from "../components/Footer.vue";
-import Navbar from "@/components/Navbar.vue";
-import bgLogin from "../assets/bglogin4.mp4"; // Video background
+import { useI18n } from "vue-i18n";
+import bgLogin from "../assets/bglogin4.mp4";
+import Navbar from "../components/Navbar.vue"; // ✅ Tambahkan ini
 
+const { t } = useI18n();
 const $router = useRouter();
 
-const onLogin = () => {
-    $router.push({ name: "login" });
-};
-
 const onGetStarted = () => {
-    $router.push({ name: "login" });
+  $router.push({ name: "login" });
 };
 </script>
 
 <template>
-  <Navbar />
-
   <div class="w-full h-screen flex flex-col justify-center items-center relative overflow-hidden">
+    <!-- ✅ Navbar -->
+    <Navbar class="absolute top-0 left-0 w-full z-20" />
+
     <!-- VIDEO Background -->
     <video
       autoplay
@@ -31,33 +28,32 @@ const onGetStarted = () => {
       <source :src="bgLogin" type="video/mp4" />
     </video>
 
-    <!-- Overlay untuk gelapkan video (opsional) -->
+    <!-- Overlay -->
     <div class="absolute inset-0 bg-white/60 -z-10"></div>
 
     <!-- Main Content -->
-    <div class="text-center max-w-3xl">
+    <div class="text-center max-w-3xl mt-20">
       <h1 class="text-5xl font-bold mt-12 mb-1 text-[#021526]">
-        SISTEM AKREDITASI
+        {{ t('title') }}
       </h1>
       <h1 class="text-5xl font-bold mb-4 text-[#021526]">
-        JURUSAN TEKNOLOGI INFORMASI
+        {{ t('subtitle') }}
       </h1>
 
       <p class="text-xl font-bold mb-8 text-[#021526]">
-        Akreditasi bukan hanya penilaian formal, tetapi cerminan kualitas institusi. Polinema terus berkomitmen meningkatkan mutu pendidikan, layanan, dan tata kelola untuk meraih predikat akreditasi terbaik demi masa depan generasi unggul.
+        {{ t('description') }}
       </p>
 
       <button
         @click="onGetStarted"
         class="bg-[#021526] text-white text-lg font-bold py-3 px-8 rounded-full hover:bg-[#03346E] transition duration-300"
       >
-        GET STARTED
+        {{ t('get_started') }}
       </button>
     </div>
   </div>
 </template>
 
-
-
 <style scoped>
+/* Tambahkan style jika diperlukan */
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <div class="navbar">
+  <div class="navbar bg-blue-600">
     <div class="flex-1">
       <router-link
         to="/"
@@ -11,31 +11,45 @@
     </div>
     <div class="text-white">
       <ul class="menu menu-horizontal px-1 font-helvetica text-lg space-x-4">
-<router-link to="/profil">{{ $t('menu.profil') }}</router-link>
-<router-link to="/visi">{{ $t('menu.visi') }}</router-link>
-<router-link to="/misi">{{ $t('menu.misi') }}</router-link>
-<router-link to="/tujuan">{{ $t('menu.tujuan') }}</router-link>
-
+        <li><router-link to="/profil" class="transition duration-200 hover:scale-110 hover:text-gray-300 hover:bg-transparent focus:outline-none">PROFIL</router-link></li>
+        <li><router-link to="/visi" class="transition duration-200 hover:scale-110 hover:text-gray-300 hover:bg-transparent focus:outline-none">VISI</router-link></li>
+        <li><router-link to="/misi" class="transition duration-200 hover:scale-110 hover:text-gray-300 hover:bg-transparent focus:outline-none">MISI</router-link></li>
+        <li><router-link to="/tujuan" class="transition duration-200 hover:scale-110 hover:text-gray-300 hover:bg-transparent focus:outline-none">TUJUAN</router-link></li>
       </ul>
-      <div class="ml-4">
-  <select @change="changeLanguage($event)" class="bg-transparent text-white border border-white rounded px-2 py-1 focus:outline-none hover:scale-105 transition duration-200"
-  >
-    <option value="id">Indonesia</option>
-    <option value="en">English</option>
-  </select>
-</div>
 
+      <select 
+        v-model="currentLocale"
+        @change="changeLanguage"
+        class="lang-switch"
+      >
+        <option value="id">ID</option>
+        <option value="en">EN</option>
+      </select>
     </div>
   </div>
 </template>
 
+
 <script setup>
 import { useI18n } from 'vue-i18n'
+import { ref, watch } from 'vue'
 
 const { locale } = useI18n()
+const currentLocale = ref(locale.value)
 
-function changeLanguage(event) {
-  locale.value = event.target.value
+function changeLanguage() {
+  locale.value = currentLocale.value
+  localStorage.setItem('userLanguage', currentLocale.value)
+}
+
+watch(locale, (newVal) => {
+  currentLocale.value = newVal
+})
+
+const savedLanguage = localStorage.getItem('userLanguage')
+if (savedLanguage) {
+  locale.value = savedLanguage
+  currentLocale.value = savedLanguage
 }
 </script>
 
@@ -52,7 +66,6 @@ function changeLanguage(event) {
   padding: 1rem 2rem;
   border-radius: 16px;
   z-index: 999;
-  
 }
 
 .container {
@@ -60,6 +73,4 @@ function changeLanguage(event) {
   justify-content: space-between;
   align-items: center;
 }
-
-
 </style>

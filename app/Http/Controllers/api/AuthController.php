@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
@@ -30,7 +31,9 @@ class AuthController extends Controller
             'status' => 'success',
             'message' => 'Login successful',
             'access_token' => $token,
-            'user' => $user
+            'user' => [
+                'role' => $user->role_id, // misalnya role 1 = admin, 2 = validator, dll
+            ]
         ]);
     }
 
@@ -44,10 +47,10 @@ class AuthController extends Controller
         ]);
     }
 
-    public function user(Request $request)
+    public function currentUser(Request $request)
     {
         return response()->json([
-            'user' => $request->user()
-        ]);
+            'user' => $request->user()->load('role')
+        ], 200);
     }
 }

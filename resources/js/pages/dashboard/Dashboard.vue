@@ -2,7 +2,9 @@
 import axios from 'axios';
 import { onMounted, reactive } from 'vue';
 import { useToast } from 'vue-toast-notification';
+
 import Sidebar from '../../components/Sidebar.vue';
+import Navbar from '../../components/Navbar.vue'; // Tambahkan ini
 
 const $toast = useToast();
 
@@ -16,7 +18,7 @@ const fetchUserData = async () => {
     usersData.loading = true;
 
     try {
-        const { data} = await axios.get('/users');
+        const { data } = await axios.get('/users');
         if (data.status === 'success') {
             usersData.data = data.data;
         } else {
@@ -35,12 +37,12 @@ onMounted(fetchUserData);
 
 <template>
   <div class="h-screen bg-gray-50 flex">
-    <Sidebar />
+    <Sidebar  class="z-0"/>
 
-    <main class="p-8 flex-1 overflow-y-auto">
-      <h1 class="text-2xl font-semibold text-gray-700 mb-4">Dashboard / Dashboard</h1>
-
-      <router-view />
-    </main>
-  </div>
+      <!-- Konten utama halaman -->
+      <main class="bg-gray-50 flex-1 overflow-y-auto">
+        <!-- Tempat konten utama -->
+        <router-view />
+      </main>
+    </div>
 </template>

@@ -3,15 +3,6 @@ import authService from "../services/authService";
 
 const routes = [
     {
-        path: "/",
-        name: "welcome",
-        component: () => import("../pages/Welcome.vue"),
-        meta: {
-            title: "Welcome",
-            requiresAuth: false,
-        },
-    },
-    {
         path: "/login",
         name: "login",
         component: () => import("../pages/auth/Login.vue"),
@@ -19,6 +10,15 @@ const routes = [
             title: "Login",
             requiresAuth: false,
         },
+    },
+    {
+        path: "/",
+        name: "welcome",
+        component: () => import("../pages/Welcome.vue"),
+        meta: {
+            title: "Welcome",
+            requiresAuth: false,
+        }
     },
     {
         path: "/dashboard",
@@ -61,13 +61,13 @@ const routes = [
                 },
             },
             {
-                path: "/dashboard-validasi",
-                name: "dashboard-validasi",
-                component: () => import("../pages/dashboard/Home/DashboardValidasi.vue"),
-                meta: {
-                    title: "Dashboard Validasi",
-                },
-            },
+                path: "/kriteria",
+                children: [
+                    {
+                        path: "/:id"
+                    }
+                ]
+            }
 
         ],
     },

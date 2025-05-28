@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\api\AuthController;
+use App\Http\Controllers\api\DetailKriteriaController;
 use App\Http\Controllers\api\JenisKriteriaController;
 use App\Http\Controllers\api\KriteriaController;
 use App\Http\Controllers\api\RolesController;
@@ -24,11 +25,11 @@ Route::post('/login', [AuthController::class, 'login']);
 
 Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::post('/logout', [AuthController::class, 'logout']);
+    Route::get('/profile', [AuthController::class, 'currentUser']);
 
     Route::apiResource('roles', RolesController::class);
     Route::apiResource('users', UsersController::class);
     Route::apiResource('kriteria', KriteriaController::class);
     Route::apiResource('jenis-kriteria', JenisKriteriaController::class);
     Route::apiResource('komentar', KomentarController::class);
-    
 });
