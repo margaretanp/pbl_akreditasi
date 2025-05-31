@@ -18,7 +18,7 @@ const routes = [
         meta: {
             title: "Welcome",
             requiresAuth: false,
-        }
+        },
     },
     {
         path: "/dashboard",
@@ -48,7 +48,9 @@ const routes = [
                         path: "/users",
                         name: "users",
                         component: () =>
-                            import("../pages/dashboard/data-master/users/Users.vue"),
+                            import(
+                                "../pages/dashboard/data-master/users/Users.vue"
+                            ),
                     },
                 ],
             },
@@ -61,14 +63,13 @@ const routes = [
                 },
             },
             {
-                path: "/kriteria",
-                children: [
-                    {
-                        path: "/:id"
-                    }
-                ]
-            }
-
+                path: "/kriteria/:id",
+                name: "kriteria",
+                component: () => import("../pages/dashboard/Kriteria.vue"),
+                meta: {
+                    title: "Kriteria",
+                },
+            },
         ],
     },
     {
