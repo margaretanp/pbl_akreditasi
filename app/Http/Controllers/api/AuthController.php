@@ -31,9 +31,7 @@ class AuthController extends Controller
             'status' => 'success',
             'message' => 'Login successful',
             'access_token' => $token,
-            'user' => [
-                'role' => $user->role_id, // misalnya role 1 = admin, 2 = validator, dll
-            ]
+            'user' => $user->load('role')
         ]);
     }
 
@@ -47,10 +45,10 @@ class AuthController extends Controller
         ]);
     }
 
-    public function currentUser(Request $request)
+    public function currentUser()
     {
         return response()->json([
-            'user' => $request->user()->load('role')
+            'user' => auth()->user()->load('role')
         ], 200);
     }
 }

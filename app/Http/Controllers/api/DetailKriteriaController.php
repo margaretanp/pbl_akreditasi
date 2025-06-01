@@ -26,7 +26,7 @@ class DetailKriteriaController extends Controller
 
     public function show($id)
     {
-        $detailKriteria = DetailKriteriaModel::all()->find($id);
+        $detailKriteria = DetailKriteriaModel::find($id)->with('kriteria', 'jenisKriteria', 'validasi');
 
         if (!$detailKriteria) {
             return response()->json(

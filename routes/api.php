@@ -31,5 +31,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::apiResource('kriteria', KriteriaController::class);
     Route::apiResource('jenis-kriteria', JenisKriteriaController::class);
     Route::apiResource('detail-kriteria', DetailKriteriaController::class);
+    
     Route::apiResource('validator', ValidasiController::class);
+    Route::put('/validation', [ValidasiController::class, 'validasi']);
 });
