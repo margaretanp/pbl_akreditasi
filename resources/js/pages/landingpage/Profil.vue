@@ -1,8 +1,9 @@
 <template>
-  <navbar/>
+<navbar/>
+
   <div class="w-full min-h-screen flex-col items-center bg-white">
 
-    <div class="p-8 max-w-3xl mx-auto items-center justify-center pt-24">
+<div class="p-8 max-w-3xl mx-auto items-center justify-center pt-[120px]">
       <h1 class="text-4xl font-bold mb-1 text-center" style="color: #021526">
         {{ t('menu.profil') }}
       </h1>

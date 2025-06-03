@@ -6,7 +6,8 @@ use App\Http\Controllers\api\JenisKriteriaController;
 use App\Http\Controllers\api\KriteriaController;
 use App\Http\Controllers\api\RolesController;
 use App\Http\Controllers\api\UsersController;
-use App\Http\Controllers\api\KomentarController;
+use App\Http\Controllers\api\ValidasiController;
+use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -20,15 +21,30 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+// Login tidak perlu middleware
 Route::post('/login', [AuthController::class, 'login']);
 
-Route::group(['middleware' => 'auth:sanctum'], function () {
+Route::middleware(['auth:sanctum'])->group(function () {
+    // Authenticated-only routes
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/profile', [AuthController::class, 'currentUser']);
 
+    // Master data & user
     Route::apiResource('roles', RolesController::class);
     Route::apiResource('users', UsersController::class);
+
+    // Kriteria dan relasinya
     Route::apiResource('kriteria', KriteriaController::class);
     Route::apiResource('jenis-kriteria', JenisKriteriaController::class);
-    Route::apiResource('detail-kriteria', DetailKriteriaController::class);    
+    Route::apiResource('detail-kriteria', DetailKriteriaController::class);
+
+    // Validasi oleh validator
+    Route::apiResource('validator', ValidasiController::class);
+    Route::put('/validation', [ValidasiController::class, 'validasi']);
+
+    // Dashboard routes
+    Route::get('/dashboard', [DashboardController::class, 'index']);
+    Route::get('/dashboard/dosen', [DashboardController::class, 'dosenDashboard']);
+    Route::get('/dashboard/kajur', [DashboardController::class, 'kajurDashboard']);
+    Route::get('/dashboard/direktur', [DashboardController::class, 'direkturDashboard']);
 });

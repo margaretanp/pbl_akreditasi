@@ -51,21 +51,8 @@ const onSubmitLogin = async () => {
 
             authService.setTokens(tokenData);
 
-            const userRole = data.user.role;
-
-            // Redirect sesuai role
-            if (userRole === 1) {
-                router.push("/admin/dashboard");
-            } else if (userRole === 2) {
-                router.push("/validator/dashboard");
-            } else if (userRole === 3) {
-                router.push("/user/dashboard");
-            } else {
-                router.push("/"); // fallback
-            }
-
             $toast.success("Login successful!");
-            router.push({name: "dashboard"});
+            router.push({name: "Home"});
         } else {
             throw new Error(data.message || "Login failed");
         }
