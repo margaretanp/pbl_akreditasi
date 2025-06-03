@@ -10,12 +10,13 @@
       </router-link>
     </div>
     <div class="text-white">
-      <ul class="menu menu-horizontal px-1 font-helvetica text-lg space-x-4">
-        <li><router-link to="/profil" class="transition duration-200 hover:scale-110 hover:text-gray-300 hover:bg-transparent focus:outline-none">PROFIL</router-link></li>
-        <li><router-link to="/visi" class="transition duration-200 hover:scale-110 hover:text-gray-300 hover:bg-transparent focus:outline-none">VISI</router-link></li>
-        <li><router-link to="/misi" class="transition duration-200 hover:scale-110 hover:text-gray-300 hover:bg-transparent focus:outline-none">MISI</router-link></li>
-        <li><router-link to="/tujuan" class="transition duration-200 hover:scale-110 hover:text-gray-300 hover:bg-transparent focus:outline-none">TUJUAN</router-link></li>
-      </ul>
+<ul class="menu menu-horizontal px-1 font-helvetica text-lg space-x-4">
+  <li><router-link to="/profil" class="transition duration-200 hover:scale-110 hover:text-gray-300 hover:bg-transparent focus:outline-none">{{ t('menu.profil') }}</router-link></li>
+  <li><router-link to="/visi" class="transition duration-200 hover:scale-110 hover:text-gray-300 hover:bg-transparent focus:outline-none">{{ t('menu.visi') }}</router-link></li>
+  <li><router-link to="/misi" class="transition duration-200 hover:scale-110 hover:text-gray-300 hover:bg-transparent focus:outline-none">{{ t('menu.misi') }}</router-link></li>
+  <li><router-link to="/tujuan" class="transition duration-200 hover:scale-110 hover:text-gray-300 hover:bg-transparent focus:outline-none">{{ t('menu.tujuan') }}</router-link></li>
+</ul>
+
 
       <select 
         v-model="currentLocale"
@@ -34,7 +35,7 @@
 import { useI18n } from 'vue-i18n'
 import { ref, watch } from 'vue'
 
-const { locale } = useI18n()
+const { t, locale } = useI18n()
 const currentLocale = ref(locale.value)
 
 function changeLanguage() {
