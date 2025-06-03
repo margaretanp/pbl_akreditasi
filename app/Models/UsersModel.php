@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Laravel\Sanctum\HasApiTokens;
+use App\Models\Kriteria;
 
 class UsersModel extends Model
 {
@@ -18,6 +19,11 @@ class UsersModel extends Model
 
     public function role()
     {
-        return $this->belongsTo(RolesModel::class, 'role_id', 'id');
+        return $this->belongsTo(RolesModel::class);
+    }
+
+    public function kriteria()
+    {
+        return $this->hasMany(KriteriaModel::class, 'user_id');
     }
 }
