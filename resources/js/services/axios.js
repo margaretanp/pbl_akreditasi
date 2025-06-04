@@ -3,7 +3,7 @@ import authService from "../services/authService";
 import router from "../router";
 
 // Set default base URL
-axios.defaults.baseURL = "http://localhost:8000/api";
+axios.defaults.baseURL = "http://localhost:8000/api/";
 
 // Set default headers
 axios.defaults.headers.common["Accept"] = "application/json";
