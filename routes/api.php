@@ -43,8 +43,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::put('/validation', [ValidasiController::class, 'validasi']);
 
     // Dashboard routes
-    Route::get('/dashboard', [DashboardController::class, 'index']);
-    Route::get('/dashboard/dosen', [DashboardController::class, 'dosenDashboard']);
-    Route::get('/dashboard/kajur', [DashboardController::class, 'kajurDashboard']);
-    Route::get('/dashboard/direktur', [DashboardController::class, 'direkturDashboard']);
+    // Route::get('/dashboard', [DashboardController::class, 'index']);
+    // Route::get('/dashboard/dosen', [DashboardController::class, 'dosenDashboard']);
+    // Route::get('/dashboard/kajur', [DashboardController::class, 'kajurDashboard']);
+    // Route::get('/dashboard/direktur', [DashboardController::class, 'direkturDashboard']);
 });

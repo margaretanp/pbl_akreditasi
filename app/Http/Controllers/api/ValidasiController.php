@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreValidasiRequest;
 use App\Http\Requests\UpdateValidasiRequest;
 use App\Models\DetailKriteriaModel;
+use App\Models\KriteriaModel;
 use App\Models\Validasi;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -14,7 +15,7 @@ class ValidasiController extends Controller
 {
     public function index()
     {
-        $validasi = Validasi::with(['user', 'detailKriteria'])->get();
+        $validasi = Validasi::with(['user', 'kriteria'])->get();
 
         return response()->json([
             'status' => 'success',
@@ -25,7 +26,7 @@ class ValidasiController extends Controller
 
     public function show($id)
     {
-        $validasi = Validasi::with(['user', 'detailKriteria'])->find($id);
+        $validasi = Validasi::with(['user', 'kriteria'])->find($id);
 
         if (!$validasi) {
             return response()->json([
@@ -95,13 +96,12 @@ class ValidasiController extends Controller
     public function validasi(Request $request)
     {
         $request->validate([
-            'status' => 'required:in:valid,invalid',
             'komentar' => 'nullable|string|max:255',
         ]);
 
-        $validator = Validasi::where('id_user', auth()->user()->id)
-            ->where('id_detail_kriteria', $request->id_detail_kriteria)
-            ->with(['user:id,name,role_id', 'user.role:id,name', 'detailKriteria'])
+        $validator = Validasi::where('user_id', auth()->user()->id)
+            ->where('kriteria_id', $request->kriteria_id)
+            ->with(['user:id,name,role_id', 'user.role:id,code', 'kriteria'])
             ->first();
 
         if (!$validator) {
@@ -111,24 +111,48 @@ class ValidasiController extends Controller
             ], 404);
         }
 
-        $detailKriteria = DetailKriteriaModel::findOrFail($request->id_detail_kriteria);
+        $currentUserRole = auth()->user()->role_id;
 
-        if ($request->status === 'valid') {
-            $detailKriteria->update(attributes: ['status_validasi' => 'accepted']);
-        } elseif ($request->status === 'invalid') {
-            $detailKriteria->update(['status_validasi' => 'rejected']);
+        if (($currentUserRole !== 2 && $currentUserRole !== 3)) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Unauthorized action'
+            ], 403);
+        }
+
+        if ($currentUserRole == 3) {
+            $role2Validator = Validasi::where('kriteria_id', $request->kriteria_id)
+                ->whereHas('user', function ($query) {
+                    $query->where('role_id', 2);
+                })
+                ->where('status', 'valid')
+                ->exists();
+
+            if (!$role2Validator) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Validation by role 2 is required before role 3 can validate'
+                ], 404);
+            }
+        }
+
+        if ($validator->is_validated == 1) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Validation already completed'
+            ], 400);
         }
 
         if ($request->has('komentar')) {
             $validator->update([
-                'status' => $request->status,
+                'is_validated' => 1,
                 'komentar' => $request->komentar,
-                'validate_at' => now(),
+                'validated_at' => now(),
             ]);
         } else {
             $validator->update([
-                'status' => $request->status,
-                'validate_at' => now(),
+                'is_validated' => 1,
+                'validated_at' => now(),
             ]);
         }
 

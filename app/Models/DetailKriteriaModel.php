@@ -12,8 +12,8 @@ class DetailKriteriaModel extends Model
 
     protected $table = 'detail_kriteria';
     protected $primaryKey = 'id';
-    protected $fillable = ['kriteria_id', 'jenis_kriteria_id', 'status_validasi', 'status_pengerjaan', 'file_url'];
-    protected $hidden =['created_at', 'updated_at', 'deleted_at'];
+    protected $fillable = ['kriteria_id', 'jenis_kriteria_id', 'file_url', 'created_by'];
+    protected $hidden = ['created_at', 'updated_at', 'deleted_at'];
 
     public function kriteria()
     {
@@ -23,8 +23,8 @@ class DetailKriteriaModel extends Model
     {
         return $this->belongsTo(JenisKriteriaModel::class, 'jenis_kriteria_id', 'id');
     }
-    public function validasi()
+    public function createdBy()
     {
-        return $this->hasMany(Validasi::class, 'id_detail_kriteria', 'id');
+        return $this->belongsTo(UsersModel::class, 'user_id','id');
     }
 }
