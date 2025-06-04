@@ -14,8 +14,9 @@ return new class extends Migration
         Schema::create('kriteria', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->softDeletes();
+            $table->boolean('is_rejected')->default(false);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

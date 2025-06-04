@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('jenis_kriteria', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->softDeletes();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

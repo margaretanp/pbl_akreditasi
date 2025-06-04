@@ -11,19 +11,19 @@ return new class extends Migration
      */
     public function up(): void
     {
-    Schema::create('validasi', function (Blueprint $table) {
+    Schema::create('validators', function (Blueprint $table) {
         $table->id();
-        $table->unsignedBigInteger('id_user');
-        $table->unsignedBigInteger('id_detail_kriteria');
-        $table->timestamp('validated_at')->nullable();
+        $table->unsignedBigInteger('user_id');
+        $table->unsignedBigInteger('kriteria_id');
         $table->text('komentar')->nullable();
-        $table->enum('status', ['pending', 'valid', 'invalid'])->default('pending');
-        $table->softDeletes();
+        $table->boolean('is_validated')->default(false);
+        $table->timestamp('validated_at')->nullable();
         $table->timestamps();
+        $table->softDeletes();
 
         // Foreign key
-        $table->foreign('id_user')->references('id')->on('users')->onDelete('cascade');
-        $table->foreign('id_detail_kriteria')->references('id')->on('detail_kriteria')->onDelete('cascade');
+        $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+        $table->foreign('kriteria_id')->references('id')->on('kriteria')->onDelete('cascade');
         });
     }
 

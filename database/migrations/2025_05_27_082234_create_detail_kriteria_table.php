@@ -15,11 +15,10 @@ return new class extends Migration
             $table->id();
             $table->foreignId('kriteria_id')->constrained('kriteria');
             $table->foreignId('jenis_kriteria_id')->constrained('jenis_kriteria');
-            $table->enum('status_validasi', ['pending', 'accepted', 'rejected'])->default('pending');
-            $table->enum('status_pengerjaan', ['save', 'submitted', 'revised'])->default('save');
+            $table->foreignId('created_by')->constrained("users");
             $table->text('file_url')->default(null);
-            $table->softDeletes();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
