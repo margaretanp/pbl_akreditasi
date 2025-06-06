@@ -15,7 +15,7 @@ class KriteriaSeeder extends Seeder
     {
         for ($i = 1; $i <= 9; $i++) {
             DB::table('kriteria')->insert([
-                'name' => 'Kriteria ' . $i,
+                'name' => 'Kriteria ' . $i
             ]);
         }
     }

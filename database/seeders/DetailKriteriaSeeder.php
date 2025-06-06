@@ -18,26 +18,31 @@ class DetailKriteriaSeeder extends Seeder
                 'kriteria_id' => 1,
                 'jenis_kriteria_id' => 1,
                 'file_url' => 'null',
+                'created_by' => 7,
             ],
             [
                 'kriteria_id' => 1,
                 'jenis_kriteria_id' => 2,
                 'file_url' => 'null',
+                'created_by' => 8,
             ],
             [
                 'kriteria_id' => 1,
                 'jenis_kriteria_id' => 3,
                 'file_url' => 'null',
+                'created_by' => 9,
             ],
             [
                 'kriteria_id' => 1,
                 'jenis_kriteria_id' => 4,
                 'file_url' => 'null',
+                'created_by' => 10,
             ],
             [
                 'kriteria_id' => 1,
                 'jenis_kriteria_id' => 5,
                 'file_url' => 'null',
+                'created_by' => 11,
             ]
         ]);
     }

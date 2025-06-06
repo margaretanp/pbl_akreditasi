@@ -21,34 +21,21 @@ class updatedetailKriteriaRequest extends FormRequest
      */
     public function rules(): array
     {
-        $hasFile = $this->hasFile('file_url');
-
         return [
             'kriteria_id' => [
                 'nullable',
-                $hasFile ? 'string' : 'integer',
+                'imteger',
                 'exists:kriteria,id'
             ],
             'jenis_kriteria_id' => [
                 'nullable',
-                $hasFile ? 'string' : 'integer',
+                'integer',
                 'exists:jenis_kriteria,id'
             ],
             'status_validasi' => 'nullable|in:pending,accepted,rejected',
             'status_pengerjaan' => 'nullable|in:save,submitted,revised',
             'file_url' => 'nullable|file|mimes:pdf,doc,docx,png,jpg,jpeg|max:2048',
         ];
-    }
-
-    protected function prepareForValidation()
-    {
-        // Convert string IDs to integers 
-        if ($this->hasFile('file_url')) {
-            $this->merge([
-                'kriteria_id' => $this->kriteria_id ? (int) $this->kriteria_id : null,
-                'jenis_kriteria_id' => $this->jenis_kriteria_id ? (int) $this->jenis_kriteria_id : null,
-            ]);
-        }
     }
 
     public function messages()
