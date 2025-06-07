@@ -12,7 +12,7 @@ class DetailKriteriaModel extends Model
 
     protected $table = 'detail_kriteria';
     protected $primaryKey = 'id';
-    protected $fillable = ['kriteria_id', 'jenis_kriteria_id', 'file_url', 'created_by'];
+    protected $fillable = ['kriteria_id', 'jenis_kriteria_id', 'description', 'file_url', 'created_by'];
     protected $hidden = ['created_at', 'updated_at', 'deleted_at'];
 
     public function kriteria()
@@ -25,6 +25,6 @@ class DetailKriteriaModel extends Model
     }
     public function createdBy()
     {
-        return $this->belongsTo(UsersModel::class, 'user_id','id');
+        return $this->belongsTo(UsersModel::class, 'created_by','id');
     }
 }

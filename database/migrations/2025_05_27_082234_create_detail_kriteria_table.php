@@ -17,6 +17,7 @@ return new class extends Migration
             $table->foreignId('jenis_kriteria_id')->constrained('jenis_kriteria');
             $table->foreignId('created_by')->constrained("users");
             $table->text('file_url')->default(null);
+            $table->text('description');
             $table->timestamps();
             $table->softDeletes();
         });
