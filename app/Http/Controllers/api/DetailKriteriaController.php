@@ -145,7 +145,13 @@ class DetailKriteriaController extends Controller
             $data['file_url'] = 'storage/detail_kriteria/' . $fileSavedName;
         }
 
+        $validator = \Validator::make($request->all(), (new updatedetailKriteriaRequest())->rules());
+        if ($validator->fails()) {
+            \Log::error('Validation errors:', $validator->errors()->toArray());
+        }
         $detailKriteria->update($data);
+        $detailKriteria->refresh();
+        $detailKriteria->load('kriteria', 'jenisKriteria', 'createdBy');
 
         return response()->json(
             [
