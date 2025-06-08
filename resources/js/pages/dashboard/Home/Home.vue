@@ -1,7 +1,30 @@
 <script setup>
-import { ref, computed, defineEmits } from "vue";
+import axios from "axios";
+import { ref, computed, defineEmits, reactive, onMounted } from "vue";
 
-const emit = defineEmits(["edit-item"]);
+const users = reactive({
+  data: [],
+  status: "",
+  message: "",
+  loading: false,
+});
+
+const fetchUsers = async () => {
+  try {
+    users.loading = true;
+    const { data } = await axios.get("users");
+
+    users.status = data.status;
+    users.message = data.message;
+    users.data = data.data;
+  } catch (error) {
+    console.error("Error fetching users:", error);
+  } finally {
+    users.loading = false;
+  }
+};
+
+const emit = defineEmits(["edit-item", "add-item"]);
 
 const StatusEnum = Object.freeze({
   SUBMITTED: "Submitted",
@@ -77,6 +100,10 @@ function onEdit(item) {
   emit("edit-item", item);
 }
 
+function onAddNew() {
+  emit("add-item");
+}
+
 // Modal Komentar
 const isKomentarModalOpen = ref(false);
 const komentarContent = ref("");
@@ -104,9 +131,46 @@ function getStatusColor(status) {
     default: return 'bg-gray-100 text-gray-800 border-gray-200';
   }
 }
+
+onMounted(() => {
+  fetchUsers();
+});
 </script>
 
 <template>
+  <div class= "container mx-auto flex flex-col gap-y-12 py-B">
+    <div class="w-full flex flex-col items-center gap-y-4">
+      <div class="w-full text-left">
+        <p class="text-xl font-bold">data users</p>
+        <p>status: {{ users.status }}</p>
+        <p>message: {{ users.message }}</p>
+        </div>
+
+      <table class="w-full text-black" v-if="!users.loading">
+        <thead>
+          <tr class="border *:border-r *:p-3">
+            <th>ID</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Role Code</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            v-for="user in users.data"
+            :key="user.id"
+            class="border *:border-r *:p-2"
+          >
+            <td class="text-center">{{ user.id }}</td>
+            <td>{{ user.name }}</td>
+            <td>{{ user.email }}</td>
+            <td>{{ user.role.code }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
   <div class="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
     <!-- Header Section -->
     <div class="bg-white shadow-lg border-b-4 border-indigo-500">
@@ -191,9 +255,9 @@ function getStatusColor(status) {
         </div>
       </div>
 
-      <!-- Filters and Search -->
+      <!-- Filters, Search, and Add Button -->
       <div class="bg-white rounded-xl shadow-lg p-6 mb-6">
-        <div class="flex flex-col md:flex-row gap-4">
+        <div class="flex flex-col lg:flex-row gap-4">
           <div class="flex-1">
             <div class="relative">
               <input
@@ -217,6 +281,17 @@ function getStatusColor(status) {
               <option value="Draft">📝 Draft</option>
               <option value="Revision">🔄 Revision</option>
             </select>
+          </div>
+          <div class="w-full md:w-auto">
+            <button
+              @click="onAddNew"
+              class="w-full md:w-auto px-6 py-3 bg-gradient-to-r from-purple-500 to-pink-600 hover:from-purple-600 hover:to-pink-700 text-white text-lg font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300 flex items-center justify-center gap-2"
+            >
+              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd"></path>
+              </svg>
+              Tambah Data
+            </button>
           </div>
         </div>
       </div>
