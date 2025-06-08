@@ -24,7 +24,7 @@ class updatedetailKriteriaRequest extends FormRequest
         return [
             'kriteria_id' => [
                 'nullable',
-                'imteger',
+                'integer',
                 'exists:kriteria,id'
             ],
             'jenis_kriteria_id' => [
@@ -32,9 +32,8 @@ class updatedetailKriteriaRequest extends FormRequest
                 'integer',
                 'exists:jenis_kriteria,id'
             ],
-            'status_validasi' => 'nullable|in:pending,accepted,rejected',
-            'status_pengerjaan' => 'nullable|in:save,submitted,revised',
-            'file_url' => 'nullable|file|mimes:pdf,doc,docx,png,jpg,jpeg|max:2048',
+            'description' => 'nullable|string',
+            'file_url' => 'nullable|file|mimes:pdf,doc,docx,png,jpg,jpeg'
         ];
     }
 
@@ -43,8 +42,6 @@ class updatedetailKriteriaRequest extends FormRequest
         return [
             'kriteria_id.exists' => 'Kriteria ID must exist in the kriteria table',
             'jenis_kriteria_id.exists' => 'Jenis Kriteria ID must exist in the jenis_kriteria table',
-            'status_validasi.in' => 'Status Validasi must be one of: pending, accepted, rejected',
-            'status_pengerjaan.in' => 'Status Pengerjaan must be one of: save, submitted, revised',
         ];
     }
 }

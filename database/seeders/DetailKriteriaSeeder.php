@@ -17,30 +17,35 @@ class DetailKriteriaSeeder extends Seeder
             [
                 'kriteria_id' => 1,
                 'jenis_kriteria_id' => 1,
+                'description' => 'Detail for kriteria 1, jenis kriteria 1',
                 'file_url' => 'null',
                 'created_by' => 7,
             ],
             [
                 'kriteria_id' => 1,
                 'jenis_kriteria_id' => 2,
+                'description' => 'Detail for kriteria 1, jenis kriteria 2',
                 'file_url' => 'null',
                 'created_by' => 8,
             ],
             [
                 'kriteria_id' => 1,
                 'jenis_kriteria_id' => 3,
+                'description' => 'Detail for kriteria 1, jenis kriteria 3',
                 'file_url' => 'null',
                 'created_by' => 9,
             ],
             [
                 'kriteria_id' => 1,
                 'jenis_kriteria_id' => 4,
+                'description' => 'Detail for kriteria 1, jenis kriteria 4',
                 'file_url' => 'null',
                 'created_by' => 10,
             ],
             [
                 'kriteria_id' => 1,
                 'jenis_kriteria_id' => 5,
+                'description' => 'Detail for kriteria 1, jenis kriteria 5',
                 'file_url' => 'null',
                 'created_by' => 11,
             ]
