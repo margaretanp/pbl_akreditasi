@@ -25,12 +25,14 @@ class AuthController extends Controller
             ], 401);
         }
 
-        $token = $user->createToken('auth_token')->plainTextToken;
+        $expiresAt = now()->addHours(24);
+        $token = $user->createToken('auth_token', ["*"], $expiresAt)->plainTextToken;
 
         return response()->json([
             'status' => 'success',
             'message' => 'Login successful',
             'access_token' => $token,
+            'expires_at' => $expiresAt,
             'user' => $user->load('role')
         ]);
     }
