@@ -1,9 +1,9 @@
 import axios from "axios";
-import authService from "../services/authService";
+import { authService } from "../services/authService";
 import router from "../router";
 
 // Set default base URL
-axios.defaults.baseURL = "http://localhost:8000/api";
+axios.defaults.baseURL = "http://localhost:8000/api/";
 
 // Set default headers
 axios.defaults.headers.common["Accept"] = "application/json";
@@ -16,15 +16,18 @@ if (token) {
 }
 
 // Interceptor to refresh token before every request
-axios.interceptors.request.use((config) => {
-    const token = authService.getAccessToken();
-    if (token) {
-        config.headers.Authorization = `Bearer ${token}`;
+axios.interceptors.request.use(
+    (config) => {
+        const token = authService.getAccessToken();
+        if (token) {
+            config.headers.Authorization = `Bearer ${token}`;
+        }
+        return config;
+    },
+    (error) => {
+        return Promise.reject(error);
     }
-    return config;
-}, (error) => {
-    return Promise.reject(error);
-});
+);
 
 // Interceptor for handling responses
 axios.interceptors.response.use(
@@ -32,7 +35,7 @@ axios.interceptors.response.use(
     (error) => {
         if (error.response?.status === 401) {
             authService.removeTokens();
-            router.push("/")
+            router.push("/login");
         }
         return Promise.reject(error);
     }
