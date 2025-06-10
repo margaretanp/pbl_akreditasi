@@ -37,10 +37,13 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::apiResource('kriteria', KriteriaController::class);
     Route::apiResource('jenis-kriteria', JenisKriteriaController::class);
     Route::apiResource('detail-kriteria', DetailKriteriaController::class);
+    Route::post('/kriteria/{id}/merge', [KriteriaController::class, 'generateMergedPdf']);
+    Route::put('/kriteria/{id}/reject', [KriteriaController::class, 'reject']);
+
 
     // Validasi oleh validator
     Route::apiResource('validator', ValidasiController::class);
-    Route::put('/validation', [ValidasiController::class, 'validasi']);
+    Route::put('/validator/validate', [ValidasiController::class, 'validasi']);
 
     // Dashboard routes
     // Route::get('/dashboard', [DashboardController::class, 'index']);

@@ -25,9 +25,8 @@ class storedetailKriteriaRequest extends FormRequest
         return [
             'kriteria_id' => 'required|integer|exists:kriteria,id',
             'jenis_kriteria_id' => 'required|integer|exists:jenis_kriteria,id',
-            'status_validasi' => 'required|in:pending,accepted,rejected',
-            'status_pengerjaan' => 'required|in:save,submitted,revised',
-            'file_url' => 'nullable|file|mimes:pdf,doc,docx,png,jpg,jpeg|max:2048',
+            'description' => 'nullable|string',
+            'file_url' => 'nullable|file|mimes:pdf,doc,docx,png,jpg,jpeg',
         ];
     }
 
@@ -41,10 +40,10 @@ class storedetailKriteriaRequest extends FormRequest
             'jenis_kriteria_id.required' => 'Jenis Kriteria ID is required',
             'jenis_kriteria_id.integer' => 'Jenis Kriteria ID must be an integer',
             'jenis_kriteria_id.exists' => 'Jenis Kriteria ID must exist in the jenis_kriteria table',
-            'status_validasi.required' => 'Status Validasi is required',
-            'status_validasi.in' => 'Status Validasi must be one of: pending, accepted, rejected',
-            'status_pengerjaan.required' => 'Status Pengerjaan is required',
-            'status_pengerjaan.in' => 'Status Pengerjaan must be one of: save, submitted, revised',
+            'description.required' => 'Description is required',
+            'description.string' => 'Description must be a string',
+            'file_url.file' => 'File must be a valid file',
+            'file_url.mimes' => 'File must be a PDF, DOC, DOCX, PNG, JPG, or JPEG',
         ];
     }
 }

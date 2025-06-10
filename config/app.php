@@ -70,7 +70,7 @@ return [
     |
     */
 
-    'timezone' => 'UTC',
+    'timezone' => env('APP_TIMEZONE', 'Asia/Jakarta'),
 
     /*
     |--------------------------------------------------------------------------
@@ -159,6 +159,8 @@ return [
         /*
          * Package Service Providers...
          */
+        Webklex\PDFMerger\Providers\PDFMergerServiceProvider::class,
+
 
         /*
          * Application Service Providers...
@@ -183,11 +185,6 @@ return [
 
     'aliases' => Facade::defaultAliases()->merge([
         // 'Example' => App\Facades\Example::class,
+        'PDFMerger' => Webklex\PDFMerger\Facades\PDFMergerFacade::class,
     ])->toArray(),
-
-
-    'locale'          => 'id',    // bahasa default
-'fallback_locale' => 'en',
-
-
 ];
