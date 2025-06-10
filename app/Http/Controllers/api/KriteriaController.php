@@ -126,7 +126,7 @@ class KriteriaController extends Controller
     {
         $user = auth()->user();
 
-        if ($user->role->id !== 2|| $user->role->id !== 3) {
+        if ($user->role->id !== 2 || $user->role->id !== 3) {
             return response()->json([
                 'status' => 'error',
                 'message' => 'Unauthorized action. Only Kajur or Direktur can reject kriteia.'
