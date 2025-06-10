@@ -1,7 +1,7 @@
 @import "tailwindcss";
 @plugin "daisyui";
 
-@import "vue-toast-notification/dist/home/theme-bootstrap.css";
+@import "vue-toast-notification/dist/theme-bootstrap.css";
 
 /* resources/css/app.css */
 .sidebar {

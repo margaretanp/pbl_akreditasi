@@ -20,6 +20,7 @@ const kriteria = reactive({
 
 const fetchKriteria = async () => {
     if (kriteria.data.length > 0) return;
+
     kriteria.loading = true;
 
     try {
@@ -30,7 +31,7 @@ const fetchKriteria = async () => {
         console.error(error);
         $toast.error("Gagal menampilkan data kriteria");
     } finally {
-        kriteria.loading = true;
+        kriteria.loading = false;
     }
 };
 
@@ -58,22 +59,11 @@ onMounted(() => {
                             Kelola dan pantau progress kriteria akreditasi Anda
                         </p>
                     </div>
-                    <div class="flex gap-4">
-                        <div
-                            class="text-center p-4 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-xl shadow-lg"
-                        >
-                            <div class="text-2xl font-bold">
-                                {{ kriteria.total }}
-                            </div>
-                            <div class="text-sm opacity-90">Total Kriteria</div>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
 
         <div class="px-8 py-6">
-            
             <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
                 <div
                     class="bg-white rounded-xl shadow-lg p-6 border-l-4 border-blue-500 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
@@ -84,7 +74,7 @@ onMounted(() => {
                                 Total Kriteria
                             </p>
                             <p class="text-3xl font-bold text-gray-800">
-                                {{ statusCounts.total }}
+                                {{ kriteria.total }}
                             </p>
                         </div>
                         <div class="bg-blue-100 p-3 rounded-full">
@@ -110,7 +100,7 @@ onMounted(() => {
                                 Submitted
                             </p>
                             <p class="text-3xl font-bold text-green-600">
-                                {{ statusCounts.submitted }}
+                                {{}}
                             </p>
                         </div>
                         <div class="bg-green-100 p-3 rounded-full">
@@ -137,9 +127,7 @@ onMounted(() => {
                             <p class="text-gray-600 text-sm font-medium">
                                 Draft
                             </p>
-                            <p class="text-3xl font-bold text-gray-600">
-                                {{ statusCounts.draft }}
-                            </p>
+                            <p class="text-3xl font-bold text-gray-600">{{}}</p>
                         </div>
                         <div class="bg-gray-100 p-3 rounded-full">
                             <svg
@@ -169,7 +157,7 @@ onMounted(() => {
                                 Revision
                             </p>
                             <p class="text-3xl font-bold text-yellow-600">
-                                {{ statusCounts.revision }}
+                                {{}}
                             </p>
                         </div>
                         <div class="bg-yellow-100 p-3 rounded-full">
@@ -189,13 +177,11 @@ onMounted(() => {
                 </div>
             </div>
 
-            
             <div class="bg-white rounded-xl shadow-lg p-6 mb-6">
                 <div class="flex flex-col lg:flex-row gap-4">
                     <div class="flex-1">
                         <div class="relative">
                             <input
-                                v-model="search"
                                 type="text"
                                 placeholder="🔍 Cari kriteria, status, atau komentar..."
                                 class="w-full pl-12 pr-4 py-3 text-lg border border-gray-300 rounded-xl focus:ring-4 focus:ring-blue-100 focus:border-blue-500 transition-all duration-300"
@@ -215,7 +201,6 @@ onMounted(() => {
                     </div>
                     <div class="w-full md:w-64">
                         <select
-                            v-model="selectedStatus"
                             class="w-full px-4 py-3 text-lg border border-gray-300 rounded-xl focus:ring-4 focus:ring-blue-100 focus:border-blue-500 transition-all duration-300"
                         >
                             <option value="semua">📋 Semua Status</option>
@@ -224,32 +209,12 @@ onMounted(() => {
                             <option value="Revision">🔄 Revision</option>
                         </select>
                     </div>
-                    <div class="w-full md:w-auto">
-                        <button
-                            @click="onAddNew()"
-                            class="w-full md:w-auto px-6 py-3 bg-gradient-to-r from-purple-500 to-pink-600 hover:from-purple-600 hover:to-pink-700 text-white text-lg font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300 flex items-center justify-center gap-2"
-                        >
-                            <svg
-                                class="w-5 h-5"
-                                fill="currentColor"
-                                viewBox="0 0 20 20"
-                            >
-                                <path
-                                    fill-rule="evenodd"
-                                    d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
-                                    clip-rule="evenodd"
-                                ></path>
-                            </svg>
-                            Tambah Data
-                        </button>
-                    </div>
                 </div>
             </div>
 
-            
             <div class="bg-white rounded-xl shadow-lg overflow-hidden">
                 <div class="overflow-x-auto">
-                    <table class="w-full">
+                    <table class="w-full" v-if="kriteria.total > 0">
                         <thead
                             class="bg-gradient-to-r from-gray-50 to-gray-100 border-b-2 border-gray-200"
                         >
@@ -267,9 +232,9 @@ onMounted(() => {
                                 <th
                                     class="text-left p-6 font-semibold text-gray-700 text-lg"
                                 >
-                                    Tanggal
+                                    File
                                 </th>
-                                <th
+                                <!--<th
                                     class="text-left p-6 font-semibold text-gray-700 text-lg"
                                 >
                                     Status
@@ -283,12 +248,12 @@ onMounted(() => {
                                     class="text-center p-6 font-semibold text-gray-700 text-lg"
                                 >
                                     Aksi
-                                </th>
+                                </th> -->
                             </tr>
                         </thead>
                         <tbody>
                             <tr
-                                v-for="(item, index) in filteredData"
+                                v-for="(item, index) in kriteria.data"
                                 :key="item.id"
                                 class="border-b border-gray-100 hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50 transition-all duration-300"
                                 :style="{ animationDelay: index * 50 + 'ms' }"
@@ -297,22 +262,17 @@ onMounted(() => {
                                     <div
                                         class="w-8 h-8 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-full flex items-center justify-center text-white font-bold"
                                     >
-                                        {{ item.id }}
+                                        {{ index + 1 }}
                                     </div>
                                 </td>
                                 <td class="p-6">
                                     <p
                                         class="font-semibold text-gray-800 text-lg"
                                     >
-                                        {{ item.nama }}
+                                        {{ item.name }}
                                     </p>
                                 </td>
-                                <td class="p-6">
-                                    <p class="text-gray-600 text-lg">
-                                        {{ item.tanggal }}
-                                    </p>
-                                </td>
-                                <td class="p-6">
+                                <!-- <td class="p-6">
                                     <span
                                         :class="getStatusColor(item.status)"
                                         class="px-4 py-2 rounded-full text-sm font-semibold inline-flex items-center gap-2 border"
@@ -322,8 +282,8 @@ onMounted(() => {
                                         }}</span>
                                         {{ item.status }}
                                     </span>
-                                </td>
-                                <td class="p-6">
+                                </td> -->
+                                <!-- <td class="p-6">
                                     <template
                                         v-if="
                                             item.status ===
@@ -345,8 +305,8 @@ onMounted(() => {
                                             >-</span
                                         >
                                     </template>
-                                </td>
-                                <td class="p-6">
+                                </td> -->
+                                <!-- <td class="p-6">
                                     <div class="flex gap-3 justify-center">
                                         <button
                                             @click="onEdit(item)"
@@ -371,15 +331,12 @@ onMounted(() => {
                                             🗑️ Hapus
                                         </button>
                                     </div>
-                                </td>
+                                </td> -->
                             </tr>
                         </tbody>
                     </table>
 
-                    <div
-                        v-if="filteredData.length === 0"
-                        class="text-center py-16"
-                    >
+                    <div class="text-center py-16" v-else>
                         <div class="text-6xl mb-4">🔍</div>
                         <p class="text-xl text-gray-500 mb-2">
                             Tidak ada data yang ditemukan
@@ -392,8 +349,7 @@ onMounted(() => {
             </div>
         </div>
 
-        
-         <!-- <div
+        <!-- <div
             v-if="isDeleteModalOpen"
             class="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4"
         >
