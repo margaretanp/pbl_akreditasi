@@ -13,8 +13,8 @@ const useCurrentUser = useCurrentUserStore();
 const user = computed(() => useCurrentUser.currentUser);
 
 const expanded = ref(true);
-
 const showKriteria = ref(false);
+const showLogoutModal = ref(false);
 
 const toggleSidebar = () => {
     expanded.value = !expanded.value;
@@ -24,14 +24,26 @@ const toggleKriteriaDropdown = () => {
     showKriteria.value = !showKriteria.value;
 };
 
+const showLogoutConfirmation = () => {
+    showLogoutModal.value = true;
+};
+
+const cancelLogout = () => {
+    showLogoutModal.value = false;
+};
+
+const confirmLogout = async () => {
+    showLogoutModal.value = false;
+    await handleLogout();
+};
+
 const handleLogout = async () => {
     try {
-        const response = await axios.post("logout");
-
-        if (response.status === "success") {
+        await axios.post("logout");
+        
             authService.removeTokens();
             router.push({ name: "welcome" });
-        }
+        
     } catch (error) {
         console.error("Error:", error);
         $toast.error("Failed to logout");
@@ -283,7 +295,7 @@ const onKriteriaRoute = (kriteriaId, event) => {
             <!-- Logout Button -->
             <div class="px-4 pb-4" v-if="expanded">
                 <button
-                    @click="handleLogout"
+                    @click="showLogoutConfirmation"
                     class="w-full bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded-md transition duration-300"
                 >
                     Logout
@@ -291,7 +303,7 @@ const onKriteriaRoute = (kriteriaId, event) => {
             </div>
             <div class="pb-4 flex justify-center" v-else>
                 <button
-                    @click="handleLogout"
+                    @click="showLogoutConfirmation"
                     class="bg-red-600 hover:bg-red-700 text-white p-2 rounded-full transition duration-300"
                     title="Logout"
                 >
@@ -316,6 +328,50 @@ const onKriteriaRoute = (kriteriaId, event) => {
         <!-- Main Content -->
         <div class="flex-1 p-8">
             <slot></slot>
+        </div>
+
+        <!-- Logout Confirmation Modal -->
+        <div
+            v-if="showLogoutModal"
+            class="fixed inset-0 flex items-center justify-center"
+        >
+            <div class="bg-white rounded-lg p-6 max-w-sm mx-4 shadow-xl">
+                <div class="flex items-center mb-4">
+                    <svg
+                        class="w-6 h-6 text-red-600 mr-3"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                    >
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.98-.833-2.75 0L3.064 16.5c-.77.833.192 2.5 1.732 2.5z"
+                        />
+                    </svg>
+                    <h3 class="text-lg font-medium text-gray-900">
+                        Konfirmasi Logout
+                    </h3>
+                </div>
+                <p class="text-gray-600 mb-6">
+                    Apakah Anda yakin ingin Logout?
+                </p>
+                <div class="flex justify-end space-x-3">
+                    <button
+                        @click="cancelLogout"
+                        class="px-4 py-2 text-gray-600 border border-gray-300 rounded-md hover:bg-gray-50 transition duration-300"
+                    >
+                        Batal
+                    </button>
+                    <button
+                        @click="confirmLogout"
+                        class="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition duration-300"
+                    >
+                        Ya, Logout
+                    </button>
+                </div>
+            </div>
         </div>
     </div>
 </template>

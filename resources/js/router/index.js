@@ -42,19 +42,6 @@ const routes = [
                 },
             },
             {
-                path: "/data-master",
-                children: [
-                    {
-                        path: "/users",
-                        name: "users",
-                        component: () =>
-                            import(
-                                "../pages/dashboard/data-master/users/Users.vue"
-                            ),
-                    },
-                ],
-            },
-            {
                 path: "/validasi",
                 name: "validasi",
                 component: () => import("../pages/dashboard/Home/Validasi.vue"),
