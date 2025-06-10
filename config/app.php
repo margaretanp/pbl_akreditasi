@@ -159,6 +159,8 @@ return [
         /*
          * Package Service Providers...
          */
+        Webklex\PDFMerger\Providers\PDFMergerServiceProvider::class,
+
 
         /*
          * Application Service Providers...
@@ -183,5 +185,6 @@ return [
 
     'aliases' => Facade::defaultAliases()->merge([
         // 'Example' => App\Facades\Example::class,
+        'PDFMerger' => Webklex\PDFMerger\Facades\PDFMergerFacade::class,
     ])->toArray(),
 ];
