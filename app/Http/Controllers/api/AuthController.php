@@ -50,7 +50,9 @@ class AuthController extends Controller
     public function currentUser()
     {
         return response()->json([
-            'user' => auth()->user()->load('role')
+            "status" => "success",
+            "message" => "Authenticated user retrieved successfuly",
+            'data' => auth()->user()->load('role')
         ], 200);
     }
 }
