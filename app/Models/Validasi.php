@@ -8,19 +8,19 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Validasi extends Model
 {
-    protected $table = 'validasi';
+    protected $table = 'validators';
     protected $primaryKey = 'id';
-    protected $fillable = ['id_user', 'id_detail_kriteria', 'validated_date', 'komentar', 'status'];
+    protected $fillable = ['user_id', 'kriteria_id', 'validated_at', 'komentar', 'is_validated'];
     protected $hidden = ['created_at', 'updated_at', 'deleted_at'];
 
 
     public function user()
     {
-        return $this->belongsTo(UsersModel::class, 'id_user', 'id');
+        return $this->belongsTo(UsersModel::class, 'user_id', 'id');
     }
 
-    public function detailKriteria(): BelongsTo
+    public function kriteria(): BelongsTo
     {   
-        return $this->belongsTo(DetailKriteriaModel::class, 'id_detail_kriteria', 'id');
+        return $this->belongsTo(KriteriaModel::class, 'kriteria_id', 'id');
     }
 }

@@ -11,13 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('roles', function (Blueprint $table) {
-            $table->id()->OnCascadeDelete();
-            $table->string('code', 4)->unique();
-            $table->string('name');
-            $table->string('description')->nullable();
-            $table->timestamps();
-            $table->softDeletes();
+          Schema::table('kriteria', function (Blueprint $table) {
+            $table->timestamp('rejected_at')->nullable()->after('is_rejected');
         });
     }
 
@@ -26,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('roles');
+          Schema::table('kriteria', function (Blueprint $table) {
+            $table->dropColumn('rejected_at');
+        });
     }
 };

@@ -13,27 +13,30 @@ class ValidasiSeeder extends Seeder
      */
     public function run(): void
     {
-        DB::table('validasi')->insert([
+        DB::table('validators')->insert([
             [
-                'id_user'         => 2,
-                'id_detail_kriteria' => 1,
-                'validated_at'  => Carbon::now()->subDays(3),
-                'komentar'          => 'All documents verified.',
-                'status'          => 'valid',
+                'user_id' => 3,
+                'kriteria_id' => 1,
             ],
             [
-                'id_user'         => 2,
-                'id_detail_kriteria' => 2,
-                'validated_at'  => Carbon::now()->subDays(1),
-                'komentar'          => 'Incomplete requirements.',
-                'status'          => 'invalid',
+                'user_id' => 3,
+                'kriteria_id' => 2,
             ],
             [
-                'id_user'         => 4,
-                'id_detail_kriteria' => 3,
-                'validated_at'  => Carbon::now(),
-                'komentar'          => 'Pending final review.',
-                'status'          => 'pending',
+                'user_id' => 3,
+                'kriteria_id' => 3,
+            ],
+             [
+                'user_id' => 4,
+                'kriteria_id' => 4,
+            ],
+            [
+                'user_id' => 4,
+                'kriteria_id' => 2,
+            ],
+            [
+                'user_id' => 4,
+                'kriteria_id' => 3,
             ]
         ]);
     }
