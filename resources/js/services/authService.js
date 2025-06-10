@@ -20,7 +20,6 @@ export const authService = {
     removeTokens() {
         localStorage.removeItem(ACCESS_TOKEN_KEY);
         localStorage.removeItem(TOKEN_EXPIRES_KEY);
-        localStorage.removeItem("user");
     },
 
     isAuthenticated() {
