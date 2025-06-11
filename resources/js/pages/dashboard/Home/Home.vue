@@ -155,7 +155,6 @@ onMounted(() => {
                 <tr>
                     <th class="w-12 text-center">No.</th>
                     <th>Nama Kriteria</th>
-                    <th>Jenis Kriteria</th>
                     <th>Status</th>
                     <th>File</th>
                 </tr>
