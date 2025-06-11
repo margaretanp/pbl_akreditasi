@@ -14,7 +14,7 @@ const routes = [
     {
         path: "/",
         name: "welcome",
-        component: () => import("../pages/Welcome.vue"),
+        component: () => import("../pages/landingpage/Welcome.vue"),
         meta: {
             title: "Welcome",
             requiresAuth: false,
@@ -29,30 +29,28 @@ const routes = [
             requiresAuth: true,
         },
         children: [
+            { path: "", name: "dashboard-home", redirect: { name: "Home" } },
             {
-                path: "",
-                redirect: { name: "Home" },
-            },
-            {
-                path: "/home",
+                path: "home",
                 name: "Home",
-                component: () => import("../pages/dashboard/Home/Home.vue"),
+                component: () => import("../pages/dashboard/home/Home.vue"),
                 meta: {
                     title: "Home",
                 },
             },
             {
-                path: "/validasi",
+
+                path: "validasi",
                 name: "validasi",
-                component: () => import("../pages/dashboard/Home/Validasi.vue"),
+                component: () => import("../pages/dashboard/home/Validasi.vue"),
                 meta: {
                     title: "Validasi",
                 },
             },
             {
-                path: "/kriteria/:id",
+                path: "kriteria/:id",
                 name: "kriteria",
-                component: () => import("../pages/dashboard/Kriteria.vue"),
+                component: () => import("../pages/dashboard/kriteria/Kriteria.vue"),
                 meta: {
                     title: "Kriteria",
                 },
@@ -96,7 +94,7 @@ const routes = [
 const router = createRouter({
     history: createWebHistory(),
     routes,
-    linkActiveClass: "font-semibold text-blue-500",
+    linkActiveClass: "font-semibold text-white",
 });
 
 router.beforeEach((to, from, next) => {

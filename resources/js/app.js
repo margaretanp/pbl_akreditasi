@@ -21,11 +21,11 @@ import { createPinia } from "pinia";
 
 // Konfigurasi i18n
 const i18n = createI18n({
-  legacy: false, // Mengaktifkan Composition API
-  locale: 'id', // Bahasa default
-  fallbackLocale: 'en', // Bahasa fallback jika terjemahan tidak ditemukan
-  messages,
-  globalInjection: true // Agar `$t` bisa digunakan langsung
+    legacy: false, // Mengaktifkan Composition API
+    locale: "id", // Bahasa default
+    fallbackLocale: "en", // Bahasa fallback jika terjemahan tidak ditemukan
+    messages,
+    globalInjection: true, // Agar `$t` bisa digunakan langsung
 });
 
 // Buat instance Vue app
@@ -39,4 +39,4 @@ app.use(router);
 app.use(ToastPlugin);
 
 // Mount Vue ke #app (di file app.blade.php)
-app.mount('#app');
+app.mount("#app");

@@ -1,42 +1,34 @@
 import axios from "axios";
-import { authService } from "../services/authService";
-import router from "../router";
+import { authService } from "./authService";
+import router from "../router"
 
-// Set default base URL
-axios.defaults.baseURL = "http://localhost:8000/api/";
+axios.defaults.baseURL = "http://localhost:8000/api";
 
-// Set default headers
-axios.defaults.headers.common["Accept"] = "application/json";
-axios.defaults.headers.common["Content-Type"] = "application/json";
-
-// Attach Bearer token if it exists
-const token = authService.getAccessToken();
-if (token) {
-    axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-}
-
-// Interceptor to refresh token before every request
 axios.interceptors.request.use(
-    (config) => {
-        const token = authService.getAccessToken();
-        if (token) {
-            config.headers.Authorization = `Bearer ${token}`;
-        }
-        return config;
-    },
-    (error) => {
-        return Promise.reject(error);
+  (config) => {
+    const accessToken = authService.getToken();
+
+    if (accessToken && authService.isAuthenticated()) {
+      config.headers["Authorization"] = `Bearer ${accessToken}`;
     }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
 );
 
-// Interceptor for handling responses
 axios.interceptors.response.use(
-    (response) => response,
-    (error) => {
-        if (error.response?.status === 401) {
-            authService.removeTokens();
-            router.push("/login");
-        }
-        return Promise.reject(error);
+  (response) => {
+    return response;
+  },
+  (error) => {
+    if (error.response && error.response.status === 401) {
+      console.error("Unauthorized - Token expired or invalid");
+      authService.removeTokens();
+      router.push("/")
     }
+  }
 );
+
+export default axios;

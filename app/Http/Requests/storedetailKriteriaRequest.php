@@ -40,7 +40,6 @@ class storedetailKriteriaRequest extends FormRequest
             'jenis_kriteria_id.required' => 'Jenis Kriteria ID is required',
             'jenis_kriteria_id.integer' => 'Jenis Kriteria ID must be an integer',
             'jenis_kriteria_id.exists' => 'Jenis Kriteria ID must exist in the jenis_kriteria table',
-            'description.required' => 'Description is required',
             'description.string' => 'Description must be a string',
             'file_url.file' => 'File must be a valid file',
             'file_url.mimes' => 'File must be a PDF, DOC, DOCX, PNG, JPG, or JPEG',
