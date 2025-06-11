@@ -1,47 +1,112 @@
-import axios from "axios";
+import axios from "./axios";
 
-const ACCESS_TOKEN_KEY = "access_token";
-const TOKEN_EXPIRES_KEY = "token_expires";
+const AUTH_TOKEN = "auth_token";
+const EXPIRES_AT = "expires_at";
 
 export const authService = {
-    setTokens({ access_token, expires_at }) {
-        localStorage.setItem(ACCESS_TOKEN_KEY, access_token);
-        localStorage.setItem(TOKEN_EXPIRES_KEY, expires_at);
-    },
+    setTokens(response) {
+        const { auth_token, expires_at } = response;
 
-    getAccessToken() {
-        return localStorage.getItem(ACCESS_TOKEN_KEY);
-    },
-
-    getTokenExpires() {
-        return localStorage.getItem(TOKEN_EXPIRES_KEY);
-    },
-
-    removeTokens() {
-        localStorage.removeItem(ACCESS_TOKEN_KEY);
-        localStorage.removeItem(TOKEN_EXPIRES_KEY);
-    },
-
-    isAuthenticated() {
-        const token = this.getAccessToken();
-        const expiresAt = this.getTokenExpires();
-
-        if (!token || !expiresAt) return false;
+        if (!auth_token || !expires_at) {
+            console.error("Invalid token response:", response);
+            return false;
+        }
 
         try {
-            return new Date(expiresAt).getTime() > Date.now();
-        } catch {
+            localStorage.setItem(AUTH_TOKEN, auth_token);
+            localStorage.setItem(EXPIRES_AT, expires_at);
+
+            return true;
+        } catch (error) {
+            console.error("Error storing auth data:", error);
             return false;
         }
     },
 
-    getLoggedInUser() {
-        const user = this.getAccessToken();
-        return user ? user : null;
+    removeTokens() {
+        try {
+            localStorage.removeItem(AUTH_TOKEN);
+            localStorage.removeItem(EXPIRES_AT);
+        } catch (error) {
+            console.error("Error removing auth data:", error);
+        }
+    },
+
+    getToken() {
+        try {
+            return localStorage.getItem(AUTH_TOKEN);
+        } catch (error) {
+            console.error("Error getting token:", error);
+            return null;
+        }
+    },
+
+    getExpiresAt() {
+        try {
+            return localStorage.getItem(EXPIRES_AT);
+        } catch (error) {
+            console.error("Error getting expires_at:", error);
+            return null;
+        }
+    },
+
+    // getStoredUser() {
+    //   try {
+    //     const userData = localStorage.getItem(USER_DATA);
+    //     return userData ? JSON.parse(userData) : null;
+    //   } catch (error) {
+    //     console.error("Error getting stored user data:", error);
+    //     return null;
+    //   }
+    // },
+
+    isAuthenticated() {
+        const token = this.getToken();
+        const expiresAt = this.getExpiresAt();
+
+        if (!token || !expiresAt) {
+            return false;
+        }
+
+        try {
+            const expiresAtTime = new Date(expiresAt).getTime();
+            const isValid = expiresAtTime > Date.now();
+
+            if (!isValid) {
+                // Token expired, clean up
+                this.removeTokens();
+            }
+
+            return isValid;
+        } catch (error) {
+            console.error("Error parsing expires_at:", error);
+            this.removeTokens();
+            return false;
+        }
+    },
+
+    // Get remaining time until token expires (in milliseconds)
+    getTimeUntilExpiry() {
+        const expiresAt = this.getExpiresAt();
+        if (!expiresAt) return 0;
+
+        try {
+            const expiresAtTime = new Date(expiresAt).getTime();
+            return Math.max(0, expiresAtTime - Date.now());
+        } catch (error) {
+            console.error("Error calculating time until expiry:", error);
+            return 0;
+        }
+    },
+
+    // Check if token will expire soon (within next 5 minutes)
+    isTokenExpiringSoon() {
+        const timeUntilExpiry = this.getTimeUntilExpiry();
+        return timeUntilExpiry > 0 && timeUntilExpiry < 5 * 60 * 1000; // 5 minutes in ms
     },
 };
 
 export const fetchCurrentUser = async () => {
-    const response = await axios.get("profile");
+    const response = await axios.get("/profile");
     return response.data;
 };

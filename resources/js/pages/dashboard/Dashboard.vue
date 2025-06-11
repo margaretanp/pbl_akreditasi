@@ -12,7 +12,7 @@ onMounted(() => currentUserStore.getCurrentUser());
 
 <template>
     <div class="h-screen bg-gray-50 flex">
-        <Sidebar class="z-0" />
+        <Sidebar />
 
         <!-- Konten utama halaman -->
         <main class="bg-gray-50 flex-1 overflow-y-auto">

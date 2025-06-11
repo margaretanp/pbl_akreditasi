@@ -29,12 +29,9 @@ const routes = [
             requiresAuth: true,
         },
         children: [
+            { path: "", name: "dashboard-home", redirect: { name: "Home" } },
             {
-                path: "",
-                redirect: { name: "Home" },
-            },
-            {
-                path: "/home",
+                path: "home",
                 name: "Home",
                 component: () => import("../pages/dashboard/Home/Home.vue"),
                 meta: {
@@ -42,20 +39,7 @@ const routes = [
                 },
             },
             {
-                path: "/data-master",
-                children: [
-                    {
-                        path: "/users",
-                        name: "users",
-                        component: () =>
-                            import(
-                                "../pages/dashboard/data-master/users/Users.vue"
-                            ),
-                    },
-                ],
-            },
-            {
-                path: "/validasi",
+                path: "validasi",
                 name: "validasi",
                 component: () => import("../pages/dashboard/Home/Validasi.vue"),
                 meta: {
@@ -63,7 +47,7 @@ const routes = [
                 },
             },
             {
-                path: "/kriteria/:id",
+                path: "kriteria/:id",
                 name: "kriteria",
                 component: () => import("../pages/dashboard/Kriteria.vue"),
                 meta: {
@@ -109,7 +93,7 @@ const routes = [
 const router = createRouter({
     history: createWebHistory(),
     routes,
-    linkActiveClass: "font-semibold text-blue-500",
+    linkActiveClass: "font-semibold text-white",
 });
 
 router.beforeEach((to, from, next) => {

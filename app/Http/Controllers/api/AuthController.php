@@ -31,10 +31,12 @@ class AuthController extends Controller
         return response()->json([
             'status' => 'success',
             'message' => 'Login successful',
-            'access_token' => $token,
-            'expires_at' => $expiresAt,
-            'user' => $user->load('role')
-        ]);
+            'data' => [
+                'auth_token' => $token,
+                'expires_at' => $expiresAt->toIso8601String(),
+                'user' => $user->load('role')
+            ],
+        ], 200);
     }
 
     public function logout(Request $request)

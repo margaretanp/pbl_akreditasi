@@ -4,6 +4,7 @@ import { ref, computed, defineEmits, reactive, onMounted } from "vue";
 import { useRouter } from "vue-router"; // Import useRouter
 import { useCurrentUserStore } from "../../../store/currentUser";
 import { useToast } from "vue-toast-notification";
+import { downloadDocument } from "../../../helpers/download-url";
 
 const router = useRouter(); // Initialize router
 
@@ -33,6 +34,10 @@ const fetchKriteria = async () => {
     } finally {
         kriteria.loading = false;
     }
+};
+
+const onDownload = async (fileUrl) => {
+    await downloadDocument(fileUrl, $toast);
 };
 
 onMounted(() => {
@@ -184,7 +189,7 @@ onMounted(() => {
                             <input
                                 type="text"
                                 placeholder="🔍 Cari kriteria, status, atau komentar..."
-                                class="w-full pl-12 pr-4 py-3 text-lg border border-gray-300 rounded-xl focus:ring-4 focus:ring-blue-100 focus:border-blue-500 transition-all duration-300"
+                                class="w-full pl-12 pr-4 py-3 text-lg text-black border border-gray-300 rounded-xl focus:ring-4 focus:ring-blue-100 focus:border-blue-500 transition-all duration-300"
                             />
                             <svg
                                 class="absolute left-4 top-4 w-5 h-5 text-gray-400"
@@ -201,7 +206,7 @@ onMounted(() => {
                     </div>
                     <div class="w-full md:w-64">
                         <select
-                            class="w-full px-4 py-3 text-lg border border-gray-300 rounded-xl focus:ring-4 focus:ring-blue-100 focus:border-blue-500 transition-all duration-300"
+                            class="w-full px-4 py-3 text-lg text-black border border-gray-300 rounded-xl focus:ring-4 focus:ring-blue-100 focus:border-blue-500 transition-all duration-300"
                         >
                             <option value="semua">📋 Semua Status</option>
                             <option value="Submitted">✅ Submitted</option>
@@ -255,22 +260,30 @@ onMounted(() => {
                             <tr
                                 v-for="(item, index) in kriteria.data"
                                 :key="item.id"
-                                class="border-b border-gray-100 hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50 transition-all duration-300"
+                                class="border-b border-gray-100 hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50 transition-all duration-300 *:p-6"
                                 :style="{ animationDelay: index * 50 + 'ms' }"
                             >
-                                <td class="p-6">
+                                <td>
                                     <div
                                         class="w-8 h-8 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-full flex items-center justify-center text-white font-bold"
                                     >
                                         {{ index + 1 }}
                                     </div>
                                 </td>
-                                <td class="p-6">
+                                <td>
                                     <p
                                         class="font-semibold text-gray-800 text-lg"
                                     >
                                         {{ item.name }}
                                     </p>
+                                </td>
+                                <td>
+                                    <button
+                                        class="font-semibold text-gray-800 text-lg"
+                                        @click="onDownload(item.merged_file_url)"
+                                    >
+                                        Download
+                                    </button>
                                 </td>
                                 <!-- <td class="p-6">
                                     <span

@@ -1,40 +1,47 @@
 <script setup>
 import axios from "axios";
-import { computed, reactive, ref } from "vue";
+import { reactive, ref } from "vue";
 import { useRouter } from "vue-router";
 import { useToast } from "vue-toast-notification";
 import { authService } from "../../services/authService";
 import InputField from "../../components/InputField.vue";
+import { required, minLength, email } from "../../services/i18n-validators";
+import { useVuelidate } from "@vuelidate/core";
+import Button from "../../components/Button.vue";
 
-const $toast = useToast();
 const router = useRouter();
 
-const formLogin = reactive({
-    email: "",
-    password: "",
-    loading: false,
-});
+const $toast = useToast();
 
-const showPassword = ref(false);
+const togglePassword = ref(false);
 
-const isFormValid = computed(() => {
-    return formLogin.email.trim() !== "" && formLogin.password.trim() !== "";
-});
-
-const togglePassword = () => {
-    showPassword.value = !showPassword.value;
+const handleTogglePassword = () => {
+    togglePassword.value = !togglePassword.value;
 };
 
-const onSubmitLogin = async () => {
-    if (!isFormValid.value || formLogin.loading) return;
-    formLogin.loading = true;
+const loading = ref(false);
 
+const loginForm = reactive({
+    email: "",
+    password: "",
+});
+
+const loginRules = {
+    email: { required, email },
+    password: { required, minLength: minLength(8) },
+};
+
+const v$ = useVuelidate(loginRules, loginForm, { $autoDirty: true });
+
+const onLogin = async () => {
     try {
+        loading.value = true;
+
         const { data } = await axios.post(
             "/login",
             {
-                email: formLogin.email,
-                password: formLogin.password,
+                email: loginForm.email,
+                password: loginForm.password,
             },
             {
                 headers: {
@@ -44,25 +51,18 @@ const onSubmitLogin = async () => {
         );
 
         if (data.status === "success") {
-            const tokenData = {
-                access_token: data.access_token,
-                expires_at: data.expires_at,
-            };
-
-            authService.setTokens(tokenData);
-
-            $toast.success("Login successful!");
+            authService.setTokens(data.data);
             router.push({ name: "Home" });
+
+            $toast.success("login success!");
         } else {
-            throw new Error(data.message || "Login failed");
+            $toast.error("Login failed!");
         }
     } catch (error) {
-        console.error("Login error:", error);
-        $toast.error(
-            error.response?.data?.message || "Username or password is incorrect"
-        );
+        console.error(error.message);
+        $toast.error("Invalid credentials!");
     } finally {
-        formLogin.loading = false;
+        loading.value = false;
     }
 };
 </script>
@@ -83,51 +83,51 @@ const onSubmitLogin = async () => {
 
                 <form
                     class="w-full max-w-sm flex flex-col gap-y-4"
-                    @submit.prevent="onSubmitLogin"
+                    @submit.prevent="onLogin"
                 >
                     <!-- Email -->
-                    <div>
-                        <label
-                            for="email"
-                            class="block text-sm font-medium text-gray-700 mb-1"
-                            >Email</label
-                        >
-                        <InputField
-                            id="email"
-                            label=""
-                            type="email"
-                            placeholder="Email"
-                            v-model="formLogin.email"
-                            class="text-black"
-                        />
-                    </div>
+                    <InputField
+                        id="email"
+                        label="Email"
+                        type="email"
+                        placeholder="Email"
+                        v-model="loginForm.email"
+                        @blur="v$.email.$touch()"
+                        :isError="v$.email.$error"
+                        :errors="v$.email.$errors"
+                    />
 
                     <!-- Password -->
-                    <div class="relative">
-                        <label
-                            for="password"
-                            class="block text-sm font-medium text-gray-700 mb-1"
-                            >Password</label
-                        >
-                        <InputField
-                            id="password"
-                            label=""
-                            :type="showPassword ? 'text' : 'password'"
-                            placeholder="Password"
-                            v-model="formLogin.password"
-                            class="text-black"
-                        />
-                    </div>
+                    <InputField
+                        id="password"
+                        label="Password"
+                        :type="togglePassword ? 'text' : 'password'"
+                        placeholder="Password"
+                        v-model="loginForm.password"
+                        @onClickIcon="handleTogglePassword"
+                        @blur="v$.password.$touch()"
+                        :isError="v$.password.$error"
+                        :errors="v$.password.$errors"
+                    >
+                        <template #icon>
+                            <i
+                                :class="
+                                    togglePassword
+                                        ? 'bi bi-eye-slash'
+                                        : 'bi bi-eye'
+                                "
+                            ></i>
+                        </template>
+                    </InputField>
 
                     <!-- Submit Button -->
-                    <button
+                    <Button
                         type="submit"
-                        class="bg-[#021526] text-white py-2 rounded-full hover:bg-[#03346E] transition-colors font-semibold"
-                        :disabled="!isFormValid || formLogin.loading"
+                        :disabled="loading"
                     >
-                        <span v-if="formLogin.loading">Loading...</span>
+                        <span v-if="loading">Loading...</span>
                         <span v-else>Sign In</span>
-                    </button>
+                    </Button>
                 </form>
             </div>
 
