@@ -1,6 +1,5 @@
 <script setup>
-import axios from "axios";
-import { onMounted, reactive } from "vue";
+import { onMounted } from "vue";
 
 import Sidebar from "../../components/Sidebar.vue";
 import { useCurrentUserStore } from "../../store/currentUser";
@@ -11,11 +10,11 @@ onMounted(() => currentUserStore.getCurrentUser());
 </script>
 
 <template>
-    <div class="h-screen bg-gray-50 flex">
-        <Sidebar />
+    <div class="h-screen w-full flex bg-gray-50">
+        <Sidebar class="shrink-0" />
 
         <!-- Konten utama halaman -->
-        <main class="bg-gray-50 flex-1 overflow-y-auto">
+        <main class="min-h-screen w-full p-6 overflow-y-auto bg-gray-100">
             <!-- Tempat konten utama -->
             <router-view />
         </main>

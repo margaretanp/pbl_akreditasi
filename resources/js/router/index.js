@@ -41,7 +41,7 @@ const routes = [
             {
                 path: "validasi",
                 name: "validasi",
-                component: () => import("../pages/dashboard/home/Validasi.vue"),
+                component: () => import("../pages/dashboard/validation/Validasi.vue"),
                 meta: {
                     title: "Validasi",
                 },

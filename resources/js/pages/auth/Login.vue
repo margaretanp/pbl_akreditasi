@@ -83,13 +83,14 @@ const onLogin = async () => {
             <div
                 class="w-1/2 bg-white flex flex-col justify-center items-center px-12"
             >
-                <h1 class="text-3xl font-bold mb-4 text-[#021526]">Login</h1>
+                <h1 class="w-full text-3xl text-center font-bold mb-4 text-slate-900">Login</h1>
 
                 <form
                     class="w-full max-w-sm flex flex-col gap-y-4"
                     @submit.prevent="onLogin"
                 >
-                    <!-- Email -->
+                    <div class="flex flex-col gap-y-2">
+                        <!-- Email -->
                     <InputField
                         id="email"
                         label="Email"
@@ -123,6 +124,7 @@ const onLogin = async () => {
                             ></i>
                         </template>
                     </InputField>
+                    </div>
 
                     <!-- Submit Button -->
                     <Button
@@ -131,7 +133,9 @@ const onLogin = async () => {
                         iconPosition="left"
                         :disabled="loading"
                     >
-                        <template #icon><Spinner v-if="loading" class="mr-3" /></template>
+                        <template #icon
+                            ><Spinner v-if="loading" class="mr-3"
+                        /></template>
                     </Button>
                 </form>
             </div>
