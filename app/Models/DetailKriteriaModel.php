@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Models\UsersModel;
 
 class DetailKriteriaModel extends Model
 {
@@ -13,7 +14,7 @@ class DetailKriteriaModel extends Model
     protected $table = 'detail_kriteria';
     protected $primaryKey = 'id';
     protected $fillable = ['kriteria_id', 'jenis_kriteria_id', 'description', 'file_url', 'created_by'];
-    protected $hidden = ['created_at', 'updated_at', 'deleted_at'];
+    protected $hidden = [ 'updated_at', 'deleted_at'];
 
     public function kriteria()
     {
