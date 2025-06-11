@@ -17,7 +17,7 @@ class KriteriaModel extends Model
         'is_rejected' => 'boolean',
     ];
 
-    public function DetailKriteria()
+    public function detailKriteria()
     {
         return $this->hasMany(DetailKriteriaModel::class, 'criteria_id', 'id');
     }

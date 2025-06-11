@@ -29,26 +29,26 @@ const statusCounts = computed(() => {
         submitted: 0,
         revision: 0,
         acc1: 0,
-        acc2: 0
+        acc2: 0,
     };
-    
-    kriteria.data.forEach(item => {
-        switch(item.status?.toLowerCase()) {
-            case 'submitted':
+
+    kriteria.data.forEach((item) => {
+        switch (item.status?.toLowerCase()) {
+            case "submitted":
                 counts.submitted++;
                 break;
-            case 'revision':
+            case "revision":
                 counts.revision++;
                 break;
-            case 'acc 1':
+            case "acc 1":
                 counts.acc1++;
                 break;
-            case 'acc 2':
+            case "acc 2":
                 counts.acc2++;
                 break;
         }
     });
-    
+
     return counts;
 });
 
@@ -75,43 +75,43 @@ const onDownload = async (fileUrl) => {
 
 // Status styling functions
 const getStatusColor = (status) => {
-    switch(status?.toLowerCase()) {
-        case 'acc 1':
-            return 'bg-blue-100 text-blue-800 border-blue-200';
-        case 'acc 2':
-            return 'bg-green-100 text-green-800 border-green-200';
-        case 'revision':
-            return 'bg-yellow-100 text-yellow-800 border-yellow-200';
-        case 'submitted':
-            return 'bg-purple-100 text-purple-800 border-purple-200';
+    switch (status?.toLowerCase()) {
+        case "acc 1":
+            return "bg-blue-100 text-blue-800 border-blue-200";
+        case "acc 2":
+            return "bg-green-100 text-green-800 border-green-200";
+        case "revision":
+            return "bg-yellow-100 text-yellow-800 border-yellow-200";
+        case "submitted":
+            return "bg-purple-100 text-purple-800 border-purple-200";
         default:
-            return 'bg-gray-100 text-gray-800 border-gray-200';
+            return "bg-gray-100 text-gray-800 border-gray-200";
     }
 };
 
 const getStatusIcon = (status) => {
-    switch(status?.toLowerCase()) {
-        case 'acc 1':
-            return '👍';
-        case 'acc 2':
-            return '✅';
-        case 'revision':
-            return '🔄';
-        case 'submitted':
-            return '📤';
+    switch (status?.toLowerCase()) {
+        case "acc 1":
+            return "👍";
+        case "acc 2":
+            return "✅";
+        case "revision":
+            return "🔄";
+        case "submitted":
+            return "📤";
         default:
-            return '📋';
+            return "📋";
     }
 };
 
 // Format date function
 const formatDate = (dateString) => {
-    if (!dateString) return '-';
+    if (!dateString) return "-";
     const date = new Date(dateString);
-    return date.toLocaleDateString('id-ID', {
-        day: '2-digit',
-        month: '2-digit',
-        year: 'numeric'
+    return date.toLocaleDateString("id-ID", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
     });
 };
 

@@ -23,8 +23,8 @@ class storedetailKriteriaRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'kriteria_id' => 'required|integer|exists:kriteria,id',
-            'jenis_kriteria_id' => 'required|integer|exists:jenis_kriteria,id',
+            'criteria_id' => 'required|integer|exists:criteria,id',
+            'jenis_criteria_id' => 'required|integer|exists:jenis_criteria,id',
             'description' => 'nullable|string',
             'file_url' => 'nullable|file|mimes:pdf,doc,docx,png,jpg,jpeg',
         ];
@@ -34,12 +34,12 @@ class storedetailKriteriaRequest extends FormRequest
     public function messages()
     {
         return [
-            'kriteria_id.required' => 'Kriteria ID is required',
-            'kriteria_id.integer' => 'Kriteria ID must be an integer',
-            'kriteria_id.exists' => 'Kriteria ID must exist in the kriteria table',
-            'jenis_kriteria_id.required' => 'Jenis Kriteria ID is required',
-            'jenis_kriteria_id.integer' => 'Jenis Kriteria ID must be an integer',
-            'jenis_kriteria_id.exists' => 'Jenis Kriteria ID must exist in the jenis_kriteria table',
+            'criteria_id.required' => 'criteria ID is required',
+            'criteria_id.integer' => 'criteria ID must be an integer',
+            'criteria_id.exists' => 'criteria ID must exist in the criteria table',
+            'jenis_criteria_id.required' => 'Jenis criteria ID is required',
+            'jenis_criteria_id.integer' => 'Jenis criteria ID must be an integer',
+            'jenis_criteria_id.exists' => 'Jenis criteria ID must exist in the jenis_criteria table',
             'description.string' => 'Description must be a string',
             'file_url.file' => 'File must be a valid file',
             'file_url.mimes' => 'File must be a PDF, DOC, DOCX, PNG, JPG, or JPEG',
