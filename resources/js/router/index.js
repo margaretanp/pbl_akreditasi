@@ -39,7 +39,6 @@ const routes = [
                 },
             },
             {
-
                 path: "validasi",
                 name: "validasi",
                 component: () => import("../pages/dashboard/validation/Validasi.vue"),
