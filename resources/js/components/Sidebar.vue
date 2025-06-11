@@ -8,7 +8,8 @@ import { useToast } from "vue-toast-notification";
 import { authService } from "../services/authService";
 import { useCurrentUserStore } from "../store/currentUser";
 
-import Button from "../components/Button.vue";
+import Button from "./Button.vue";
+import ModalDialog from "./ModalDialog.vue"
 
 const route = useRoute();
 const router = useRouter();
@@ -78,6 +79,13 @@ const onKriteriaRoute = (kriteriaId, event) => {
 
     router.push({ name: "kriteria", params: { id: kriteriaId } });
 };
+
+const modalDialogRef = ref(null);
+const showModalDialog = ref(false);
+
+const toggleModalDialog = () => {
+  modalDialogRef.value?.openModal();
+}
 </script>
 
 <template>
@@ -161,7 +169,7 @@ const onKriteriaRoute = (kriteriaId, event) => {
                 variant="dangerFilled"
                 justify="start"
                 icon-position="left"
-                @click="handleLogout()"
+                @click="toggleModalDialog"
                 class="mb-4"
                 >Logout
                 <template #icon
@@ -169,4 +177,13 @@ const onKriteriaRoute = (kriteriaId, event) => {
             ></Button>
         </nav>
     </aside>
+
+    <ModalDialog ref="modalDialogRef" v-model:show="showModalDialog">
+        <template #header>Logout</template>
+        <template #body>Apakah anada yakin ingin keluar?</template>
+        <template #footer>
+            <Button label="Tidak" variant="primaryOutlined" @click="modalDialogRef?.closeModal()" />
+            <Button label="Keluar" variant="dangerFilled" @click="handleLogout" />
+        </template>
+    </ModalDialog>
 </template>

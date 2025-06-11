@@ -6,11 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\storedetailKriteriaRequest;
 use App\Http\Requests\updatedetailKriteriaRequest;
 use App\Models\DetailKriteriaModel;
-<<<<<<< HEAD
 use App\Models\Validasi;
-=======
 use App\Models\KriteriaModel;
->>>>>>> 06c39d5c34e3482422e03a418958db06f0a7c7aa
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -59,9 +56,6 @@ class DetailKriteriaController extends Controller
     public function store(storedetailKriteriaRequest $request)
     {
         $data = $request->validated();
-<<<<<<< HEAD
-        $data['created_by'] = auth()->user()->id;
-=======
 
         $user = auth()->user();
 
@@ -73,7 +67,7 @@ class DetailKriteriaController extends Controller
         }
 
         $data['created_by'] = $user->id;
->>>>>>> 06c39d5c34e3482422e03a418958db06f0a7c7aa
+
 
         try {
             if ($request->hasFile('file_url')) {
@@ -111,7 +105,6 @@ class DetailKriteriaController extends Controller
         try {
             $data = $request->validated();
 
-<<<<<<< HEAD
             // Handle file upload if exists
             if ($request->hasFile('file_url')) {
                 // Delete old file if exists
@@ -119,20 +112,6 @@ class DetailKriteriaController extends Controller
                     unlink(public_path($detailKriteria->file_url));
                 }
                 $data['file_url'] = $this->processUploadedFile($request->file('file_url'));
-=======
-        $user = auth()->user();
-
-        if ($detailKriteria->created_by !== $user->id || $user->role->id !== 5) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'User is not authorized to update Detail Kriteria'
-            ], 403);
-        }
-
-        if ($request->hasFile('file_url')) {
-            if ($detailKriteria->file_url && file_exists(public_path($detailKriteria->file_url))) {
-                unlink(public_path($detailKriteria->file_url));
->>>>>>> 06c39d5c34e3482422e03a418958db06f0a7c7aa
             }
 
             // Update detail kriteria
@@ -157,40 +136,42 @@ class DetailKriteriaController extends Controller
         }
     }
 
-<<<<<<< HEAD
     // Tampilkan Status Tiap Isian
 
-public function byUser(Request $request)
-{
-    $userId = $request->query('user_id', auth()->id());
-    
-    $detailKriteria = DetailKriteriaModel::where('created_by', $userId)
-        ->with(['kriteria', 'jenisKriteria', 'createdBy', 'validasi' => function($query) {
-            $query->with('user.role');
-        }])
-        ->get()
-        ->map(function($item) {
-            $item->status = $item->validasi->map(function($validation) {
-                return [
-                    'role' => $validation->user->role->name,
-                    'status' => $validation->is_validated ? 'Approved' : 'Pending',
-                    'komentar' => $validation->komentar,
-                    'validated_at' => $validation->validated_at
-                ];
+    public function byUser(Request $request)
+    {
+        $userId = $request->query('user_id', auth()->id());
+
+        $detailKriteria = DetailKriteriaModel::where('created_by', $userId)
+            ->with([
+                'kriteria',
+                'jenisKriteria',
+                'createdBy',
+                'validasi' => function ($query) {
+                    $query->with('user.role');
+                }
+            ])
+            ->get()
+            ->map(function ($item) {
+                $item->status = $item->validasi->map(function ($validation) {
+                    return [
+                        'role' => $validation->user->role->name,
+                        'status' => $validation->is_validated ? 'Approved' : 'Pending',
+                        'komentar' => $validation->komentar,
+                        'validated_at' => $validation->validated_at
+                    ];
+                });
+
+                return $item;
             });
-            
-            return $item;
-        });
 
-    return response()->json([
-        'status' => 'success',
-        'message' => 'Detail Kriteria by user retrieved successfully',
-        'data' => $detailKriteria
-    ], 200);
-}
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Detail Kriteria by user retrieved successfully',
+            'data' => $detailKriteria
+        ], 200);
+    }
 
-=======
->>>>>>> 06c39d5c34e3482422e03a418958db06f0a7c7aa
     public function destroy($id)
     {
         $detailKriteria = DetailKriteriaModel::find($id);
@@ -229,7 +210,7 @@ public function byUser(Request $request)
 
         $fileSavedName = $fileName . '_' . time() . '.pdf';
         $storagePath = storage_path('app/public/detail_kriteria');
-        
+
         if (!file_exists($storagePath)) {
             mkdir($storagePath, 0755, true);
         }
