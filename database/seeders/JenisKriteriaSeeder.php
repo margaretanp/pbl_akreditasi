@@ -13,7 +13,7 @@ class JenisKriteriaSeeder extends Seeder
      */
     public function run(): void
     {
-        DB::table('jenis_kriteria')->insert([
+        DB::table('jenis_criteria')->insert([
             [
                 'name' => 'Penetapan',
             ],

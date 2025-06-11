@@ -11,10 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('kriteria', function (Blueprint $table) {
+        Schema::create('criteria', function (Blueprint $table) {
             $table->id();
             $table->string('name');
             $table->boolean('is_rejected')->default(false);
+            $table->timestamp('rejected_at')->nullable();
+            $table->string('merged_file_url')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
@@ -25,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('kriteria');
+        Schema::dropIfExists('criteria');
     }
 };

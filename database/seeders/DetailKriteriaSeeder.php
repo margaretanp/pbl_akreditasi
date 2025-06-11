@@ -13,34 +13,34 @@ class DetailKriteriaSeeder extends Seeder
      */
     public function run(): void
     {
-        DB::table('detail_kriteria')->insert([
+        DB::table('detail_criteria')->insert([
             [
-                'kriteria_id' => 1,
-                'jenis_kriteria_id' => 1,
+                'criteria_id' => 1,
+                'jenis_criteria_id' => 1,
                 'description' => 'Detail for kriteria 1, jenis kriteria 1',
                 'created_by' => 7,
             ],
             [
-                'kriteria_id' => 1,
-                'jenis_kriteria_id' => 2,
+                'criteria_id' => 1,
+                'jenis_criteria_id' => 2,
                 'description' => 'Detail for kriteria 1, jenis kriteria 2',
                 'created_by' => 8,
             ],
             [
-                'kriteria_id' => 1,
-                'jenis_kriteria_id' => 3,
+                'criteria_id' => 1,
+                'jenis_criteria_id' => 3,
                 'description' => 'Detail for kriteria 1, jenis kriteria 3',
                 'created_by' => 9,
             ],
             [
-                'kriteria_id' => 1,
-                'jenis_kriteria_id' => 4,
+                'criteria_id' => 1,
+                'jenis_criteria_id' => 4,
                 'description' => 'Detail for kriteria 1, jenis kriteria 4',
                 'created_by' => 10,
             ],
             [
-                'kriteria_id' => 1,
-                'jenis_kriteria_id' => 5,
+                'criteria_id' => 1,
+                'jenis_criteria_id' => 5,
                 'description' => 'Detail for kriteria 1, jenis kriteria 5',
                 'created_by' => 11,
             ]

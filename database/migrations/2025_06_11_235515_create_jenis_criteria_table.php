@@ -11,8 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-          Schema::table('kriteria', function (Blueprint $table) {
-            $table->timestamp('rejected_at')->nullable()->after('is_rejected');
+        Schema::create('jenis_criteria', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->timestamps();
+            $table->softDeletes();
         });
     }
 
@@ -21,8 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-          Schema::table('kriteria', function (Blueprint $table) {
-            $table->dropColumn('rejected_at');
-        });
+        Schema::dropIfExists('jenis_criteria');
     }
 };

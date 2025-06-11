@@ -15,28 +15,28 @@ class ValidasiSeeder extends Seeder
     {
         DB::table('validators')->insert([
             [
+                'criteria_id' => 1,
                 'user_id' => 3,
-                'kriteria_id' => 1,
             ],
             [
+                'criteria_id' => 2,
                 'user_id' => 3,
-                'kriteria_id' => 2,
             ],
             [
+                'criteria_id' => 3,
                 'user_id' => 3,
-                'kriteria_id' => 3,
-            ],
-             [
-                'user_id' => 4,
-                'kriteria_id' => 4,
             ],
             [
+                'criteria_id' => 4,
                 'user_id' => 4,
-                'kriteria_id' => 2,
             ],
             [
+                'criteria_id' => 2,
                 'user_id' => 4,
-                'kriteria_id' => 3,
+            ],
+            [
+                'criteria_id' => 3,
+                'user_id' => 4,
             ]
         ]);
     }

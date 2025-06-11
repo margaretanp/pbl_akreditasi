@@ -45,8 +45,7 @@ class KriteriaController extends Controller
                 break;
 
             default: // Other roles - limited access
-                $kriteria = KriteriaModel::select('id', 'name')
-                    ->where('is_rejected', false)
+                $kriteria = KriteriaModel::where('is_rejected', false)
                     ->get();
                 break;
         }

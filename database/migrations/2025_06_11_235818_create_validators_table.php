@@ -11,13 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('detail_kriteria', function (Blueprint $table) {
+        Schema::create('validators', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('kriteria_id')->constrained('kriteria');
-            $table->foreignId('jenis_kriteria_id')->constrained('jenis_kriteria');
-            $table->foreignId('created_by')->constrained("users");
-            $table->string('file_url')->nullable();
-            $table->text('description')->nullable();
+            $table->foreignId('criteria_id')->constrained('criteria')->onDelete('cascade');
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->string('comment')->nullable();
+            $table->boolean('has_validated')->default(false);
+            $table->timestamp('validated_at')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
@@ -28,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('detail_kriteria');
+        Schema::dropIfExists('validators');
     }
 };
