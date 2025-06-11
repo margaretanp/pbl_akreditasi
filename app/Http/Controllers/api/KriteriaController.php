@@ -408,4 +408,37 @@ class KriteriaController extends Controller
 
         return $tempPath;
     }
+    
+    // Submit ke Direktur Jika Semua Disetujui Kajur
+
+public function submitToDirektur(Request $request)
+{
+    // Ambil semua kriteria yang dimiliki oleh user yang login (dosen)
+    $userKriteria = KriteriaModel::whereHas('validasi', function($query) {
+        $query->where('user_id', auth()->id());
+    })->with('validasi')->get();
+
+    // Cek apakah semua kriteria sudah disetujui kajur (role_id 2)
+    foreach ($userKriteria as $kriteria) {
+        $kajurValidation = $kriteria->validasi->firstWhere('user.role_id', 2);
+        
+        if (!$kajurValidation || $kajurValidation->is_validated != 1) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Not all criteria have been approved by the department head'
+            ], 400);
+        }
+    }
+
+    // Update timestamp submitted_to_direktur_at
+    foreach ($userKriteria as $kriteria) {
+        $kriteria->update(['submitted_to_direktur_at' => now()]);
+    }
+
+    return response()->json([
+        'status' => 'success',
+        'message' => 'All criteria successfully submitted to director',
+        'data' => $userKriteria
+    ], 200);
+}
 }
