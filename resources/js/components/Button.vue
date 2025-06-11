@@ -44,9 +44,9 @@ const slot = useSlots();
 
 const buttonClasses = computed(() => {
     const sizeClasses = {
-        small: "px-2 py-1 gap-x-1 text-sm",
-        normal: "px-4 py-2 gap-x-2 text-base",
-        large: "px-6 py-3 gap-x-4 text-lg",
+        small: "px-2 py-1 text-sm",
+        normal: "px-4 py-2 text-base",
+        large: "px-6 py-3 text-lg",
     };
 
     const variantClasses = {
@@ -79,7 +79,7 @@ const buttonClasses = computed(() => {
             : "flex-row-reverse"
         : "flex-row"; // Default to flex-row when no icon
 
-    return `font-medium inline-flex gap-x-3 items-center focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-offset-2 rounded-md ${sizeClass} ${variantClass} ${
+    return `font-medium inline-flex items-center focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-offset-2 rounded-md ${sizeClass} ${variantClass} ${
         props.disabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer"
     } ${flexDirection} ${justifyClass}`;
 });

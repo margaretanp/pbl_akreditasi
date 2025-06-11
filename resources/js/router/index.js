@@ -14,7 +14,7 @@ const routes = [
     {
         path: "/",
         name: "welcome",
-        component: () => import("../pages/Welcome.vue"),
+        component: () => import("../pages/landingpage/Welcome.vue"),
         meta: {
             title: "Welcome",
             requiresAuth: false,
@@ -33,7 +33,7 @@ const routes = [
             {
                 path: "home",
                 name: "Home",
-                component: () => import("../pages/dashboard/Home/Home.vue"),
+                component: () => import("../pages/dashboard/home/Home.vue"),
                 meta: {
                     title: "Home",
                 },
@@ -41,7 +41,7 @@ const routes = [
             {
                 path: "validasi",
                 name: "validasi",
-                component: () => import("../pages/dashboard/Home/Validasi.vue"),
+                component: () => import("../pages/dashboard/home/Validasi.vue"),
                 meta: {
                     title: "Validasi",
                 },
@@ -49,7 +49,7 @@ const routes = [
             {
                 path: "kriteria/:id",
                 name: "kriteria",
-                component: () => import("../pages/dashboard/Kriteria.vue"),
+                component: () => import("../pages/dashboard/kriteria/Kriteria.vue"),
                 meta: {
                     title: "Kriteria",
                 },

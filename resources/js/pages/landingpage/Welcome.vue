@@ -1,20 +1,20 @@
 <script setup>
 import { useRouter } from "vue-router";
 import { useI18n } from "vue-i18n";
-import bgLogin from "../assets/bglogin4.mp4";
-import Navbar from "../components/Navbar.vue"; // ✅ Tambahkan ini
+import bgLogin from "../../assets/bglogin4.mp4";
+import Navbar from "../../components/Navbar.vue"; 
 
 const { t } = useI18n();
-const $router = useRouter();
+const router = useRouter();
 
 const onGetStarted = () => {
-  $router.push({ name: "login" });
+  router.push({ name: "login" });
 };
 </script>
 
 <template>
   <div class="w-full h-screen flex flex-col justify-center items-center relative overflow-hidden">
-    <!-- ✅ Navbar -->
+    <!-- Navbar -->
     <Navbar class="absolute top-0 left-0 w-full z-20" />
 
     <!-- VIDEO Background -->
@@ -53,7 +53,3 @@ const onGetStarted = () => {
     </div>
   </div>
 </template>
-
-<style scoped>
-/* Tambahkan style jika diperlukan */
-</style>

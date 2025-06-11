@@ -161,7 +161,7 @@ const onKriteriaRoute = (kriteriaId, event) => {
                 icon-position="left"
                 @click="handleLogout()"
                 >Logout
-                <template #icon><i class="bi bi-box-arrow-right"></i></template
+                <template #icon><i class="bi bi-box-arrow-right mr-3"></i></template
             ></Button>
         </nav>
     </aside>

@@ -5,10 +5,7 @@ namespace App\Http\Controllers\api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreValidasiRequest;
 use App\Http\Requests\UpdateValidasiRequest;
-use App\Models\DetailKriteriaModel;
-use App\Models\KriteriaModel;
 use App\Models\Validasi;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class ValidasiController extends Controller

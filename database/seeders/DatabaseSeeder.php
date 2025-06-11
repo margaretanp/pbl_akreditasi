@@ -16,7 +16,7 @@ class DatabaseSeeder extends Seeder
             UsersSeeder::class,
             JenisKriteriaSeeder::class,
             KriteriaSeeder::class,
-            DetailKriteriaSeeder::class,
+            // DetailKriteriaSeeder::class,
             ValidasiSeeder::class,
         ]);
     }

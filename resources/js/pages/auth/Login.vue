@@ -1,13 +1,17 @@
 <script setup>
-import axios from "axios";
 import { reactive, ref } from "vue";
+import axios from "axios";
+
 import { useRouter } from "vue-router";
 import { useToast } from "vue-toast-notification";
-import { authService } from "../../services/authService";
-import InputField from "../../components/InputField.vue";
-import { required, minLength, email } from "../../services/i18n-validators";
 import { useVuelidate } from "@vuelidate/core";
+
+import { authService } from "../../services/authService";
+import { required, minLength, email } from "../../services/i18n-validators";
+
+import InputField from "../../components/InputField.vue";
 import Button from "../../components/Button.vue";
+import Spinner from "../../components/Spinner.vue";
 
 const router = useRouter();
 
@@ -54,13 +58,13 @@ const onLogin = async () => {
             authService.setTokens(data.data);
             router.push({ name: "Home" });
 
-            $toast.success("login success!");
+            $toast.success("Berhasil masuk!");
         } else {
-            $toast.error("Login failed!");
+            $toast.error("Gagal masuk, coba ulang lagi!");
         }
     } catch (error) {
         console.error(error.message);
-        $toast.error("Invalid credentials!");
+        $toast.error("Email atau passsword salah!");
     } finally {
         loading.value = false;
     }
@@ -75,11 +79,11 @@ const onLogin = async () => {
         <div
             class="flex w-full max-w-4xl h-[500px] rounded-lg shadow-lg overflow-hidden bg-white"
         >
-            <!-- Sign in section -->
+            <!-- Login form section -->
             <div
                 class="w-1/2 bg-white flex flex-col justify-center items-center px-12"
             >
-                <h1 class="text-3xl font-bold mb-4 text-[#021526]">Sign in</h1>
+                <h1 class="text-3xl font-bold mb-4 text-[#021526]">Login</h1>
 
                 <form
                     class="w-full max-w-sm flex flex-col gap-y-4"
@@ -123,10 +127,11 @@ const onLogin = async () => {
                     <!-- Submit Button -->
                     <Button
                         type="submit"
+                        :label="loading ? 'Memuat ...' : 'Masuk'"
+                        iconPosition="left"
                         :disabled="loading"
                     >
-                        <span v-if="loading">Loading...</span>
-                        <span v-else>Sign In</span>
+                        <template #icon><Spinner v-if="loading" class="mr-3" /></template>
                     </Button>
                 </form>
             </div>
