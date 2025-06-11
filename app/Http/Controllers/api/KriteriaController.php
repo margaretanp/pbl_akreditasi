@@ -32,7 +32,7 @@ class KriteriaController extends Controller
         // Role-based data filtering
         switch ($user->role->id) {
             case 2: // Kajur role - can see all kriteria
-                $kriteria = KriteriaModel::all();
+                $kriteria = KriteriaModel::with(["detailKriteria", "validators"])->all();
                 break;
 
             case 3: // Direktur role - can only see validated kriteria
@@ -41,12 +41,12 @@ class KriteriaController extends Controller
                         ->whereHas('user', function ($userQuery) {
                             $userQuery->where('role_id', 2); // Validated by Kajur (role id 2)
                         });
-                })->get();
+                })->with(["detailKriteria", "validators"])->get();
                 break;
 
             default: // Other roles - limited access
                 $kriteria = KriteriaModel::where('is_rejected', false)
-                    ->get();
+                    ->with(["detailKriteria", "validators"])->get();
                 break;
         }
 

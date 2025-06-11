@@ -24,27 +24,27 @@ const criteriaConfig = [
     {
         key: "penetapan",
         title: "Penetapan",
-        jenis_kriteria_id: 1,
+        jenis_criteria_id: 1,
     },
     {
         key: "perencanaan",
         title: "Perencanaan",
-        jenis_kriteria_id: 2,
+        jenis_criteria_id: 2,
     },
     {
         key: "pelaksanaan",
         title: "Pelaksanaan",
-        jenis_kriteria_id: 3,
+        jenis_criteria_id: 3,
     },
     {
         key: "evaluasi",
         title: "Evaluasi",
-        jenis_kriteria_id: 4,
+        jenis_criteria_id: 4,
     },
     {
         key: "peningkatan",
         title: "Peningkatan",
-        jenis_kriteria_id: 5,
+        jenis_criteria_id: 5,
     },
 ];
 
@@ -53,27 +53,27 @@ const formData = reactive({
     penetapan: {
         description: "",
         file: null,
-        jenis_kriteria_id: 1,
+        jenis_criteria_id: 1,
     },
     perencanaan: {
         description: "",
         file: null,
-        jenis_kriteria_id: 2,
+        jenis_criteria_id: 2,
     },
     pelaksanaan: {
         description: "",
         file: null,
-        jenis_kriteria_id: 3,
+        jenis_criteria_id: 3,
     },
     evaluasi: {
         description: "",
         file: null,
-        jenis_kriteria_id: 4,
+        jenis_criteria_id: 4,
     },
     peningkatan: {
         description: "",
         file: null,
-        jenis_kriteria_id: 5,
+        jenis_criteria_id: 5,
     },
 });
 
@@ -91,8 +91,8 @@ const handleFileUpdate = (sectionKey, file) => {
 const submitSection = async (sectionKey, sectionData) => {
     try {
         const submitData = new FormData();
-        submitData.append("kriteria_id", kriteriaId.value);
-        submitData.append("jenis_kriteria_id", sectionData.jenis_kriteria_id);
+        submitData.append("criteria_id", kriteriaId.value);
+        submitData.append("jenis_criteria_id", sectionData.jenis_criteria_id);
         submitData.append("description", sectionData.description);
 
         if (sectionData.file) {
@@ -197,7 +197,9 @@ const resetForm = () => {
         <!-- Main Content -->
         <div class="flex flex-col p-6 gap-y-6 bg-white rounded-lg shadow-md">
             <div class="space-y-2">
-                <h3 class="text-base md:text-4xl font-semibold md:font-bold text-slate-900">
+                <h3
+                    class="text-base md:text-4xl font-semibold md:font-bold text-slate-900"
+                >
                     {{ `Kriteria ${kriteriaId}` }}
                 </h3>
                 <hr class="text-gray-300" />
@@ -210,8 +212,12 @@ const resetForm = () => {
                     :key="criteria.key"
                     :title="criteria.title"
                     :description="formData[criteria.key].description"
-                    @update:description="(value) => handleDescriptionUpdate(criteria.key, value)"
-                    @file-selected="(file) => handleFileUpdate(criteria.key, file)"
+                    @update:description="
+                        (value) => handleDescriptionUpdate(criteria.key, value)
+                    "
+                    @file-selected="
+                        (file) => handleFileUpdate(criteria.key, file)
+                    "
                 />
             </div>
 
