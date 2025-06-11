@@ -18,14 +18,20 @@
 </ul>
 
 
-      <select 
-        v-model="currentLocale"
-        @change="changeLanguage"
-        class="lang-switch"
-      >
-        <option value="id">ID</option>
-        <option value="en">EN</option>
-      </select>
+      <!-- Language Switch -->
+      <div class="relative inline-block">
+        <svg xmlns="http://www.w3.org/2000/svg" class="absolute left-2 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-600 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 12c2.21 0 4-1.79 4-4S14.21 4 12 4 8 5.79 8 8s1.79 4 4 4zm0 0v8m0 0h4m-4 0H8" />
+        </svg>
+        <select
+          v-model="currentLocale"
+          @change="changeLanguage"
+          class="pl-8 pr-4 py-1 bg-white text-gray-800 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+        >
+          <option value="id">ID</option>
+          <option value="en">EN</option>
+        </select>
+      </div>
     </div>
   </div>
 </template>
