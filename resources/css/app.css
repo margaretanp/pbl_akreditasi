@@ -15,3 +15,23 @@
     -ms-overflow-style: none;  /* IE and Edge */
     scrollbar-width: none;  /* Firefox */
 }
+
+body {
+  @apply subpixel-antialiased;
+}
+
+tbody tr:hover {
+  @apply bg-stone-100;
+}
+
+th {
+  @apply text-nowrap border-b p-4 text-start font-medium;
+}
+
+td {
+  @apply border-b p-4;
+}
+
+.v-toast__item {
+  @apply rounded-md py-0.5 min-w-xs;
+}
