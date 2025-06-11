@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router";
-import authService from "../services/authService";
+import { authService } from "../services/authService";
 
 const routes = [
     {
@@ -31,7 +31,7 @@ const routes = [
         children: [
             {
                 path: "",
-                redirect: "/home",
+                redirect: { name: "Home" },
             },
             {
                 path: "/home",
@@ -40,19 +40,6 @@ const routes = [
                 meta: {
                     title: "Home",
                 },
-            },
-            {
-                path: "/data-master",
-                children: [
-                    {
-                        path: "/users",
-                        name: "users",
-                        component: () =>
-                            import(
-                                "../pages/dashboard/data-master/users/Users.vue"
-                            ),
-                    },
-                ],
             },
             {
                 path: "/validasi",
@@ -104,7 +91,6 @@ const routes = [
             title: "Tujuan",
         },
     },
-    
 ];
 
 const router = createRouter({
@@ -116,8 +102,12 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
     const isAuthenticated = authService.isAuthenticated();
 
-    if (to.meta.requiresAuth && isAuthenticated) {
-        return next("/dashboard");
+    if (to.meta.requiresAuth && !isAuthenticated) {
+        return next("/login");
+    }
+
+    if (isAuthenticated && to.name === "login") {
+        return next({ name: "Home" });
     }
 
     document.title = `Akreditasi | ${to.meta.title}`;

@@ -1,3 +1,95 @@
+<script setup>
+import axios from "axios";
+import { computed, ref } from "vue";
+import { authService } from "../services/authService";
+import { useRouter } from "vue-router";
+import { useToast } from "vue-toast-notification";
+import { useCurrentUserStore } from "../store/currentUser";
+
+const router = useRouter();
+const $toast = useToast();
+
+const useCurrentUser = useCurrentUserStore();
+const user = computed(() => useCurrentUser.currentUser);
+
+const expanded = ref(true);
+const showKriteria = ref(false);
+const showLogoutModal = ref(false);
+
+const toggleSidebar = () => {
+    expanded.value = !expanded.value;
+};
+
+const toggleKriteriaDropdown = () => {
+    showKriteria.value = !showKriteria.value;
+};
+
+const showLogoutConfirmation = () => {
+    showLogoutModal.value = true;
+};
+
+const cancelLogout = () => {
+    showLogoutModal.value = false;
+};
+
+const confirmLogout = async () => {
+    showLogoutModal.value = false;
+    await handleLogout();
+};
+
+const handleLogout = async () => {
+    try {
+        await axios.post("logout");
+        
+            authService.removeTokens();
+            router.push({ name: "welcome" });
+        
+    } catch (error) {
+        console.error("Error:", error);
+        $toast.error("Failed to logout");
+    }
+};
+
+const onKriteriaRoute = (kriteriaId, event) => {
+    event.preventDefault();
+
+    // Check if user has the correct role
+    if (user.value.role.id !== 5) {
+        $toast.error("Anda tidak bisa membuka menu ini!");
+        return;
+    }
+
+    // Map user IDs to their allowed kriteria IDs
+    const userKriteriaMap = {
+        7: 1,
+        8: 2,
+        9: 3,
+        10: 4,
+        11: 5,
+        12: 6,
+        13: 7,
+        14: 8,
+        15: 9
+    };
+
+    const allowedKriteriaId = userKriteriaMap[user.value.id];
+
+    // Check if user is trying to access their assigned kriteria
+    // if (!allowedKriteriaId) {
+    //     $toast.error("Anda tidak memiliki akses di kriteria ini");
+    //     return;
+    // }
+
+    // Check if clicked kriteria matches user's allowed kriteria
+    if (kriteriaId !== allowedKriteriaId) {
+        $toast.error("Anda hanya bisa mengakses Kriteria " + allowedKriteriaId);
+        return;
+    }
+
+    router.push({ name: "kriteria", params: { id: kriteriaId } });
+};
+</script>
+
 <template>
     <div class="flex h-full">
         <!-- Sidebar -->
@@ -159,12 +251,13 @@
                             :class="expanded ? 'ml-8 space-y-1' : 'space-y-1'"
                         >
                             <li v-for="i in 9" :key="'kriteria-' + i">
-                                <router-link
-                                    :to="`/kriteria/${i}`"
+                                <a
+                                    href="#"
                                     class="block px-4 py-2 hover:bg-gray-700 rounded text-white text-sm"
+                                    @click="onKriteriaRoute(i, $event)"
                                 >
                                     Kriteria {{ i }}
-                                </router-link>
+                                </a>
                             </li>
                         </div>
                     </li>
@@ -202,7 +295,7 @@
             <!-- Logout Button -->
             <div class="px-4 pb-4" v-if="expanded">
                 <button
-                    @click="handleLogout"
+                    @click="showLogoutConfirmation"
                     class="w-full bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded-md transition duration-300"
                 >
                     Logout
@@ -210,7 +303,7 @@
             </div>
             <div class="pb-4 flex justify-center" v-else>
                 <button
-                    @click="handleLogout"
+                    @click="showLogoutConfirmation"
                     class="bg-red-600 hover:bg-red-700 text-white p-2 rounded-full transition duration-300"
                     title="Logout"
                 >
@@ -236,38 +329,52 @@
         <div class="flex-1 p-8">
             <slot></slot>
         </div>
+
+        <!-- Logout Confirmation Modal -->
+        <div
+            v-if="showLogoutModal"
+            class="fixed inset-0 flex items-center justify-center"
+        >
+            <div class="bg-white rounded-lg p-6 max-w-sm mx-4 shadow-xl">
+                <div class="flex items-center mb-4">
+                    <svg
+                        class="w-6 h-6 text-red-600 mr-3"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                    >
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.98-.833-2.75 0L3.064 16.5c-.77.833.192 2.5 1.732 2.5z"
+                        />
+                    </svg>
+                    <h3 class="text-lg font-medium text-gray-900">
+                        Konfirmasi Logout
+                    </h3>
+                </div>
+                <p class="text-gray-600 mb-6">
+                    Apakah Anda yakin ingin Logout?
+                </p>
+                <div class="flex justify-end space-x-3">
+                    <button
+                        @click="cancelLogout"
+                        class="px-4 py-2 text-gray-600 border border-gray-300 rounded-md hover:bg-gray-50 transition duration-300"
+                    >
+                        Batal
+                    </button>
+                    <button
+                        @click="confirmLogout"
+                        class="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition duration-300"
+                    >
+                        Ya, Logout
+                    </button>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
-
-<script>
-import axios from "axios";
-
-export default {
-    data() {
-        return {
-            expanded: true,
-            showKriteria: false,
-            userRole: (sessionStorage.getItem("userRole") || "").toUpperCase(),
-        };
-    },
-
-    methods: {
-        toggleSidebar() {
-            this.expanded = !this.expanded;
-        },
-        toggleKriteriaDropdown() {
-            this.showKriteria = !this.showKriteria;
-        },
-        async handleLogout() {
-            const response = await axios.post("/logout");
-            localStorage.removeItem("token"); // hapus token jika ada
-            sessionStorage.clear(); // hapus session
-            this.$router.push({ name: "welcome" }); // redirect ke halaman landing
-            return response.data;
-        },
-    },
-};
-</script>
 
 <style scoped>
 /* Tambahan style jika diperlukan */

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\storedetailKriteriaRequest;
 use App\Http\Requests\updatedetailKriteriaRequest;
 use App\Models\DetailKriteriaModel;
+use App\Models\KriteriaModel;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 
@@ -53,7 +54,16 @@ class DetailKriteriaController extends Controller
     {
         $data = $request->validated();
 
-        $data['created_by'] = auth()->user()->id;
+        $user = auth()->user();
+
+        if ($user->role->id !== 5) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'User is not authorized to create Detail Kriteria'
+            ], 403);
+        }
+
+        $data['created_by'] = $user->id;
 
         if ($request->hasFile('file_url')) {
             $file = $request->file('file_url');
@@ -111,6 +121,15 @@ class DetailKriteriaController extends Controller
 
         $data = $request->validated();
 
+        $user = auth()->user();
+
+        if ($detailKriteria->created_by !== $user->id || $user->role->id !== 5) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'User is not authorized to update Detail Kriteria'
+            ], 403);
+        }
+
         if ($request->hasFile('file_url')) {
             if ($detailKriteria->file_url && file_exists(public_path($detailKriteria->file_url))) {
                 unlink(public_path($detailKriteria->file_url));
@@ -162,6 +181,7 @@ class DetailKriteriaController extends Controller
             200
         );
     }
+
     public function destroy($id)
     {
         $detailKriteria = DetailKriteriaModel::find($id);

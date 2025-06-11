@@ -1,7 +1,9 @@
+import axios from "axios";
+
 const ACCESS_TOKEN_KEY = "access_token";
 const TOKEN_EXPIRES_KEY = "token_expires";
 
-const authService = {
+export const authService = {
     setTokens({ access_token, expires_at }) {
         localStorage.setItem(ACCESS_TOKEN_KEY, access_token);
         localStorage.setItem(TOKEN_EXPIRES_KEY, expires_at);
@@ -18,7 +20,6 @@ const authService = {
     removeTokens() {
         localStorage.removeItem(ACCESS_TOKEN_KEY);
         localStorage.removeItem(TOKEN_EXPIRES_KEY);
-        localStorage.removeItem("user");
     },
 
     isAuthenticated() {
@@ -40,4 +41,7 @@ const authService = {
     },
 };
 
-export default authService;
+export const fetchCurrentUser = async () => {
+    const response = await axios.get("profile");
+    return response.data;
+};

@@ -3,7 +3,7 @@ import axios from "axios";
 import { computed, reactive, ref } from "vue";
 import { useRouter } from "vue-router";
 import { useToast } from "vue-toast-notification";
-import authService from "../../services/authService";
+import { authService } from "../../services/authService";
 import InputField from "../../components/InputField.vue";
 
 const $toast = useToast();
@@ -15,7 +15,7 @@ const formLogin = reactive({
     loading: false,
 });
 
-const showPassword = ref(false)
+const showPassword = ref(false);
 
 const isFormValid = computed(() => {
     return formLogin.email.trim() !== "" && formLogin.password.trim() !== "";
@@ -52,7 +52,7 @@ const onSubmitLogin = async () => {
             authService.setTokens(tokenData);
 
             $toast.success("Login successful!");
-            router.push({name: "Home"});
+            router.push({ name: "Home" });
         } else {
             throw new Error(data.message || "Login failed");
         }
