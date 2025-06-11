@@ -21,6 +21,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+//Submit ke Direktur
+Route::post('/submit-direktur', [KriteriaController::class, 'submitToDirektur']);
+
+//Tampilkan Status Tiap Isian
+Route::get('/detail-kriteria/by-user', [DetailKriteriaController::class, 'byUser']);
+
 // Login tidak perlu middleware
 Route::post('/login', [AuthController::class, 'login']);
 

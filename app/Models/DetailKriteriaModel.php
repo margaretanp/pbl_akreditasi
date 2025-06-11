@@ -27,4 +27,15 @@ class DetailKriteriaModel extends Model
     {
         return $this->belongsTo(UsersModel::class, 'created_by','id');
     }
+    public function validasi()
+{
+    return $this->hasManyThrough(
+        Validasi::class,
+        KriteriaModel::class,
+        'id', // Foreign key on kriteria table...
+        'kriteria_id', // Foreign key on validasi table...
+        'kriteria_id', // Local key on detail_kriteria table...
+        'id' // Local key on kriteria table...
+    );
+}
 }
