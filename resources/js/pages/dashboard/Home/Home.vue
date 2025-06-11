@@ -10,6 +10,7 @@ import { downloadDocument } from "../../../helpers/download-url";
 import Card from "./components/Card.vue";
 
 import InputField from "../../../components/InputField.vue";
+import Button from "../../../components/Button.vue";
 import TablePlaceholder from "../../../components/TablePlaceholder.vue";
 import DataEmpty from "../../../components/DataEmpty.vue";
 
@@ -21,35 +22,6 @@ const kriteria = reactive({
     data: [],
     total: 0,
     loading: false,
-});
-
-// Status counters
-const statusCounts = computed(() => {
-    const counts = {
-        submitted: 0,
-        revision: 0,
-        acc1: 0,
-        acc2: 0,
-    };
-
-    kriteria.data.forEach((item) => {
-        switch (item.status?.toLowerCase()) {
-            case "submitted":
-                counts.submitted++;
-                break;
-            case "revision":
-                counts.revision++;
-                break;
-            case "acc 1":
-                counts.acc1++;
-                break;
-            case "acc 2":
-                counts.acc2++;
-                break;
-        }
-    });
-
-    return counts;
 });
 
 const fetchKriteria = async () => {
@@ -69,39 +41,32 @@ const fetchKriteria = async () => {
     }
 };
 
+const totalValidated = computed(() => {
+    return kriteria.data.filter((k) => {
+        return (
+            Array.isArray(k.validators) &&
+            k.validators.length === 2 &&
+            k.validators.every((v) => v.has_validated)
+        );
+    }).length;
+});
+
+const totalPending = computed(() => {
+    return kriteria.data.filter((k) => {
+        return (
+            Array.isArray(k.validators) &&
+            k.validators.length === 2 &&
+            k.validators.some((v) => !v.has_validated)
+        );
+    }).length;
+});
+
+const totalRejected = computed(() => {
+    return kriteria.data.filter((k) => k.is_rejected).length;
+});
+
 const onDownload = async (fileUrl) => {
     await downloadDocument(fileUrl, $toast);
-};
-
-// Status styling functions
-const getStatusColor = (status) => {
-    switch (status?.toLowerCase()) {
-        case "acc 1":
-            return "bg-blue-100 text-blue-800 border-blue-200";
-        case "acc 2":
-            return "bg-green-100 text-green-800 border-green-200";
-        case "revision":
-            return "bg-yellow-100 text-yellow-800 border-yellow-200";
-        case "submitted":
-            return "bg-purple-100 text-purple-800 border-purple-200";
-        default:
-            return "bg-gray-100 text-gray-800 border-gray-200";
-    }
-};
-
-const getStatusIcon = (status) => {
-    switch (status?.toLowerCase()) {
-        case "acc 1":
-            return "👍";
-        case "acc 2":
-            return "✅";
-        case "revision":
-            return "🔄";
-        case "submitted":
-            return "📤";
-        default:
-            return "📋";
-    }
 };
 
 // Format date function
@@ -141,7 +106,7 @@ onMounted(() => {
 
         <div class="grid grid-cols-1 md:grid-cols-4 gap-3">
             <Card
-                title="Total Kriteria"
+                title="Jumlah Kriteria"
                 :total-data="kriteria.total"
                 icon="bi bi-award"
                 icon-color="text-blue-500"
@@ -149,27 +114,27 @@ onMounted(() => {
             />
 
             <Card
-                title="Total Kriteria"
-                :total-data="kriteria.total"
-                icon="bi bi-award"
-                icon-color="text-blue-500"
-                icon-background="bg-blue-100"
+                title="Tervalidasi"
+                :total-data="totalValidated"
+                icon="bi bi-check-lg"
+                icon-color="text-green-500"
+                icon-background="bg-green-100"
             />
 
             <Card
-                title="Total Kriteria"
-                :total-data="kriteria.total"
-                icon="bi bi-award"
-                icon-color="text-blue-500"
-                icon-background="bg-blue-100"
+                title="Pending"
+                :total-data="totalPending"
+                icon="bi bi-hourglass-split"
+                icon-color="text-yellow-500"
+                icon-background="bg-yellow-100"
             />
 
             <Card
-                title="Total Kriteria"
-                :total-data="kriteria.total"
-                icon="bi bi-award"
-                icon-color="text-blue-500"
-                icon-background="bg-blue-100"
+                title="Ditolak"
+                :total-data="totalRejected"
+                icon="bi bi-x-lg"
+                icon-color="text-red-500"
+                icon-background="bg-red-100"
             />
         </div>
 
@@ -190,7 +155,7 @@ onMounted(() => {
                 <tr>
                     <th class="w-12 text-center">No.</th>
                     <th>Nama Kriteria</th>
-                    <th>Pembuat</th>
+                    <th>Jenis Kriteria</th>
                     <th>Status</th>
                     <th>File</th>
                 </tr>
@@ -201,11 +166,51 @@ onMounted(() => {
                     <td>
                         {{ item.name }}
                     </td>
-                    <td>{{ item.validators?.created_by }}</td>
                     <td>
-                        {{ item.is_rejected ? "Ditolak" : "Tervalidasi" }}
+                        <div
+                            class="py-1 px-1.5 w-fit font-normal rounded"
+                            :class="{
+                                'text-red-500 bg-red-50 border border-red-500':
+                                    item.is_rejected,
+                                'text-yellow-500 bg-yellow-50 border border-yellow-500':
+                                    item.validators.every(
+                                        (v) => !v.has_validated
+                                    ),
+                                'text-green-500 bg-green-50 border border-green-500':
+                                    item.validators.every(
+                                        (v) => v.has_validated
+                                    ),
+                            }"
+                        >
+                            <p>
+                                {{
+                                    item.is_rejected
+                                        ? "Ditolak, perlu revisi"
+                                        : item.validators.every(
+                                              (v) => !v.has_validated
+                                          )
+                                        ? "Belum ada validasi"
+                                        : item.validators.every(
+                                              (v) => v.has_validated
+                                          )
+                                        ? "Tervalidasi penuh"
+                                        : "Validasi belum lengkap"
+                                }}
+                            </p>
+                        </div>
                     </td>
-                    <td>{{  }}</td>
+                    <td>
+                        <Button
+                            label="Preview"
+                            variant="primaryOutlined"
+                            icon-position="right"
+                            @click="onDownload(item.merged_file_url)"
+                        >
+                            <template #icon>
+                                <i class="bi bi-download ml-3"></i>
+                            </template>
+                        </Button>
+                    </td>
                 </tr>
             </tbody>
         </table>

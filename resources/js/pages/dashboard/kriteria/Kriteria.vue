@@ -173,6 +173,18 @@ const submitAllSections = async () => {
         // Reset form if all successful
         if (failed === 0) {
             resetForm();
+
+            $toast.success(
+                "Semua data berhasil disimpan. Menggabungkan dokumen..."
+            );
+            try {
+                await axios.post(`/kriteria/${kriteriaId.value}/merge`);
+                $toast.success("File berhasil digabung dan disimpan");
+                resetForm();
+            } catch (mergeError) {
+                console.error("Error merging file:", mergeError);
+                $toast.error("Gagal menggabungkan file");
+            }
         }
     } catch (error) {
         console.error("Error in bulk submission:", error);
