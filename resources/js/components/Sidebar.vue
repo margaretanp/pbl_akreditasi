@@ -1,3 +1,83 @@
+<script setup>
+import axios from "axios";
+import { computed, ref } from "vue";
+import { authService } from "../services/authService";
+import { useRouter } from "vue-router";
+import { useToast } from "vue-toast-notification";
+import { useCurrentUserStore } from "../store/currentUser";
+
+const router = useRouter();
+const $toast = useToast();
+
+const useCurrentUser = useCurrentUserStore();
+const user = computed(() => useCurrentUser.currentUser);
+
+const expanded = ref(true);
+
+const showKriteria = ref(false);
+
+const toggleSidebar = () => {
+    expanded.value = !expanded.value;
+};
+
+const toggleKriteriaDropdown = () => {
+    showKriteria.value = !showKriteria.value;
+};
+
+const handleLogout = async () => {
+    try {
+        const response = await axios.post("logout");
+
+        if (response.status === "success") {
+            authService.removeTokens();
+            router.push({ name: "welcome" });
+        }
+    } catch (error) {
+        console.error("Error:", error);
+        $toast.error("Failed to logout");
+    }
+};
+
+const onKriteriaRoute = (kriteriaId, event) => {
+    event.preventDefault();
+
+    // Check if user has the correct role
+    if (user.value.role.id !== 5) {
+        $toast.error("Anda tidak bisa membuka menu ini!");
+        return;
+    }
+
+    // Map user IDs to their allowed kriteria IDs
+    const userKriteriaMap = {
+        7: 1,
+        8: 2,
+        9: 3,
+        10: 4,
+        11: 5,
+        12: 6,
+        13: 7,
+        14: 8,
+        15: 9
+    };
+
+    const allowedKriteriaId = userKriteriaMap[user.value.id];
+
+    // Check if user is trying to access their assigned kriteria
+    // if (!allowedKriteriaId) {
+    //     $toast.error("Anda tidak memiliki akses di kriteria ini");
+    //     return;
+    // }
+
+    // Check if clicked kriteria matches user's allowed kriteria
+    if (kriteriaId !== allowedKriteriaId) {
+        $toast.error("Anda hanya bisa mengakses Kriteria " + allowedKriteriaId);
+        return;
+    }
+
+    router.push({ name: "kriteria", params: { id: kriteriaId } });
+};
+</script>
+
 <template>
     <div class="flex h-full">
         <!-- Sidebar -->
@@ -159,12 +239,13 @@
                             :class="expanded ? 'ml-8 space-y-1' : 'space-y-1'"
                         >
                             <li v-for="i in 9" :key="'kriteria-' + i">
-                                <router-link
-                                    :to="`/kriteria/${i}`"
+                                <a
+                                    href="#"
                                     class="block px-4 py-2 hover:bg-gray-700 rounded text-white text-sm"
+                                    @click="onKriteriaRoute(i, $event)"
                                 >
                                     Kriteria {{ i }}
-                                </router-link>
+                                </a>
                             </li>
                         </div>
                     </li>
@@ -238,36 +319,6 @@
         </div>
     </div>
 </template>
-
-<script>
-import axios from "axios";
-
-export default {
-    data() {
-        return {
-            expanded: true,
-            showKriteria: false,
-            userRole: (sessionStorage.getItem("userRole") || "").toUpperCase(),
-        };
-    },
-
-    methods: {
-        toggleSidebar() {
-            this.expanded = !this.expanded;
-        },
-        toggleKriteriaDropdown() {
-            this.showKriteria = !this.showKriteria;
-        },
-        async handleLogout() {
-            const response = await axios.post("/logout");
-            localStorage.removeItem("token"); // hapus token jika ada
-            sessionStorage.clear(); // hapus session
-            this.$router.push({ name: "welcome" }); // redirect ke halaman landing
-            return response.data;
-        },
-    },
-};
-</script>
 
 <style scoped>
 /* Tambahan style jika diperlukan */

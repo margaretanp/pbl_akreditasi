@@ -1,6 +1,8 @@
 @import "tailwindcss";
 @plugin "daisyui";
 
+@import "vue-toast-notification/dist/theme-bootstrap.css";
+
 /* resources/css/app.css */
 .sidebar {
     position: fixed;
@@ -9,7 +11,7 @@
     left: 0;
     z-index: 100;
     padding: 48px 0 0;
-    box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
+    box-shadow: inset -1px 0 0 rgba(0, 0, 0, 0.1);
 }
 
 .sidebar .nav-link {
@@ -26,7 +28,7 @@ main {
 }
 
 .card {
-    transition: transform .2s;
+    transition: transform 0.2s;
 }
 
 .card:hover {

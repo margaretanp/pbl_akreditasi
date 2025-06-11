@@ -122,6 +122,38 @@ class KriteriaController extends Controller
         );
     }
 
+    public function reject(request $request, $id)
+    {
+        $user = auth()->user();
+
+        if ($user->role->id !== 2 || $user->role->id !== 3) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Unauthorized action. Only Kajur or Direktur can reject kriteia.'
+            ]);
+        }
+        $data = $request->validate([
+            'is_rejected' => 'required|boolean'
+        ]);
+
+        $kriteria = KriteriaModel::find($id);
+        if (!$kriteria) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'kriteria not found'
+            ], 404);
+        }
+        $kriteria->update([
+            'is_rejected' => $data['is_rejected'],
+            'rejected_at' => now()
+        ]);
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Kriteria rejection status updated successfully',
+            'data' => $kriteria
+        ], 200);
+    }
+
     public function generateMergedPdf($id)
     {
         try {

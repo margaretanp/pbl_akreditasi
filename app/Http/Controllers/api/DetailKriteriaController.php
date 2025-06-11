@@ -6,7 +6,11 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\storedetailKriteriaRequest;
 use App\Http\Requests\updatedetailKriteriaRequest;
 use App\Models\DetailKriteriaModel;
+<<<<<<< HEAD
 use App\Models\Validasi;
+=======
+use App\Models\KriteriaModel;
+>>>>>>> 06c39d5c34e3482422e03a418958db06f0a7c7aa
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -55,7 +59,21 @@ class DetailKriteriaController extends Controller
     public function store(storedetailKriteriaRequest $request)
     {
         $data = $request->validated();
+<<<<<<< HEAD
         $data['created_by'] = auth()->user()->id;
+=======
+
+        $user = auth()->user();
+
+        if ($user->role->id !== 5) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'User is not authorized to create Detail Kriteria'
+            ], 403);
+        }
+
+        $data['created_by'] = $user->id;
+>>>>>>> 06c39d5c34e3482422e03a418958db06f0a7c7aa
 
         try {
             if ($request->hasFile('file_url')) {
@@ -93,6 +111,7 @@ class DetailKriteriaController extends Controller
         try {
             $data = $request->validated();
 
+<<<<<<< HEAD
             // Handle file upload if exists
             if ($request->hasFile('file_url')) {
                 // Delete old file if exists
@@ -100,6 +119,20 @@ class DetailKriteriaController extends Controller
                     unlink(public_path($detailKriteria->file_url));
                 }
                 $data['file_url'] = $this->processUploadedFile($request->file('file_url'));
+=======
+        $user = auth()->user();
+
+        if ($detailKriteria->created_by !== $user->id || $user->role->id !== 5) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'User is not authorized to update Detail Kriteria'
+            ], 403);
+        }
+
+        if ($request->hasFile('file_url')) {
+            if ($detailKriteria->file_url && file_exists(public_path($detailKriteria->file_url))) {
+                unlink(public_path($detailKriteria->file_url));
+>>>>>>> 06c39d5c34e3482422e03a418958db06f0a7c7aa
             }
 
             // Update detail kriteria
@@ -124,6 +157,7 @@ class DetailKriteriaController extends Controller
         }
     }
 
+<<<<<<< HEAD
     // Tampilkan Status Tiap Isian
 
 public function byUser(Request $request)
@@ -155,6 +189,8 @@ public function byUser(Request $request)
     ], 200);
 }
 
+=======
+>>>>>>> 06c39d5c34e3482422e03a418958db06f0a7c7aa
     public function destroy($id)
     {
         $detailKriteria = DetailKriteriaModel::find($id);

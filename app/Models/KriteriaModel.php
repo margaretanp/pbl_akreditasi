@@ -11,7 +11,7 @@ class KriteriaModel extends Model
     use HasFactory, SoftDeletes;
     protected $table = 'kriteria';
     protected $primaryKey = 'id';
-    protected $fillable = ['name', 'is_rejected', 'merged_file_url', 'merged_at'];
+    protected $fillable = ['name', 'is_rejected', 'rejected_at','merged_file_url', 'merged_at'];
     protected $hidden = ['deleted_at', 'created_at', 'updated_at'];
 
     protected $casts = [
