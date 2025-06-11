@@ -29,10 +29,6 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/profile', [AuthController::class, 'currentUser']);
 
-    // Master data & user
-    Route::apiResource('roles', RolesController::class);
-    Route::apiResource('users', UsersController::class);
-
     // Kriteria dan relasinya
     Route::apiResource('kriteria', KriteriaController::class);
     Route::apiResource('jenis-kriteria', JenisKriteriaController::class);

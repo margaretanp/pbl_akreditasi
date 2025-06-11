@@ -16,15 +16,46 @@ class KriteriaController extends Controller
 {
     public function index()
     {
-        $kriteria = KriteriaModel::all();
-        return response()->json(
-            [
+        // Get authenticated user (if any)
+        $user = auth()->user();
+
+        // If no user is authenticated, return read-only data
+        if (!$user) {
+            $kriteria = KriteriaModel::select('id', 'name')->get();
+            return response()->json([
                 'status' => 'success',
                 'message' => 'Kriteria data retrieved successfully',
                 'data' => $kriteria
-            ],
-            200
-        );
+            ], 200);
+        }
+
+        // Role-based data filtering
+        switch ($user->role->id) {
+            case 2: // Kajur role - can see all kriteria
+                $kriteria = KriteriaModel::all();
+                break;
+
+            case 3: // Direktur role - can only see validated kriteria
+                $kriteria = KriteriaModel::whereHas('validators', function ($query) {
+                    $query->where('is_validated', true)
+                        ->whereHas('user', function ($userQuery) {
+                            $userQuery->where('role_id', 2); // Validated by Kajur (role id 2)
+                        });
+                })->get();
+                break;
+
+            default: // Other roles - limited access
+                $kriteria = KriteriaModel::select('id', 'name')
+                    ->where('is_rejected', false)
+                    ->get();
+                break;
+        }
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Kriteria data retrieved successfully',
+            'data' => $kriteria
+        ], 200);
     }
 
     public function show($id)
