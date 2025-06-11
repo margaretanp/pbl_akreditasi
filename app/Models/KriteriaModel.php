@@ -25,4 +25,5 @@ class KriteriaModel extends Model
     {
         return $this->hasMany(Validasi::class, 'criteria_id', 'id');
     }
+    
 }

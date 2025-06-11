@@ -9,6 +9,8 @@ use App\Models\DetailKriteriaModel;
 use App\Models\KriteriaModel;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Validator;
 
 class DetailKriteriaController extends Controller
 {
@@ -65,44 +67,26 @@ class DetailKriteriaController extends Controller
 
         $data['created_by'] = $user->id;
 
-        if ($request->hasFile('file_url')) {
-            $file = $request->file('file_url');
-            $fileOriginalName = $file->getClientOriginalName();
-            $fileName = pathinfo($fileOriginalName, PATHINFO_FILENAME);
-            $fileName = str_replace(' ', '_', $fileName);
-            $originalExt = strtolower($file->getClientOriginalExtension());
-
-            $fileSavedName = $fileName . '_' . time() . '.pdf';
-            $storagePath = storage_path('app/public/detail_kriteria');
-            $fullPath = $storagePath . '/' . $fileSavedName;
-
-
-            if ($originalExt === 'pdf') {
-                // If already PDF, just store it
-                $file->storeAs('detail_kriteria', $fileSavedName, 'public');
-            } elseif (in_array($originalExt, ['jpg', 'jpeg', 'png', 'gif', 'bmp'])) {
-                // Convert image to PDF
-                $this->convertImageToPdfSimple($file, $fullPath);
-            } elseif ($originalExt === 'txt') {
-                // Convert text to PDF
-                $this->convertTextToPdfSimple($file, $fullPath);
-            } else {
-                return response()->json([
-                    'status' => 'error',
-                    'message' => 'Unsupported file type. Supported formats: PDF, JPG, JPEG, PNG, GIF, BMP, TXT'
-                ], 400);
+        try {
+            if ($request->hasFile('file_url')) {
+                $data['file_url'] = $this->processUploadedFile($request->file('file_url'));
             }
 
-            $data['file_url'] = 'storage/detail_kriteria/' . $fileSavedName;
+            $detailKriteria = DetailKriteriaModel::create($data);
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Detail Kriteria created successfully',
+                'data' => $detailKriteria->load('kriteria', 'jenisKriteria', 'createdBy')
+            ], 201);
+        } catch (\Exception $e) {
+            Log::error('Error creating detail kriteria: ' . $e->getMessage());
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Failed to create detail kriteria',
+                'error' => $e->getMessage()
+            ], 500);
         }
-
-        $detailKriteria = DetailKriteriaModel::create($data);
-
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Detail Kriteria created successfully',
-            'data' => $detailKriteria
-        ], 201);
     }
 
     public function update(updatedetailKriteriaRequest $request, $id)
@@ -110,16 +94,14 @@ class DetailKriteriaController extends Controller
         $detailKriteria = DetailKriteriaModel::find($id);
 
         if (!$detailKriteria) {
-            return response()->json(
-                [
-                    'status' => 'error',
-                    'message' => 'Detail Kriteria not found'
-                ],
-                404
-            );
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Detail Kriteria not found'
+            ], 404);
         }
 
-        $data = $request->validated();
+        try {
+            $data = $request->validated();
 
         $user = auth()->user();
 
@@ -135,51 +117,26 @@ class DetailKriteriaController extends Controller
                 unlink(public_path($detailKriteria->file_url));
             }
 
-            $file = $request->file('file_url');
-            $fileOriginalName = $file->getClientOriginalName();
-            $fileName = pathinfo($fileOriginalName, PATHINFO_FILENAME);
-            $fileName = str_replace(' ', '_', $fileName);
-            $originalExt = strtolower($file->getClientOriginalExtension());
+            // Update detail kriteria
+            $detailKriteria->update($data);
 
-            $fileSavedName = $fileName . '_' . time() . '.pdf';
-            $storagePath = storage_path('app/public/detail_kriteria');
-            $fullPath = $storagePath . '/' . $fileSavedName;
+            // Reset validation status for all related validasi records
+            $this->resetValidationStatus($detailKriteria);
 
-            if ($originalExt === 'pdf') {
-                // If already PDF, just store it
-                $file->storeAs('detail_kriteria', $fileSavedName, 'public');
-            } elseif (in_array($originalExt, ['jpg', 'jpeg', 'png', 'gif', 'bmp'])) {
-                // Convert image to PDF
-                $this->convertImageToPdfSimple($file, $fullPath);
-            } elseif ($originalExt === 'txt') {
-                // Convert text to PDF
-                $this->convertTextToPdfSimple($file, $fullPath);
-            } else {
-                return response()->json([
-                    'status' => 'error',
-                    'message' => 'Unsupported file type. Supported formats: PDF, JPG, JPEG, PNG, GIF, BMP, TXT'
-                ], 400);
-            }
-
-            $data['file_url'] = 'storage/detail_kriteria/' . $fileSavedName;
-        }
-
-        $validator = \Validator::make($request->all(), (new updatedetailKriteriaRequest())->rules());
-        if ($validator->fails()) {
-            \Log::error('Validation errors:', $validator->errors()->toArray());
-        }
-        $detailKriteria->update($data);
-        $detailKriteria->refresh();
-        $detailKriteria->load('kriteria', 'jenisKriteria', 'createdBy');
-
-        return response()->json(
-            [
+            return response()->json([
                 'status' => 'success',
-                'message' => 'Detail Kriteria updated successfully',
-                'data' => $detailKriteria
-            ],
-            200
-        );
+                'message' => 'Detail Kriteria updated successfully and validation status reset',
+                'data' => $detailKriteria->fresh(['kriteria', 'jenisKriteria', 'createdBy'])
+            ], 200);
+
+        } catch (\Exception $e) {
+            Log::error('Error updating detail kriteria: ' . $e->getMessage());
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Failed to update detail kriteria',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 
     public function destroy($id)
@@ -209,6 +166,50 @@ class DetailKriteriaController extends Controller
             ],
             200
         );
+    }
+
+    private function processUploadedFile($file)
+    {
+        $fileOriginalName = $file->getClientOriginalName();
+        $fileName = pathinfo($fileOriginalName, PATHINFO_FILENAME);
+        $fileName = str_replace(' ', '_', $fileName);
+        $originalExt = strtolower($file->getClientOriginalExtension());
+
+        $fileSavedName = $fileName . '_' . time() . '.pdf';
+        $storagePath = storage_path('app/public/detail_kriteria');
+        
+        if (!file_exists($storagePath)) {
+            mkdir($storagePath, 0755, true);
+        }
+
+        $fullPath = $storagePath . '/' . $fileSavedName;
+
+        if ($originalExt === 'pdf') {
+            $file->storeAs('public/detail_kriteria', $fileSavedName);
+        } elseif (in_array($originalExt, ['jpg', 'jpeg', 'png', 'gif', 'bmp'])) {
+            $this->convertImageToPdfSimple($file, $fullPath);
+        } elseif ($originalExt === 'txt') {
+            $this->convertTextToPdfSimple($file, $fullPath);
+        } else {
+            throw new \Exception('Unsupported file type. Supported formats: PDF, JPG, JPEG, PNG, GIF, BMP, TXT');
+        }
+
+        return 'storage/detail_kriteria/' . $fileSavedName;
+    }
+
+    /**
+     * Reset validation status when detail kriteria is updated
+     */
+    private function resetValidationStatus(DetailKriteriaModel $detailKriteria)
+    {
+        Validasi::where('kriteria_id', $detailKriteria->kriteria_id)
+            ->where('user_id', auth()->id())
+            ->update([
+                'is_validated' => 0,
+                'validated_at' => null,
+                'komentar' => null,
+                'status' => 'pending'
+            ]);
     }
 
     private function convertImageToPdfSimple($file, $outputPath)
@@ -256,3 +257,5 @@ class DetailKriteriaController extends Controller
         $pdf->save($outputPath);
     }
 }
+
+
