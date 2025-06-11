@@ -20,7 +20,7 @@ const user = computed(() => useCurrentUser.currentUser);
 const showKriteria = ref(false);
 
 const activeKriteriaId = computed(() => {
-    if (route.name === 'kriteria' && route.params.id) {
+    if (route.name === "kriteria" && route.params.id) {
         return parseInt(route.params.id);
     }
     return null;
@@ -88,9 +88,9 @@ const onKriteriaRoute = (kriteriaId, event) => {
         <h3 class="px-3 py-2 text-white font-bold text-xl">AKREDITASI</h3>
 
         <!-- Navigation -->
-        <nav class="h-full flex flex-col justify-between text-gray-300">
+        <nav class="h-full flex flex-col justify-between gap-y-4 text-gray-300">
             <div
-                class="flex flex-col gap-y-3 *:px-3 *:py-2 *:inline-flex *:gap-x-3"
+                class="flex flex-col gap-y-3 overflow-y-auto *:px-3 *:py-2 *:inline-flex *:gap-x-3"
             >
                 <!-- Dashboard -->
                 <router-link :to="{ name: 'Home' }">
@@ -100,6 +100,7 @@ const onKriteriaRoute = (kriteriaId, event) => {
 
                 <!-- Kriteria Dropdown hanya untuk Dosen -->
                 <div
+                    v-if="user.role?.id === 5"
                     @click="toggleKriteriaDropdown"
                     class="cursor-pointer hover:text-white rounded-lg transition-all duration-200 ease-in-out px-3 py-2 inline-flex gap-x-3"
                     :class="{
@@ -120,18 +121,16 @@ const onKriteriaRoute = (kriteriaId, event) => {
                     </div>
                 </div>
 
-                <!-- Dropdown Menu with Animation (Moved Outside) -->
+                <!-- Dropdown Menu -->
                 <div
                     v-if="showKriteria"
-                    class="overflow-hidden transition-all duration-300 ease-in-out -mt-3"
+                    class="overflow-y-auto transition-all duration-300 ease-in-out -mt-3"
                     :class="{
                         'max-h-96 opacity-100': showKriteria,
                         'max-h-0 opacity-0': !showKriteria,
                     }"
                 >
-                    <div
-                        class="ml-6 flex flex-col gap-y-1 border-l-2 border-gray-700 pl-4"
-                    >
+                    <div class="ml-6 flex flex-col gap-y-1">
                         <a
                             v-for="i in 9"
                             :key="i"
@@ -139,7 +138,7 @@ const onKriteriaRoute = (kriteriaId, event) => {
                             class="px-3 py-2 hover:text-white rounded-md text-gray-400 text-sm transition-all duration-200 ease-in-out transform"
                             :class="{
                                 'font-semibold text-white': isKriteriaActive(i),
-                                'text-gray-400': !isKriteriaActive(i)
+                                'text-gray-400': !isKriteriaActive(i),
                             }"
                             @click="onKriteriaRoute(i, $event)"
                         >
@@ -148,7 +147,10 @@ const onKriteriaRoute = (kriteriaId, event) => {
                     </div>
                 </div>
 
-                <router-link to="/dashboard/validasi">
+                <router-link
+                    v-if="user.role?.id === 2 || user.role?.id === 3"
+                    to="/dashboard/validasi"
+                >
                     <i class="bi bi-clipboard-check"></i>
                     <span>Validasi</span>
                 </router-link>
@@ -160,8 +162,10 @@ const onKriteriaRoute = (kriteriaId, event) => {
                 justify="start"
                 icon-position="left"
                 @click="handleLogout()"
+                class="mb-4"
                 >Logout
-                <template #icon><i class="bi bi-box-arrow-right mr-3"></i></template
+                <template #icon
+                    ><i class="bi bi-box-arrow-right mr-3"></i></template
             ></Button>
         </nav>
     </aside>

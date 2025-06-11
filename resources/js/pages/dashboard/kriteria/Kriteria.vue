@@ -192,6 +192,7 @@ const resetForm = () => {
 </script>
 
 <template>
+    <!-- Content wrapper -->
     <div class="min-h-screen p-4 bg-gray-100">
         <!-- Main Content -->
         <div class="flex flex-col p-6 gap-y-6 bg-white rounded-lg shadow-md">

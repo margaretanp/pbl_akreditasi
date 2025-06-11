@@ -11,7 +11,7 @@ const props = defineProps({
   },
   label: {
     type: String,
-    default: "Label",
+    required: false,
   },
   type: {
     type: String,
@@ -69,14 +69,14 @@ defineEmits(["update:modelValue", "blur", "onClickIcon"]);
 </script>
 
 <template>
-  <div class="flex flex-col gap-y-2">
-    <label :for="props.id" class="text-base font-medium text-gray-700">
+  <div class="flex flex-col">
+    <label v-if="props.label" :for="props.id" class="mb-2 text-base font-medium text-gray-700">
       {{ props.label }}
     </label>
 
     <div class="relative text-gray-500">
       <input
-        class="w-full py-2 font-medium placeholder-gray-500 bg-gray-50 border border-gray-500 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-offset-2 rounded-md"
+        class="w-full py-2 placeholder-gray-500 bg-gray-50 border border-gray-300 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-offset-2 rounded-md"
         :class="`${
           isError
             ? 'border-red-500 focus-visible:ring-red-500'
@@ -110,6 +110,6 @@ defineEmits(["update:modelValue", "blur", "onClickIcon"]);
       </button>
     </div>
 
-    <ErrorMessages v-if="isError" :errors="props.errors" />
+    <ErrorMessages v-if="isError" :errors="props.errors" class="mt-2" />
   </div>
 </template>
