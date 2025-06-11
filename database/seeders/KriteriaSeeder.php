@@ -14,7 +14,7 @@ class KriteriaSeeder extends Seeder
     public function run(): void
     {
         for ($i = 1; $i <= 9; $i++) {
-            DB::table('kriteria')->insert([
+            DB::table('criteria')->insert([
                 'name' => 'Kriteria ' . $i
             ]);
         }

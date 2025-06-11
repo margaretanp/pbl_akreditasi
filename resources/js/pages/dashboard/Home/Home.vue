@@ -1,6 +1,6 @@
 <script setup>
 import axios from "axios";
-import { reactive, onMounted } from "vue";
+import { reactive, computed, onMounted } from "vue";
 
 import { useRouter } from "vue-router"; // Import useRouter
 import { useToast } from "vue-toast-notification";
@@ -188,7 +188,7 @@ onMounted(() => {
         <table v-if="!kriteria.loading && kriteria.total > 0">
             <thead class="text-gray-700">
                 <tr>
-                    <th>No.</th>
+                    <th class="w-12 text-center">No.</th>
                     <th>Nama Kriteria</th>
                     <th>Status</th>
                     <th>File</th>
@@ -196,7 +196,7 @@ onMounted(() => {
             </thead>
             <tbody class="text-gray-500 font-medium">
                 <tr v-for="(item, index) in kriteria.data" :key="item.id">
-                    <td>{{ index + 1 }}</td>
+                    <td>{{ `${index + 1}.` }}</td>
                     <td>
                         {{ item.name }}
                     </td>
