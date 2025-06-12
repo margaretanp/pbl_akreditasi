@@ -69,6 +69,30 @@ const fetchKriteria = async () => {
     }
 };
 
+const totalValidated = computed(() => {
+    return kriteria.data.filter((k) => {
+        return (
+            Array.isArray(k.validators) &&
+            k.validators.length === 2 &&
+            k.validators.every((v) => v.has_validated)
+        );
+    }).length;
+});
+
+const totalPending = computed(() => {
+    return kriteria.data.filter((k) => {
+        return (
+            Array.isArray(k.validators) &&
+            k.validators.length === 2 &&
+            k.validators.some((v) => !v.has_validated)
+        );
+    }).length;
+});
+
+const totalRejected = computed(() => {
+    return kriteria.data.filter((k) => k.is_rejected).length;
+});
+
 const onDownload = async (fileUrl) => {
     await downloadDocument(fileUrl, $toast);
 };
@@ -119,24 +143,27 @@ onMounted(() => {
     fetchKriteria();
 });
 </script>
-
 <template>
-    <!-- Main content -->
-    <div class="flex flex-col p-6 gap-y-6 rounded-lg shadow-md bg-white">
-        <!-- Header -->
-        <div class="space-y-4">
-            <div class="space-y-1">
-                <h1
-                    class="text-4xl font-bold bg-gradient-to-r from-indigo-600 to-blue-600 bg-clip-text text-transparent"
-                >
-                    DASHBOARD AKREDITASI
-                </h1>
-                <p class="text-gray-600 text-lg">
-                    Kelola dan pantau progress kriteria akreditasi Anda
-                </p>
+    <div
+        class="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100"
+    >
+        <div class="bg-white shadow-lg border-b-4 border-indigo-500">
+            <div class="px-8 py-6">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h1 class="text-4xl font-bold text-gray-800 mb-2">
+                            <span
+                                class="bg-gradient-to-r from-indigo-600 to-blue-600 bg-clip-text text-transparent"
+                            >
+                                DASHBOARD AKREDITASI
+                            </span>
+                        </h1>
+                        <p class="text-gray-600 text-lg">
+                            Kelola dan pantau progress kriteria akreditasi Anda
+                        </p>
+                    </div>
+                </div>
             </div>
-
-            <hr class="text-gray-300" />
         </div>
 
         <div class="px-8 py-6">
@@ -168,58 +195,55 @@ onMounted(() => {
                 </div>
 
                 <div
+                    class="bg-white rounded-xl shadow-lg p-6 border-l-4 border-blue-400 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
+                >
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-gray-600 text-sm font-medium">
+                                ACC 1
+                            </p>
+                            <p class="text-3xl font-bold text-blue-600">
+                                {{ statusCounts.acc1 }}
+                            </p>
+                        </div>
+                        <div class="bg-blue-100 p-3 rounded-full">
+                            <span class="text-xl">👍</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div
                     class="bg-white rounded-xl shadow-lg p-6 border-l-4 border-green-500 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
+                >
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-gray-600 text-sm font-medium">
+                                ACC 2
+                            </p>
+                            <p class="text-3xl font-bold text-green-600">
+                                {{ statusCounts.acc2 }}
+                            </p>
+                        </div>
+                        <div class="bg-green-100 p-3 rounded-full">
+                            <span class="text-xl">✅</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div
+                    class="bg-white rounded-xl shadow-lg p-6 border-l-4 border-purple-500 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
                 >
                     <div class="flex items-center justify-between">
                         <div>
                             <p class="text-gray-600 text-sm font-medium">
                                 Submitted
                             </p>
-                            <p class="text-3xl font-bold text-green-600">
-                                {{}}
+                            <p class="text-3xl font-bold text-purple-600">
+                                {{ statusCounts.submitted }}
                             </p>
                         </div>
-                        <div class="bg-green-100 p-3 rounded-full">
-                            <svg
-                                class="w-6 h-6 text-green-600"
-                                fill="currentColor"
-                                viewBox="0 0 20 20"
-                            >
-                                <path
-                                    fill-rule="evenodd"
-                                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                                    clip-rule="evenodd"
-                                ></path>
-                            </svg>
-                        </div>
-                    </div>
-                </div>
-
-                <div
-                    class="bg-white rounded-xl shadow-lg p-6 border-l-4 border-gray-500 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
-                >
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <p class="text-gray-600 text-sm font-medium">
-                                Draft
-                            </p>
-                            <p class="text-3xl font-bold text-gray-600">{{}}</p>
-                        </div>
-                        <div class="bg-gray-100 p-3 rounded-full">
-                            <svg
-                                class="w-6 h-6 text-gray-600"
-                                fill="currentColor"
-                                viewBox="0 0 20 20"
-                            >
-                                <path
-                                    d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z"
-                                ></path>
-                                <path
-                                    fill-rule="evenodd"
-                                    d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z"
-                                    clip-rule="evenodd"
-                                ></path>
-                            </svg>
+                        <div class="bg-purple-100 p-3 rounded-full">
+                            <span class="text-xl">📤</span>
                         </div>
                     </div>
                 </div>
@@ -233,21 +257,11 @@ onMounted(() => {
                                 Revision
                             </p>
                             <p class="text-3xl font-bold text-yellow-600">
-                                {{}}
+                                {{ statusCounts.revision }}
                             </p>
                         </div>
                         <div class="bg-yellow-100 p-3 rounded-full">
-                            <svg
-                                class="w-6 h-6 text-yellow-600"
-                                fill="currentColor"
-                                viewBox="0 0 20 20"
-                            >
-                                <path
-                                    fill-rule="evenodd"
-                                    d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z"
-                                    clip-rule="evenodd"
-                                ></path>
-                            </svg>
+                            <span class="text-xl">🔄</span>
                         </div>
                     </div>
                 </div>
@@ -259,7 +273,7 @@ onMounted(() => {
                         <div class="relative">
                             <input
                                 type="text"
-                                placeholder="🔍 Cari kriteria, status, atau komentar..."
+                                placeholder="🔍 Cari kriteria, dosen, status, atau komentar..."
                                 class="w-full pl-12 pr-4 py-3 text-lg text-black border border-gray-300 rounded-xl focus:ring-4 focus:ring-blue-100 focus:border-blue-500 transition-all duration-300"
                             />
                             <svg
@@ -280,9 +294,10 @@ onMounted(() => {
                             class="w-full px-4 py-3 text-lg text-black border border-gray-300 rounded-xl focus:ring-4 focus:ring-blue-100 focus:border-blue-500 transition-all duration-300"
                         >
                             <option value="semua">📋 Semua Status</option>
-                            <option value="Submitted">✅ Submitted</option>
-                            <option value="Draft">📝 Draft</option>
-                            <option value="Revision">🔄 Revision</option>
+                            <option value="acc 1">👍 ACC 1</option>
+                            <option value="acc 2">✅ ACC 2</option>
+                            <option value="revision">🔄 Revision</option>
+                            <option value="submitted">📤 Submitted</option>
                         </select>
                     </div>
                 </div>
@@ -303,60 +318,71 @@ onMounted(() => {
                                 <th
                                     class="text-left p-6 font-semibold text-gray-700 text-lg"
                                 >
+                                    Nama Dosen
+                                </th>
+                                <th
+                                    class="text-left p-6 font-semibold text-gray-700 text-lg"
+                                >
                                     Nama Kriteria
                                 </th>
                                 <th
                                     class="text-left p-6 font-semibold text-gray-700 text-lg"
                                 >
-                                    File
+                                    Tanggal Submit
                                 </th>
-                                <!--<th
+                                <th
                                     class="text-left p-6 font-semibold text-gray-700 text-lg"
                                 >
                                     Status
                                 </th>
                                 <th
-                                    class="text-left p-6 font-semibold text-gray-700 text-lg"
-                                >
-                                    Komentar
-                                </th>
-                                <th
                                     class="text-center p-6 font-semibold text-gray-700 text-lg"
                                 >
-                                    Aksi
-                                </th> -->
+                                    File
+                                </th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr
                                 v-for="(item, index) in kriteria.data"
                                 :key="item.id"
-                                class="border-b border-gray-100 hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50 transition-all duration-300 *:p-6"
+                                class="border-b border-gray-100 hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50 transition-all duration-300"
                                 :style="{ animationDelay: index * 50 + 'ms' }"
                             >
-                                <td>
+                                <td class="p-6">
                                     <div
                                         class="w-8 h-8 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-full flex items-center justify-center text-white font-bold"
                                     >
                                         {{ index + 1 }}
                                     </div>
                                 </td>
-                                <td>
-                                    <p
-                                        class="font-semibold text-gray-800 text-lg"
-                                    >
+                                <td class="p-6">
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-10 h-10 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center text-white font-bold">
+                                            {{ item.lecturer_name?.charAt(0) || 'D' }}
+                                        </div>
+                                        <div>
+                                            <p class="font-semibold text-gray-800 text-base">
+                                                {{ item.lecturer_name || 'Dr. John Doe' }}
+                                            </p>
+                                            <p class="text-sm text-gray-500">Dosen</p>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="p-6">
+                                    <p class="font-semibold text-gray-800 text-lg">
                                         {{ item.name }}
                                     </p>
                                 </td>
-                                <td>
-                                    <button
-                                        class="font-semibold text-gray-800 text-lg"
-                                        @click="onDownload(item.merged_file_url)"
-                                    >
-                                        Download
-                                    </button>
+                                <td class="p-6">
+                                    <div class="flex items-center gap-2">
+                                        <span class="text-lg">📅</span>
+                                        <span class="text-gray-700 font-medium">
+                                            {{ formatDate(item.submission_date) }}
+                                        </span>
+                                    </div>
                                 </td>
-                                <!-- <td class="p-6">
+                                <td class="p-6">
                                     <span
                                         :class="getStatusColor(item.status)"
                                         class="px-4 py-2 rounded-full text-sm font-semibold inline-flex items-center gap-2 border"
@@ -364,63 +390,25 @@ onMounted(() => {
                                         <span class="text-lg">{{
                                             getStatusIcon(item.status)
                                         }}</span>
-                                        {{ item.status }}
+                                        {{ item.status || 'Submitted' }}
                                     </span>
-                                </td> -->
-                                <!-- <td class="p-6">
-                                    <template
-                                        v-if="
-                                            item.status ===
-                                                StatusEnum.REVISION &&
-                                            item.komentar
-                                        "
+                                </td>
+                                <td class="p-6 text-center">
+                                    <button
+                                        @click="onDownload(item.merged_file_url)"
+                                        class="inline-flex items-center gap-2 bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white px-4 py-2 rounded-xl font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300"
                                     >
-                                        <button
-                                            @click="
-                                                openKomentarModal(item.komentar)
-                                            "
-                                            class="bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white px-4 py-2 rounded-xl font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300"
-                                        >
-                                            💬 Lihat Komentar
-                                        </button>
-                                    </template>
-                                    <template v-else>
-                                        <span class="text-gray-400 text-lg"
-                                            >-</span
-                                        >
-                                    </template>
-                                </td> -->
-                                <!-- <td class="p-6">
-                                    <div class="flex gap-3 justify-center">
-                                        <button
-                                            @click="onEdit(item)"
-                                            :disabled="
-                                                item.status ===
-                                                StatusEnum.SUBMITTED
-                                            "
-                                            :class="
-                                                item.status ===
-                                                StatusEnum.SUBMITTED
-                                                    ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                                                    : 'bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white shadow-lg hover:shadow-xl transform hover:-translate-y-1'
-                                            "
-                                            class="px-4 py-2 rounded-xl font-semibold transition-all duration-300"
-                                        >
-                                            ✏️ Edit
-                                        </button>
-                                        <button
-                                            @click="openDeleteModal(item)"
-                                            class="bg-gradient-to-r from-red-500 to-pink-600 hover:from-red-600 hover:to-pink-700 text-white px-4 py-2 rounded-xl font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300"
-                                        >
-                                            🗑️ Hapus
-                                        </button>
-                                    </div>
-                                </td> -->
+                                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                                        </svg>
+                                        Download
+                                    </button>
+                                </td>
                             </tr>
                         </tbody>
                     </table>
 
-                    <div class="text-center py-16" v-else>
+                    <div class="text-center py-16" v-else-if="!kriteria.loading">
                         <div class="text-6xl mb-4">🔍</div>
                         <p class="text-xl text-gray-500 mb-2">
                             Tidak ada data yang ditemukan
@@ -429,132 +417,16 @@ onMounted(() => {
                             Coba ubah kata kunci pencarian atau filter status
                         </p>
                     </div>
-                </div>
-            </div>
-        </div>
 
-        <!-- <div
-            v-if="isDeleteModalOpen"
-            class="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4"
-        >
-            <div
-                class="bg-white rounded-2xl shadow-2xl w-full max-w-md transform transition-all duration-300 scale-100"
-            >
-                <div
-                    class="bg-gradient-to-r from-red-500 to-pink-600 text-white p-6 rounded-t-2xl"
-                >
-                    <div class="flex items-center justify-center mb-4">
-                        <div
-                            class="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center"
-                        >
-                            <svg
-                                class="w-8 h-8"
-                                fill="currentColor"
-                                viewBox="0 0 20 20"
-                            >
-                                <path
-                                    fill-rule="evenodd"
-                                    d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"
-                                    clip-rule="evenodd"
-                                ></path>
-                                <path
-                                    fill-rule="evenodd"
-                                    d="M10 18a8 8 0 100-16 8 8 0 000 16zM8 7a1 1 0 012 0v4a1 1 0 11-2 0V7zm5 1a1 1 0 10-2 0v4a1 1 0 102 0V8z"
-                                    clip-rule="evenodd"
-                                ></path>
-                            </svg>
-                        </div>
-                    </div>
-                    <h2 class="text-2xl font-bold text-center">
-                        Konfirmasi Hapus
-                    </h2>
-                </div>
-
-                <div class="p-6">
-                    <p class="text-center text-gray-700 mb-6 text-lg">
-                        Apakah Anda yakin ingin menghapus
-                        <strong class="text-red-600">{{
-                            deleteTarget?.nama
-                        }}</strong
-                        >?
-                    </p>
-                    <div class="flex gap-4">
-                        <button
-                            @click="closeModals"
-                            class="flex-1 px-6 py-3 bg-gray-300 hover:bg-gray-400 text-gray-700 rounded-xl font-semibold transition-all duration-300 transform hover:-translate-y-1"
-                        >
-                            Batal
-                        </button>
-                        <button
-                            @click="confirmDelete"
-                            class="flex-1 px-6 py-3 bg-gradient-to-r from-red-500 to-pink-600 hover:from-red-600 hover:to-pink-700 text-white rounded-xl font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300"
-                        >
-                            Hapus
-                        </button>
+                    <div class="text-center py-16" v-else>
+                        <div class="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
+                        <p class="text-lg text-gray-500 mt-4">Memuat data...</p>
                     </div>
                 </div>
             </div>
         </div>
-
-
-        
-        <div
-            v-if="isKomentarModalOpen"
-            class="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4"
-        >
-            <div
-                class="bg-white rounded-2xl shadow-2xl w-full max-w-2xl transform transition-all duration-300 scale-100"
-            >
-                <div
-                    class="bg-gradient-to-r from-blue-500 to-indigo-600 text-white p-6 rounded-t-2xl"
-                >
-                    <div class="flex items-center justify-center mb-4">
-                        <div
-                            class="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center"
-                        >
-                            <svg
-                                class="w-8 h-8"
-                                fill="currentColor"
-                                viewBox="0 0 20 20"
-                            >
-                                <path
-                                    fill-rule="evenodd"
-                                    d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17l1.338-3.123C2.493 12.767 2 11.434 2 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM7 9H5v2h2V9zm8 0h-2v2h2V9zM9 9h2v2H9V9z"
-                                    clip-rule="evenodd"
-                                ></path>
-                            </svg>
-                        </div>
-                    </div>
-                    <h2 class="text-2xl font-bold text-center">
-                        Komentar Revisi
-                    </h2>
-                </div>
-
-
-                <div class="p-8">
-                    <div
-                        class="bg-yellow-50 border border-yellow-200 rounded-xl p-6 mb-6"
-                    >
-                        <p
-                            class="text-gray-800 text-lg leading-relaxed whitespace-pre-line"
-                        >
-                            {{ komentarContent }}
-                        </p>
-                    </div>
-                    <div class="flex justify-center">
-                        <button
-                            @click="closeModals"
-                            class="px-8 py-3 bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white rounded-xl font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300"
-                        >
-                            Tutup
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div> -->
     </div>
 </template>
-
 <style scoped>
 @keyframes fadeIn {
     from {

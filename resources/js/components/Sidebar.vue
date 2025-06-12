@@ -8,7 +8,8 @@ import { useToast } from "vue-toast-notification";
 import { authService } from "../services/authService";
 import { useCurrentUserStore } from "../store/currentUser";
 
-import Button from "../components/Button.vue";
+import Button from "./Button.vue";
+import ModalDialog from "./ModalDialog.vue"
 
 const route = useRoute();
 const router = useRouter();
@@ -78,6 +79,13 @@ const onKriteriaRoute = (kriteriaId, event) => {
 
     router.push({ name: "kriteria", params: { id: kriteriaId } });
 };
+
+const modalDialogRef = ref(null);
+const showModalDialog = ref(false);
+
+const toggleModalDialog = () => {
+  modalDialogRef.value?.openModal();
+}
 </script>
 
 <template>
@@ -169,3 +177,4 @@ const onKriteriaRoute = (kriteriaId, event) => {
             ></Button>
         </nav>
     </aside>
+</template>

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\storedetailKriteriaRequest;
 use App\Http\Requests\updatedetailKriteriaRequest;
 use App\Models\DetailKriteriaModel;
+use App\Models\Validasi;
 use App\Models\KriteriaModel;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
@@ -108,8 +109,8 @@ class DetailKriteriaController extends Controller
         if ($detailKriteria->created_by !== $user->id || $user->role->id !== 5) {
             return response()->json([
                 'status' => 'error',
-                'message' => 'User is not authorized to update Detail Kriteria'
-            ], 403);
+                'message' => 'Detail Kriteria not found'
+            ], 404);
         }
 
         if ($request->hasFile('file_url')) {
@@ -117,26 +118,51 @@ class DetailKriteriaController extends Controller
                 unlink(public_path($detailKriteria->file_url));
             }
 
-            // Update detail kriteria
-            $detailKriteria->update($data);
+            $file = $request->file('file_url');
+            $fileOriginalName = $file->getClientOriginalName();
+            $fileName = pathinfo($fileOriginalName, PATHINFO_FILENAME);
+            $fileName = str_replace(' ', '_', $fileName);
+            $originalExt = strtolower($file->getClientOriginalExtension());
 
-            // Reset validation status for all related validasi records
-            $this->resetValidationStatus($detailKriteria);
+            $fileSavedName = $fileName . '_' . time() . '.pdf';
+            $storagePath = storage_path('app/public/detail_kriteria');
+            $fullPath = $storagePath . '/' . $fileSavedName;
 
-            return response()->json([
-                'status' => 'success',
-                'message' => 'Detail Kriteria updated successfully and validation status reset',
-                'data' => $detailKriteria->fresh(['kriteria', 'jenisKriteria', 'createdBy'])
-            ], 200);
+            if ($originalExt === 'pdf') {
+                // If already PDF, just store it
+                $file->storeAs('detail_kriteria', $fileSavedName, 'public');
+            } elseif (in_array($originalExt, ['jpg', 'jpeg', 'png', 'gif', 'bmp'])) {
+                // Convert image to PDF
+                $this->convertImageToPdfSimple($file, $fullPath);
+            } elseif ($originalExt === 'txt') {
+                // Convert text to PDF
+                $this->convertTextToPdfSimple($file, $fullPath);
+            } else {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Unsupported file type. Supported formats: PDF, JPG, JPEG, PNG, GIF, BMP, TXT'
+                ], 400);
+            }
 
-        } catch (\Exception $e) {
-            Log::error('Error updating detail kriteria: ' . $e->getMessage());
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Failed to update detail kriteria',
-                'error' => $e->getMessage()
-            ], 500);
+            $data['file_url'] = 'storage/detail_kriteria/' . $fileSavedName;
         }
+
+        $validator = \Validator::make($request->all(), (new updatedetailKriteriaRequest())->rules());
+        if ($validator->fails()) {
+            \Log::error('Validation errors:', $validator->errors()->toArray());
+        }
+        $detailKriteria->update($data);
+        $detailKriteria->refresh();
+        $detailKriteria->load('kriteria', 'jenisKriteria', 'createdBy');
+
+        return response()->json(
+            [
+                'status' => 'success',
+                'message' => 'Detail Kriteria updated successfully',
+                'data' => $detailKriteria
+            ],
+            200
+        );
     }
 
     public function destroy($id)
