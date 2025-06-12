@@ -31,8 +31,8 @@ class KriteriaController extends Controller
 
         // Role-based data filtering
         switch ($user->role->id) {
-            case 2 || 5: // Kajur role - can see all kriteria
-                $kriteria = KriteriaModel::with(["detailKriteria", "validators"])->get();
+            case 2: // Kajur role - can see all kriteria
+                $kriteria = KriteriaModel::with(["detailKriteria", "validators"])->all();
                 break;
 
             case 3: // Direktur role - can only see validated kriteria

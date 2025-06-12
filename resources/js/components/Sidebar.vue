@@ -1,4 +1,4 @@
-<script setup>
+<script setup>More actions
 import { computed, ref } from "vue";
 import axios from "axios";
 
@@ -169,7 +169,7 @@ const toggleModalDialog = () => {
                 variant="dangerFilled"
                 justify="start"
                 icon-position="left"
-                @click="toggleModalDialog"
+                @click="handleLogout()"
                 class="mb-4"
                 >Logout
                 <template #icon
@@ -177,13 +177,4 @@ const toggleModalDialog = () => {
             ></Button>
         </nav>
     </aside>
-
-    <ModalDialog ref="modalDialogRef" v-model:show="showModalDialog">
-        <template #header>Logout</template>
-        <template #body>Apakah anada yakin ingin keluar?</template>
-        <template #footer>
-            <Button label="Tidak" variant="primaryOutlined" @click="modalDialogRef?.closeModal()" />
-            <Button label="Keluar" variant="dangerFilled" @click="handleLogout" />
-        </template>
-    </ModalDialog>
 </template>
